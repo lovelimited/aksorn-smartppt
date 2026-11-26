@@ -21,6 +21,6 @@
 - **สไลด์ Interactive เต็มรูปแบบ พร้อมเสียงและแอนิเมชัน**
 - **มีหน้าสรุปเนื้อหาสำหรับพิมพ์หรืออ่านต่อเนื่อง**
 
-## 🚀 การเผยแพร่และการใช้งาน
-- **Netlify:** [https://aksorn-smartppt.netlify.app](https://aksorn-smartppt.netlify.app)
-- **GitHub Pages:** [https://lovelimited.github.io/aksorn-smartppt/](https://lovelimited.github.io/aksorn-smartppt/)
+## 🚀 เว็บไซต์ออนไลน์และการ Deploy
+- **Live บน GitHub Pages:** [https://lovelimited.github.io/aksorn-smartppt/](https://lovelimited.github.io/aksorn-smartppt/)
+- **1-Click Deploy บน Vercel:** [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/lovelimited/aksorn-smartppt)
