@@ -2574,7 +2574,13 @@
             if (show) {
                 loader.style.display = 'flex';
                 if (text) document.getElementById('pdfLoadingText').textContent = text;
-     // ANNOTATION ENGINE: VECTOR STROKES, REAL MULTIPLY HIGHLIGHTER & DUAL ERASER (OBJECT vs PARTIAL)
+            } else {
+                loader.style.display = 'none';
+            }
+        }
+
+        // ========================================================
+        // ANNOTATION ENGINE: VECTOR STROKES, REAL MULTIPLY HIGHLIGHTER & DUAL ERASER (OBJECT vs PARTIAL)
         // ========================================================
         function distToSegment(p, v, w) {
             const l2 = (w.x - v.x) ** 2 + (w.y - v.y) ** 2;
@@ -3111,11 +3117,7 @@
             }
         }
 
-        () => penCtx.drawImage(imgP, 0, 0, penCanvas.width, penCanvas.height);
-                    imgP.src = saved.pen;
-                }
-            }
-        }
+
 
         function undoAnnotation() {
             const stack = pageUndoStacks[pdfCurrentPage];
