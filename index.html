@@ -1094,7 +1094,7 @@
         .pdf-reader-modal {
             position: fixed;
             inset: 0;
-            background: rgba(26, 15, 10, 0.88);
+            background: rgba(26, 15, 10, 0.90);
             backdrop-filter: blur(8px);
             z-index: 10000;
             display: none;
@@ -1103,13 +1103,13 @@
 
         .pdf-reader-toolbar {
             background: #FFFFFF;
-            border-bottom: 2px solid var(--gold-primary);
-            padding: 10px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            box-shadow: 0 4px 16px rgba(26, 15, 10, 0.15);
+            box-shadow: 0 2px 8px rgba(26, 15, 10, 0.08);
             flex-shrink: 0;
             z-index: 10;
         }
@@ -1122,9 +1122,9 @@
         }
 
         .pdf-realm-seal {
-            font-size: 26px;
-            width: 42px;
-            height: 42px;
+            font-size: 24px;
+            width: 38px;
+            height: 38px;
             background: var(--gold-light);
             border: 1px solid var(--gold-border);
             border-radius: var(--radius-sm);
@@ -1136,7 +1136,7 @@
 
         .pdf-doc-meta h4 {
             font-family: var(--font-headline);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.2;
@@ -1149,7 +1149,7 @@
         .pdf-stream-badge {
             display: inline-block;
             font-family: var(--font-mono);
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
             color: var(--success);
             letter-spacing: 0.5px;
@@ -1168,18 +1168,18 @@
             background: var(--surface-alt);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-sm);
-            padding: 3px 8px;
+            padding: 2px 8px;
         }
 
         .pdf-page-jump-wrap input {
-            width: 52px;
-            height: 28px;
+            width: 50px;
+            height: 26px;
             background: #FFFFFF;
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-sm);
             text-align: center;
             font-family: var(--font-mono);
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 700;
             color: var(--text-primary);
             outline: none;
@@ -1209,7 +1209,7 @@
             background: var(--surface-alt);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-sm);
-            padding: 3px 6px;
+            padding: 2px 6px;
         }
 
         .pdf-zoom-text {
@@ -1229,7 +1229,7 @@
             font-family: var(--font-headline);
             font-size: 12px;
             font-weight: 700;
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: var(--radius-sm);
             cursor: pointer;
             transition: all 150ms ease;
@@ -1249,8 +1249,8 @@
             background: var(--surface-alt);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
@@ -1272,6 +1272,161 @@
             color: var(--red-secondary);
         }
 
+        /* ======================================================== */
+        /* SECONDARY TOOLBAR: ANNOTATION TOOLS (ปากกา ไฮไลท์ ยางลบ) */
+        /* ======================================================== */
+        .pdf-annot-bar {
+            background: var(--surface-elevated);
+            border-bottom: 2px solid var(--gold-primary);
+            padding: 6px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 12px rgba(26, 15, 10, 0.1);
+            flex-shrink: 0;
+            z-index: 9;
+        }
+
+        .annot-tool-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .annot-btn {
+            background: #FFFFFF;
+            border: 1.5px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-family: var(--font-headline);
+            font-size: 12.5px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 150ms ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .annot-btn:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        .annot-btn.active {
+            background: var(--gold-primary);
+            border-color: var(--gold-border);
+            color: #1A0F0A;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .annot-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border-subtle);
+        }
+
+        .annot-colors-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .color-swatch {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 150ms ease;
+            border: 2px solid #FFFFFF;
+            box-shadow: 0 0 0 1px var(--border-subtle);
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 2px var(--gold-primary);
+        }
+
+        .color-swatch.active {
+            box-shadow: 0 0 0 2px var(--gold-primary), 0 0 8px rgba(202, 138, 4, 0.6);
+            transform: scale(1.15);
+        }
+
+        .annot-sizes-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 2px 4px;
+        }
+
+        .size-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 150ms ease;
+        }
+
+        .size-btn:hover {
+            background: var(--gold-light);
+        }
+
+        .size-btn.active {
+            background: var(--gold-primary);
+        }
+
+        .size-circle {
+            border-radius: 50%;
+            background: #1A0F0A;
+        }
+
+        .annot-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .annot-btn-action {
+            background: #FFFFFF;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: var(--font-headline);
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 150ms ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .annot-btn-action:hover {
+            background: var(--surface-alt);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        .annot-btn-action.danger:hover {
+            background: var(--red-light);
+            border-color: var(--red-border);
+            color: var(--red-secondary);
+        }
+
+        /* PDF VIEWPORT & CANVAS CONTAINER */
         .pdf-viewer-viewport {
             flex: 1;
             background: #EBE3D5;
@@ -1319,11 +1474,21 @@
             background: #FFFFFF;
             margin: auto;
             height: fit-content;
+            user-select: none;
         }
 
         #pdfCanvas {
             display: block;
             border-radius: var(--radius-sm);
+        }
+
+        #annotationCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: var(--radius-sm);
+            touch-action: none;
+            pointer-events: none; /* controlled dynamically by current tool */
         }
 
         .floating-nav-btn {
@@ -1385,7 +1550,7 @@
                 <div class="royal-crest">⚜️</div>
                 <div class="royal-titles">
                     <h1>Aksorn Smart PPT <span class="edition-tag">QUEST & E-BOOK ARCHIVES</span></h1>
-                    <p>ระบบศูนย์รวมคัมภีร์สื่อการสอนอินเตอร์แอคทีฟ & หนังสือเรียนฉบับเต็ม PDF (Byte-Range Fast Streaming)</p>
+                    <p>ระบบศูนย์รวมคัมภีร์สื่อการสอนอินเตอร์แอคทีฟ & หนังสือเรียนฉบับเต็ม PDF (Byte-Range Fast Streaming & Annotation Tools)</p>
                 </div>
             </div>
 
@@ -1546,7 +1711,7 @@
     <!-- OPTION 1: QUESTUI PDF.JS STREAMING WEB READER MODAL      -->
     <!-- ======================================================== -->
     <div class="pdf-reader-modal" id="pdfReaderModal">
-        <!-- Top Toolbar -->
+        <!-- Top Main Toolbar -->
         <div class="pdf-reader-toolbar">
             <div class="pdf-toolbar-left">
                 <span class="pdf-realm-seal">📖</span>
@@ -1579,6 +1744,67 @@
             </div>
         </div>
 
+        <!-- Secondary Toolbar: Annotation Tools (ปากกา ไฮไลท์ ยางลบ) -->
+        <div class="pdf-annot-bar" id="pdfAnnotBar">
+            <div class="annot-tool-group">
+                <button class="annot-btn active" id="toolViewBtn" onclick="setAnnotTool('view')" title="เลื่อนดูปกติ (V)">
+                    <span>👆</span> เลื่อนดู
+                </button>
+                <button class="annot-btn" id="toolPenBtn" onclick="setAnnotTool('pen')" title="ปากกาขีดเขียน (P)">
+                    <span>✏️</span> ปากกา
+                </button>
+                <button class="annot-btn" id="toolHighlighterBtn" onclick="setAnnotTool('highlighter')" title="ไฮไลท์ข้อความ (H)">
+                    <span>🖍️</span> ไฮไลท์
+                </button>
+                <button class="annot-btn" id="toolEraserBtn" onclick="setAnnotTool('eraser')" title="ยางลบ (E)">
+                    <span>🧹</span> ยางลบ
+                </button>
+            </div>
+
+            <div class="annot-divider"></div>
+
+            <!-- Colors for Pen / Highlighter -->
+            <div class="annot-colors-group" id="annotColorsGroup">
+                <span class="color-swatch active" style="background: #DC2626;" onclick="selectAnnotColor('#DC2626', this)" title="แดง"></span>
+                <span class="color-swatch" style="background: #CA8A04;" onclick="selectAnnotColor('#CA8A04', this)" title="ทอง"></span>
+                <span class="color-swatch" style="background: #2563EB;" onclick="selectAnnotColor('#2563EB', this)" title="น้ำเงิน"></span>
+                <span class="color-swatch" style="background: #16A34A;" onclick="selectAnnotColor('#16A34A', this)" title="เขียว"></span>
+                <span class="color-swatch" style="background: #1A0F0A;" onclick="selectAnnotColor('#1A0F0A', this)" title="ดำ"></span>
+                <span class="color-swatch" style="background: #FACC15;" onclick="selectAnnotColor('#FACC15', this)" title="เหลืองสว่าง"></span>
+                <span class="color-swatch" style="background: #F43F5E;" onclick="selectAnnotColor('#F43F5E', this)" title="ชมพู"></span>
+            </div>
+
+            <div class="annot-divider"></div>
+
+            <!-- Stroke Sizes -->
+            <div class="annot-sizes-group">
+                <button class="size-btn sm active" onclick="selectAnnotSize(2.5, 18, 24, this)" title="เส้นเล็ก">
+                    <span class="size-circle" style="width: 4px; height: 4px;"></span>
+                </button>
+                <button class="size-btn md" onclick="selectAnnotSize(5, 26, 36, this)" title="เส้นกลาง">
+                    <span class="size-circle" style="width: 8px; height: 8px;"></span>
+                </button>
+                <button class="size-btn lg" onclick="selectAnnotSize(9, 38, 52, this)" title="เส้นใหญ่">
+                    <span class="size-circle" style="width: 12px; height: 12px;"></span>
+                </button>
+            </div>
+
+            <div class="annot-divider"></div>
+
+            <!-- Actions -->
+            <div class="annot-actions-group">
+                <button class="annot-btn-action" onclick="undoAnnotation()" title="ย้อนกลับการเขียน (Ctrl+Z)">
+                    ↩️ เลิกทำ
+                </button>
+                <button class="annot-btn-action danger" onclick="clearCurrentPageAnnotations()" title="ล้างการเขียนทั้งหมดในหน้านี้">
+                    🗑️ ล้างหน้านี้
+                </button>
+                <button class="annot-btn-action" onclick="downloadAnnotatedPage()" title="บันทึกภาพหน้านี้พร้อมรอยเขียน">
+                    💾 เซฟรูป
+                </button>
+            </div>
+        </div>
+
         <!-- Viewport -->
         <div class="pdf-viewer-viewport" id="pdfViewport">
             <!-- Shimmering Loading Progress Indicator -->
@@ -1587,9 +1813,10 @@
                 <span id="pdfLoadingText">กำลังสตรีมมิ่งหน้าแรกผ่าน Byte-Range Request...</span>
             </div>
 
-            <!-- Canvas Container -->
+            <!-- Canvas Container with Stacked Drawing Overlay Canvas -->
             <div class="pdf-canvas-container" id="pdfCanvasContainer">
                 <canvas id="pdfCanvas"></canvas>
+                <canvas id="annotationCanvas"></canvas>
             </div>
 
             <!-- Floating Chevrons -->
@@ -1645,6 +1872,20 @@
         let pdfRenderQueue = null;
 
         // ==========================================
+        // ANNOTATION TOOLS STATE & VARIABLES
+        // ==========================================
+        let currentAnnotTool = 'view'; // 'view' | 'pen' | 'highlighter' | 'eraser'
+        let currentAnnotColor = '#DC2626'; // default red
+        let currentPenWidth = 2.5;
+        let currentHighlighterWidth = 20;
+        let currentEraserWidth = 28;
+        let isDrawing = false;
+        let lastDrawX = 0;
+        let lastDrawY = 0;
+        const pageAnnotationsMap = {}; // { pageNum: dataUrl }
+        const pageUndoStacks = {};     // { pageNum: [dataUrl, ...] }
+
+        // ==========================================
         // STEP 1: RENDER SUBJECT GROUPS
         // ==========================================
         function renderStep1Groups() {
@@ -1652,7 +1893,6 @@
             container.innerHTML = '';
 
             Object.values(hierarchyData).forEach(grp => {
-                // Calculate aggregated statistics for this group
                 let groupCoursesCount = 0;
                 let groupUnitsCount = 0;
                 let groupSlidesCount = 0;
@@ -1768,7 +2008,6 @@
             const grp = hierarchyData[selectedGroupName];
             const grd = grp.grades[gradeName];
             
-            // Set first course as selected
             if (grd.courseKeys.length > 0) {
                 selectedCourseKey = grd.courseKeys[0];
             }
@@ -1782,7 +2021,6 @@
             const grp = hierarchyData[selectedGroupName];
             const grd = grp.grades[selectedGradeName];
 
-            // Render Course Tabs if more than 1 course exists in this grade
             const tabsWrap = document.getElementById('courseTabsWrap');
             const tabsContainer = document.getElementById('courseTabsContainer');
             tabsContainer.innerHTML = '';
@@ -1826,7 +2064,7 @@
                                     <h3>${tb.title}</h3>
                                     <p>ฉบับสมบูรณ์ ${tb.pages} หน้า • ความคมชัดสูง (Lossless Master) • ขนาดไฟล์ ${tb.size_mb} MB</p>
                                     <div class="stream-speed-note">
-                                        ⚡ เปิดอ่านได้ทันทีใน 1 วินาที โดยไม่ต้องรอโหลดไฟล์ 60MB (Byte-Range Streaming)
+                                        ⚡ เปิดอ่านได้ทันทีใน 1 วินาที พร้อมปากกาขีดเขียน ไฮไลท์ และยางลบในตัว
                                     </div>
                                 </div>
                             </div>
@@ -1869,7 +2107,6 @@
             let unitsToDisplay = [];
 
             if (isOverviewMode) {
-                // Overview mode: all courses
                 Object.values(coursesData).forEach(c => {
                     unitsToDisplay = unitsToDisplay.concat(c.units);
                 });
@@ -1877,14 +2114,12 @@
                 unitsToDisplay = coursesData[selectedCourseKey].units;
             }
 
-            // Filter logic
             if (currentFilter === 'notes') {
                 unitsToDisplay = unitsToDisplay.filter(u => u.hasNotes);
             } else if (currentFilter === 'large') {
                 unitsToDisplay = unitsToDisplay.filter(u => (u.slideCount || 0) >= 50);
             }
 
-            // Search query logic
             if (searchQuery) {
                 unitsToDisplay = unitsToDisplay.filter(u => {
                     const fullText = `${u.title} ${u.clean_subj} ${u.productName} ${u.subjectGroup}`.toLowerCase();
@@ -2104,6 +2339,9 @@
                 return;
             }
 
+            // Save annotation on previous page before flipping
+            saveCurrentPageAnnotation();
+
             pdfIsRendering = true;
             showPdfLoader(true, `กำลังสตรีมมิ่งหน้า ${num} จาก ${pdfTotalPagesCount}...`);
 
@@ -2118,6 +2356,13 @@
                 canvas.height = Math.floor(viewport.height * pixelRatio);
                 canvas.style.width = Math.floor(viewport.width) + 'px';
                 canvas.style.height = Math.floor(viewport.height) + 'px';
+
+                // Size Annotation Canvas identically
+                const annotCanvas = document.getElementById('annotationCanvas');
+                annotCanvas.width = canvas.width;
+                annotCanvas.height = canvas.height;
+                annotCanvas.style.width = canvas.style.width;
+                annotCanvas.style.height = canvas.style.height;
 
                 const transform = pixelRatio !== 1 ? [pixelRatio, 0, 0, pixelRatio, 0, 0] : null;
 
@@ -2136,6 +2381,9 @@
 
                     const vp = document.getElementById('pdfViewport');
                     vp.scrollTop = 0;
+
+                    // Restore annotations for this page
+                    restorePageAnnotation(num);
 
                     if (pdfRenderQueue !== null) {
                         const nextNum = pdfRenderQueue;
@@ -2193,6 +2441,7 @@
         }
 
         function closePdfReader() {
+            saveCurrentPageAnnotation();
             const modal = document.getElementById('pdfReaderModal');
             modal.style.display = 'none';
             document.body.style.overflow = '';
@@ -2210,6 +2459,195 @@
             } else {
                 loader.style.display = 'none';
             }
+        }
+
+        // ==========================================
+        // ANNOTATION ENGINE: PEN, HIGHLIGHTER, ERASER
+        // ==========================================
+        function setAnnotTool(tool) {
+            currentAnnotTool = tool;
+            const annotCanvas = document.getElementById('annotationCanvas');
+
+            document.getElementById('toolViewBtn').classList.toggle('active', tool === 'view');
+            document.getElementById('toolPenBtn').classList.toggle('active', tool === 'pen');
+            document.getElementById('toolHighlighterBtn').classList.toggle('active', tool === 'highlighter');
+            document.getElementById('toolEraserBtn').classList.toggle('active', tool === 'eraser');
+
+            if (tool === 'view') {
+                annotCanvas.style.pointerEvents = 'none';
+                annotCanvas.style.cursor = 'default';
+            } else if (tool === 'pen' || tool === 'highlighter') {
+                annotCanvas.style.pointerEvents = 'auto';
+                annotCanvas.style.cursor = 'crosshair';
+            } else if (tool === 'eraser') {
+                annotCanvas.style.pointerEvents = 'auto';
+                annotCanvas.style.cursor = 'cell';
+            }
+        }
+
+        function selectAnnotColor(color, el) {
+            currentAnnotColor = color;
+            document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            // If in view or eraser mode, auto switch to pen
+            if (currentAnnotTool === 'view' || currentAnnotTool === 'eraser') {
+                setAnnotTool('pen');
+            }
+        }
+
+        function selectAnnotSize(penW, highW, eraserW, el) {
+            currentPenWidth = penW;
+            currentHighlighterWidth = highW;
+            currentEraserWidth = eraserW;
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            if (el) el.classList.add('active');
+        }
+
+        function getCanvasCoords(e) {
+            const canvas = document.getElementById('annotationCanvas');
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function handlePointerDown(e) {
+            if (currentAnnotTool === 'view') return;
+            isDrawing = true;
+            const canvas = document.getElementById('annotationCanvas');
+            try { canvas.setPointerCapture(e.pointerId); } catch(err) {}
+
+            const coords = getCanvasCoords(e);
+            lastDrawX = coords.x;
+            lastDrawY = coords.y;
+
+            // Save undo snapshot
+            if (!pageUndoStacks[pdfCurrentPage]) pageUndoStacks[pdfCurrentPage] = [];
+            if (pageUndoStacks[pdfCurrentPage].length > 25) pageUndoStacks[pdfCurrentPage].shift();
+            pageUndoStacks[pdfCurrentPage].push(canvas.toDataURL());
+
+            const ctx = canvas.getContext('2d');
+            const pixelRatio = window.devicePixelRatio || 1;
+
+            ctx.beginPath();
+            ctx.moveTo(lastDrawX, lastDrawY);
+
+            if (currentAnnotTool === 'pen') {
+                ctx.globalAlpha = 1.0;
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = currentAnnotColor;
+                ctx.lineWidth = currentPenWidth * pixelRatio;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+            } else if (currentAnnotTool === 'highlighter') {
+                ctx.globalAlpha = 0.42;
+                ctx.globalCompositeOperation = 'multiply';
+                ctx.strokeStyle = currentAnnotColor;
+                ctx.lineWidth = currentHighlighterWidth * pixelRatio;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+            } else if (currentAnnotTool === 'eraser') {
+                ctx.globalAlpha = 1.0;
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = currentEraserWidth * pixelRatio;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+            }
+
+            // Draw initial point
+            ctx.lineTo(lastDrawX + 0.1, lastDrawY + 0.1);
+            ctx.stroke();
+        }
+
+        function handlePointerMove(e) {
+            if (!isDrawing || currentAnnotTool === 'view') return;
+            const canvas = document.getElementById('annotationCanvas');
+            const ctx = canvas.getContext('2d');
+            const coords = getCanvasCoords(e);
+
+            ctx.lineTo(coords.x, coords.y);
+            ctx.stroke();
+            lastDrawX = coords.x;
+            lastDrawY = coords.y;
+        }
+
+        function handlePointerUp(e) {
+            if (!isDrawing) return;
+            isDrawing = false;
+            const canvas = document.getElementById('annotationCanvas');
+            try { canvas.releasePointerCapture(e.pointerId); } catch(err) {}
+
+            saveCurrentPageAnnotation();
+        }
+
+        function saveCurrentPageAnnotation() {
+            const canvas = document.getElementById('annotationCanvas');
+            if (!canvas) return;
+            pageAnnotationsMap[pdfCurrentPage] = canvas.toDataURL();
+        }
+
+        function restorePageAnnotation(num) {
+            const canvas = document.getElementById('annotationCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (pageAnnotationsMap[num]) {
+                const img = new Image();
+                img.onload = () => {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+                img.src = pageAnnotationsMap[num];
+            }
+        }
+
+        function undoAnnotation() {
+            const stack = pageUndoStacks[pdfCurrentPage];
+            if (!stack || stack.length === 0) return;
+            const prevDataUrl = stack.pop();
+            const canvas = document.getElementById('annotationCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const img = new Image();
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                saveCurrentPageAnnotation();
+            };
+            img.src = prevDataUrl;
+        }
+
+        function clearCurrentPageAnnotations() {
+            const canvas = document.getElementById('annotationCanvas');
+            if (!canvas) return;
+            if (!pageUndoStacks[pdfCurrentPage]) pageUndoStacks[pdfCurrentPage] = [];
+            pageUndoStacks[pdfCurrentPage].push(canvas.toDataURL());
+
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            delete pageAnnotationsMap[pdfCurrentPage];
+        }
+
+        function downloadAnnotatedPage() {
+            const pdfCanvas = document.getElementById('pdfCanvas');
+            const annotCanvas = document.getElementById('annotationCanvas');
+            if (!pdfCanvas || !annotCanvas) return;
+
+            const merged = document.createElement('canvas');
+            merged.width = pdfCanvas.width;
+            merged.height = pdfCanvas.height;
+            const mCtx = merged.getContext('2d');
+            mCtx.drawImage(pdfCanvas, 0, 0);
+            mCtx.drawImage(annotCanvas, 0, 0);
+
+            const link = document.createElement('a');
+            link.download = `Aksorn_Textbook_Page_${pdfCurrentPage}_Annotated.png`;
+            link.href = merged.toDataURL('image/png');
+            link.click();
         }
 
         // Slide Modal Quick Inspect
@@ -2234,7 +2672,7 @@
             }
         }
 
-        // Keyboard navigation
+        // Keyboard navigation & tool shortcuts
         document.addEventListener('keydown', (e) => {
             const pdfModal = document.getElementById('pdfReaderModal');
             const isPdfOpen = pdfModal.style.display === 'flex';
@@ -2243,14 +2681,28 @@
                 if (isPdfOpen) closePdfReader();
                 else closeModal();
             } else if (isPdfOpen) {
-                if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-                    prevPdfPage();
-                } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
-                    nextPdfPage();
-                } else if (e.key === '+' || e.key === '=') {
-                    zoomPdfIn();
-                } else if (e.key === '-') {
-                    zoomPdfOut();
+                // Tool shortcuts (only when not typing in an input)
+                if (document.activeElement.tagName !== 'INPUT') {
+                    if (e.key === 'p' || e.key === 'P') setAnnotTool('pen');
+                    else if (e.key === 'h' || e.key === 'H') setAnnotTool('highlighter');
+                    else if (e.key === 'e' || e.key === 'E') setAnnotTool('eraser');
+                    else if (e.key === 'v' || e.key === 'V') setAnnotTool('view');
+                    else if ((e.ctrlKey || e.metaKey) && (e.key === 'z' || e.key === 'Z')) {
+                        e.preventDefault();
+                        undoAnnotation();
+                    }
+                }
+
+                if (currentAnnotTool === 'view') {
+                    if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        prevPdfPage();
+                    } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+                        nextPdfPage();
+                    } else if (e.key === '+' || e.key === '=') {
+                        zoomPdfIn();
+                    } else if (e.key === '-') {
+                        zoomPdfOut();
+                    }
                 }
             }
         });
@@ -2258,6 +2710,15 @@
         // Initialization
         window.addEventListener('DOMContentLoaded', () => {
             goToStep(1);
+
+            // Bind pointer events on annotation canvas
+            const annotCanvas = document.getElementById('annotationCanvas');
+            if (annotCanvas) {
+                annotCanvas.addEventListener('pointerdown', handlePointerDown);
+                annotCanvas.addEventListener('pointermove', handlePointerMove);
+                annotCanvas.addEventListener('pointerup', handlePointerUp);
+                annotCanvas.addEventListener('pointercancel', handlePointerUp);
+            }
         });
     </script>
 </body>
