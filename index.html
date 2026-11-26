@@ -7,6 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Fira+Code:wght@400;500;600;700&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Mozilla PDF.js for Instant Byte-Range Streaming -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
     <style>
         :root {
             /* QuestUI Light Theme (Illuminated Manuscript & Royal Parchment) */
@@ -94,91 +98,85 @@
             font-size: 16px;
             line-height: 1.7;
             min-height: 100vh;
-            padding: 24px 20px;
+            padding: 24px 20px 48px;
         }
 
         .container {
-            max-width: 1360px;
+            max-width: 1380px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
             gap: 28px;
         }
 
-        /* Ornate Medieval Header */
+        /* ROYAL TOP HEADER */
         .royal-header {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
-            border-top: 3px solid var(--gold-primary);
+            border-top: 4px solid var(--gold-primary);
             border-radius: var(--radius-default);
-            padding: 20px 28px;
+            padding: 22px 28px;
             box-shadow: var(--shadow-default);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 16px;
-            position: relative;
-        }
-
-        .royal-header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 20px;
-            right: 20px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            gap: 20px;
         }
 
         .royal-brand {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
         }
 
         .royal-crest {
-            width: 52px;
-            height: 52px;
+            font-size: 34px;
+            width: 58px;
+            height: 58px;
             background: var(--gold-light);
-            border: 2px solid var(--gold-primary);
-            border-radius: var(--radius-default);
+            border: 1.5px solid var(--gold-border);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
             box-shadow: var(--shadow-sm);
-            color: var(--gold-primary);
+            flex-shrink: 0;
         }
 
         .royal-titles h1 {
             font-family: var(--font-headline);
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
+            letter-spacing: 0.5px;
             color: var(--text-primary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            line-height: 1.25;
         }
 
         .royal-titles h1 span.edition-tag {
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 1.5px;
-            color: var(--gold-primary);
-            background: var(--gold-subtle);
-            border: 1px solid var(--gold-border);
+            color: var(--purple-tertiary);
+            background: var(--purple-light);
             padding: 2px 8px;
             border-radius: var(--radius-sm);
+            border: 1px solid var(--purple-border);
+            vertical-align: middle;
+            margin-left: 8px;
         }
 
         .royal-titles p {
             font-size: 14px;
             color: var(--text-secondary);
-            font-style: italic;
             margin-top: 2px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
         .realm-status {
@@ -187,74 +185,101 @@
             gap: 8px;
             background: var(--success-light);
             border: 1px solid var(--success);
-            color: var(--success);
             padding: 6px 14px;
             border-radius: var(--radius-sm);
-            font-family: var(--font-headline);
+            font-family: var(--font-mono);
             font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--success);
+            letter-spacing: 0.5px;
         }
 
         .status-rune {
             width: 8px;
             height: 8px;
+            border-radius: 50%;
             background: var(--success);
-            border-radius: var(--radius-full);
-            box-shadow: 0 0 6px var(--success);
-            animation: pulse-rune 2s infinite ease-in-out;
+            box-shadow: 0 0 8px var(--success);
         }
 
-        @keyframes pulse-rune {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.6; }
+        .btn-mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-headline);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 200ms ease;
         }
 
-        /* KPI / Lore Stats Cards (4 Columns) */
+        .btn-mode-toggle:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        /* 4-COLUMN STATS / KPI ROW */
         .lore-kpi-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 18px;
         }
 
         .lore-kpi-card {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
-            border-top: 2px solid var(--gold-primary);
             border-radius: var(--radius-default);
-            padding: 20px 22px;
+            padding: 18px 20px;
             box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
             gap: 16px;
             position: relative;
-            transition: all 300ms ease;
+            overflow: hidden;
+            transition: all 250ms ease;
         }
 
         .lore-kpi-card:hover {
-            background: var(--surface-elevated);
-            border-color: var(--gold-border);
             box-shadow: var(--shadow-md);
+            border-color: var(--gold-border);
             transform: translateY(-2px);
         }
 
+        .lore-kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .lore-kpi-card:nth-child(1)::after { background: var(--gold-primary); }
+        .lore-kpi-card:nth-child(2)::after { background: var(--purple-tertiary); }
+        .lore-kpi-card:nth-child(3)::after { background: var(--red-secondary); }
+        .lore-kpi-card:nth-child(4)::after { background: var(--success); }
+
         .kpi-crest-icon {
+            font-size: 26px;
             width: 48px;
             height: 48px;
-            border-radius: var(--radius-default);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             flex-shrink: 0;
-            border: 1px solid var(--border-subtle);
         }
 
-        .crest-gold { background: var(--gold-light); border-color: var(--gold-border); }
-        .crest-red { background: var(--red-light); border-color: var(--red-border); }
-        .crest-purple { background: var(--purple-light); border-color: var(--purple-tertiary); }
-        .crest-green { background: var(--success-light); border-color: var(--success); }
+        .crest-gold { background: var(--gold-light); border: 1px solid var(--gold-border); }
+        .crest-purple { background: var(--purple-light); border: 1px solid var(--purple-border); }
+        .crest-red { background: var(--red-light); border: 1px solid var(--red-border); }
+        .crest-green { background: var(--success-light); border: 1px solid var(--success); }
 
         .kpi-details {
             display: flex;
@@ -265,45 +290,126 @@
             font-family: var(--font-headline);
             font-size: 11px;
             font-weight: 700;
-            color: var(--text-muted);
             letter-spacing: 1px;
+            color: var(--text-muted);
             text-transform: uppercase;
         }
 
         .kpi-number {
             font-family: var(--font-mono);
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--text-primary);
-            line-height: 1.15;
-            margin-top: 2px;
+            line-height: 1.2;
+            margin: 2px 0;
         }
 
         .kpi-desc {
             font-size: 12px;
             color: var(--text-secondary);
-            margin-top: 2px;
         }
 
-        /* STEP 1: REALM SELECTOR (เลือกวิชาก่อน) */
-        .realm-selection-section {
+        /* HIERARCHICAL INTERACTIVE BREADCRUMB BAR */
+        .quest-breadcrumb-nav {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
-            border-top: 3px solid var(--gold-primary);
+            border-left: 4px solid var(--gold-primary);
             border-radius: var(--radius-default);
-            padding: 26px 28px;
-            box-shadow: var(--shadow-default);
+            padding: 12px 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
+        .breadcrumb-trail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            background: none;
+            border: none;
+            font-family: var(--font-headline);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gold-primary);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            transition: all 150ms ease;
+        }
+
+        .breadcrumb-item:hover {
+            background: var(--gold-light);
+            color: var(--gold-hover);
+        }
+
+        .breadcrumb-item.active {
+            color: var(--text-primary);
+            cursor: default;
+        }
+
+        .breadcrumb-sep {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        .breadcrumb-current {
+            font-family: var(--font-headline);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--purple-tertiary);
+            background: var(--purple-light);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--purple-border);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-quest-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-headline);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 200ms ease;
+        }
+
+        .btn-quest-back:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+            transform: translateX(-2px);
+        }
+
+        /* SECTION HEADLINE BAR */
         .section-headline-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 14px;
             border-bottom: 1px solid var(--border-subtle);
-            padding-bottom: 14px;
+            padding-bottom: 12px;
         }
 
         .headline-group {
@@ -313,27 +419,29 @@
         }
 
         .step-rune-badge {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             background: var(--gold-primary);
             color: #1A0F0A;
             font-family: var(--font-headline);
             font-weight: 800;
-            font-size: 14px;
+            font-size: 15px;
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gold-border);
+            flex-shrink: 0;
         }
 
         .headline-group h2 {
             font-family: var(--font-headline);
-            font-size: 19px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-primary);
             letter-spacing: 0.5px;
+            line-height: 1.3;
         }
 
         .headline-group p {
@@ -341,93 +449,71 @@
             color: var(--text-secondary);
         }
 
-        .realm-grid {
+        /* STEP 1: SUBJECT GROUP REALM CARDS */
+        .group-cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 22px;
         }
 
-        .realm-card {
-            background: var(--surface-alt);
+        .group-card {
+            background: var(--surface-card);
             border: 1px solid var(--border-subtle);
-            border-top: 2px solid var(--border-subtle);
+            border-top: 3px solid var(--gold-primary);
             border-radius: var(--radius-default);
-            padding: 22px;
+            padding: 26px 24px;
             cursor: pointer;
             transition: all 300ms ease;
-            position: relative;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
+            position: relative;
+            box-shadow: var(--shadow-sm);
         }
 
-        .realm-card:hover {
+        .group-card:hover {
             background: var(--surface-elevated);
             border-color: var(--gold-border);
-            box-shadow: var(--shadow-md);
-            transform: translateY(-3px);
-        }
-
-        .realm-card.active {
-            background: #FFFDF9;
-            border: 1.5px solid var(--gold-primary);
-            border-top: 3px solid var(--gold-primary);
             box-shadow: var(--shadow-glow), var(--shadow-md);
+            transform: translateY(-4px);
         }
 
-        .realm-card.active::before {
-            content: '⚔️ REALM CHOSEN';
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: var(--gold-primary);
-            color: #1A0F0A;
-            font-family: var(--font-headline);
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            padding: 3px 8px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--gold-border);
-        }
-
-        .realm-card-top {
+        .group-card-header {
             display: flex;
-            align-items: center;
-            gap: 14px;
+            align-items: flex-start;
+            gap: 16px;
         }
 
-        .realm-emblem {
-            width: 48px;
-            height: 48px;
+        .group-emblem {
+            font-size: 32px;
+            width: 60px;
+            height: 60px;
+            background: var(--gold-light);
+            border: 1.5px solid var(--gold-border);
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            background: var(--surface-card);
-            border: 1px solid var(--border-subtle);
             flex-shrink: 0;
             box-shadow: var(--shadow-sm);
         }
 
-        .realm-info h3 {
+        .group-header-text h3 {
             font-family: var(--font-headline);
-            font-size: 17px;
+            font-size: 19px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.3;
         }
 
-        .realm-info span.grade-text {
-            font-size: 13px;
+        .group-header-text p {
+            font-size: 13.5px;
             color: var(--text-secondary);
-            font-style: italic;
-            display: block;
-            margin-top: 2px;
+            margin-top: 4px;
+            line-height: 1.5;
         }
 
-        .realm-pills {
+        .group-pills {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -438,84 +524,134 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: var(--surface-card);
+            background: var(--surface-alt);
             border: 1px solid var(--border-subtle);
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-family: var(--font-headline);
             font-size: 11px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
             color: var(--text-secondary);
         }
 
-        .realm-footer-action {
+        .group-footer-action {
             margin-top: 6px;
-            padding-top: 10px;
+            padding-top: 12px;
             border-top: 1px dashed var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: space-between;
             font-family: var(--font-headline);
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
-            letter-spacing: 0.5px;
             color: var(--gold-primary);
         }
 
-        /* STEP 2: ACTIVE QUEST REALM & UNITS */
-        .quests-container {
-            display: flex;
-            flex-direction: column;
-            gap: 22px;
+        /* STEP 2: GRADE LEVEL CARDS */
+        .grade-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
         }
 
-        .active-realm-banner {
+        .grade-card {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
-            border-top: 3px solid var(--gold-primary);
+            border-top: 3px solid var(--purple-tertiary);
             border-radius: var(--radius-default);
-            padding: 22px 28px;
-            box-shadow: var(--shadow-default);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 300ms ease;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 18px;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: var(--shadow-sm);
         }
 
-        .banner-heraldry {
-            display: flex;
-            align-items: center;
-            gap: 18px;
+        .grade-card:hover {
+            background: var(--surface-elevated);
+            border-color: var(--purple-border);
+            box-shadow: 0 0 20px rgba(88, 28, 135, 0.25), var(--shadow-md);
+            transform: translateY(-4px);
         }
 
-        .heraldry-seal {
-            font-size: 32px;
-            width: 60px;
-            height: 60px;
-            background: var(--gold-light);
-            border: 1.5px solid var(--gold-border);
+        .grade-card-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .grade-seal {
+            font-family: var(--font-headline);
+            font-weight: 800;
+            font-size: 16px;
+            width: 54px;
+            height: 54px;
+            background: var(--purple-light);
+            color: var(--purple-tertiary);
+            border: 1.5px solid var(--purple-border);
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             box-shadow: var(--shadow-sm);
         }
 
-        .banner-titles h2 {
+        .grade-info h3 {
             font-family: var(--font-headline);
-            font-size: 21px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--text-primary);
-            letter-spacing: 0.5px;
         }
 
-        .banner-titles p {
-            font-size: 14px;
+        .grade-info p {
+            font-size: 13.5px;
             color: var(--text-secondary);
-            font-style: italic;
             margin-top: 2px;
+        }
+
+        /* STEP 3: COURSE CLASSROOM VIEW */
+        .course-tabs-bar {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-default);
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .course-tab-btn {
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-headline);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 200ms ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .course-tab-btn:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        .course-tab-btn.active {
+            background: var(--gold-primary);
+            border-color: var(--gold-border);
+            color: #1A0F0A;
+            box-shadow: var(--shadow-sm);
         }
 
         /* ROYAL TEXTBOOK (FULL E-BOOK PDF) HERO CARD */
@@ -569,7 +705,7 @@
 
         .textbook-hero-meta h3 {
             font-family: var(--font-headline);
-            font-size: 19px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--text-primary);
             margin: 2px 0;
@@ -580,6 +716,16 @@
             color: var(--text-secondary);
         }
 
+        .textbook-hero-meta .stream-speed-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
         .textbook-hero-actions {
             display: flex;
             align-items: center;
@@ -587,7 +733,63 @@
             flex-wrap: wrap;
         }
 
-        /* Quest Controls Bar */
+        /* BUTTONS (QUESTUI SYSTEM) */
+        .btn-quest {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: var(--font-headline);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            padding: 9px 18px;
+            border-radius: var(--radius-default);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 250ms ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--gold-primary);
+            color: #1A0F0A;
+            border: 1px solid var(--gold-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-hover);
+            color: #1A0F0A;
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--gold-primary);
+            border: 1.5px solid var(--gold-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gold-subtle);
+            color: var(--gold-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-inspect {
+            background: var(--surface-alt);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-inspect:hover {
+            background: var(--surface-elevated);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        /* QUEST CONTROLS & FILTER BAR */
         .quest-controls-bar {
             background: var(--surface-card);
             border: 1px solid var(--border-subtle);
@@ -649,38 +851,36 @@
         }
 
         .filter-btn-rune {
-            background: var(--surface-card);
+            background: var(--surface-alt);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            padding: 6px 16px;
-            border-radius: var(--radius-sm);
             font-family: var(--font-headline);
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            padding: 8px 16px;
+            border-radius: var(--radius-default);
             cursor: pointer;
             transition: all 200ms ease;
         }
 
         .filter-btn-rune:hover {
-            background: var(--surface-alt);
+            background: var(--surface-elevated);
+            color: var(--text-primary);
             border-color: var(--gold-border);
-            color: var(--gold-primary);
         }
 
         .filter-btn-rune.active {
             background: var(--gold-primary);
-            border-color: var(--gold-border);
             color: #1A0F0A;
-            box-shadow: var(--shadow-sm);
             font-weight: 700;
+            border-color: var(--gold-border);
+            box-shadow: var(--shadow-sm);
         }
 
-        /* Quest Chapters Grid */
+        /* QUESTS GRID & CARDS */
         .quests-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 22px;
         }
 
@@ -689,179 +889,126 @@
             border: 1px solid var(--border-subtle);
             border-top: 2px solid var(--gold-primary);
             border-radius: var(--radius-default);
-            padding: 24px;
+            padding: 22px;
             box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 18px;
-            position: relative;
+            gap: 16px;
             transition: all 300ms ease;
+            position: relative;
         }
 
         .quest-card:hover {
             background: var(--surface-elevated);
             border-color: var(--gold-border);
-            box-shadow: var(--shadow-glow), var(--shadow-md);
+            box-shadow: var(--shadow-md), var(--shadow-glow);
             transform: translateY(-3px);
         }
 
         .quest-card-header {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            gap: 10px;
         }
 
         .quest-number-seal {
-            background: var(--gold-subtle);
-            color: var(--gold-primary);
-            border: 1px solid var(--gold-border);
             font-family: var(--font-headline);
             font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--purple-tertiary);
+            background: var(--purple-light);
+            border: 1px solid var(--purple-border);
             padding: 3px 10px;
             border-radius: var(--radius-sm);
+            letter-spacing: 1px;
         }
 
         .quest-slide-counter {
             font-family: var(--font-mono);
             font-size: 12px;
-            font-weight: 700;
-            background: var(--surface-alt);
-            color: var(--text-primary);
-            border: 1px solid var(--border-subtle);
-            padding: 3px 8px;
+            font-weight: 600;
+            color: var(--gold-primary);
+            background: var(--gold-light);
+            border: 1px solid var(--gold-border);
+            padding: 3px 10px;
             border-radius: var(--radius-sm);
         }
 
         .quest-card-body {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .quest-title {
             font-family: var(--font-headline);
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.4;
         }
 
         .quest-desc {
-            font-size: 14px;
+            font-size: 13.5px;
             color: var(--text-secondary);
-            line-height: 1.6;
         }
 
         .lore-notes-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: var(--purple-light);
-            color: var(--purple-tertiary);
-            border: 1px solid rgba(88, 28, 135, 0.3);
+            font-size: 12px;
+            color: var(--red-secondary);
+            background: var(--red-light);
+            border: 1px solid var(--red-border);
             padding: 4px 10px;
             border-radius: var(--radius-sm);
-            font-size: 12px;
             font-weight: 600;
             width: fit-content;
         }
 
-        /* Quest Action Buttons */
         .quest-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-subtle);
+            margin-top: 6px;
         }
 
-        /* QuestUI Buttons Specification */
-        .btn-quest {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            height: 40px;
-            padding: 8px 18px;
-            border-radius: var(--radius-default);
-            font-family: var(--font-headline);
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 250ms ease;
-            white-space: nowrap;
-        }
-
-        /* Primary Button: #CA8A04 fill, #1A0F0A text, 1px #DAA520 border, #B8780A hover */
-        .btn-primary {
-            background: var(--gold-primary);
-            color: #1A0F0A;
-            border: 1px solid var(--gold-border);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-primary:hover {
-            background: var(--gold-hover);
-            box-shadow: var(--shadow-glow);
-            transform: translateY(-1px);
-        }
-
-        /* Secondary Button: transparent fill, #CA8A04 text, 1px #CA8A04 border */
-        .btn-secondary {
-            background: transparent;
-            color: var(--gold-primary);
-            border: 1px solid var(--gold-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gold-subtle);
-            box-shadow: 0 0 10px rgba(202, 138, 4, 0.2);
-            color: var(--gold-hover);
-        }
-
-        /* Ghost / Inspect Button */
-        .btn-inspect {
+        .quest-actions .btn-inspect {
             grid-column: span 2;
-            background: var(--surface-alt);
-            color: var(--text-secondary);
-            border: 1px dashed var(--border-subtle);
-            height: 36px;
-            font-size: 11px;
         }
 
-        .btn-inspect:hover {
+        .empty-tome {
+            grid-column: 1 / -1;
             background: var(--surface-card);
-            border-color: var(--gold-primary);
-            color: var(--gold-primary);
+            border: 1px dashed var(--border-subtle);
+            border-radius: var(--radius-default);
+            padding: 48px 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* Destructive Button: #991B1B */
-        .btn-destructive {
-            background: var(--red-secondary);
-            color: #FFFFFF;
-            border: 1px solid var(--red-border);
+        .empty-tome h3 {
+            font-family: var(--font-headline);
+            font-size: 18px;
+            color: var(--text-primary);
         }
 
-        .btn-destructive:hover {
-            background: var(--red-hover);
+        .empty-tome p {
+            font-size: 14px;
+            color: var(--text-secondary);
         }
 
-        /* Modal Lightbox for Slide & PDF Viewing */
+        /* MODAL MANUSCRIPT LIGHTBOX FOR QUICK INSPECT */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(26, 15, 10, 0.7);
+            inset: 0;
+            background: rgba(26, 15, 10, 0.78);
             backdrop-filter: blur(6px);
             z-index: 9999;
             display: none;
@@ -875,32 +1022,26 @@
         }
 
         .modal-manuscript {
-            background: var(--bg-page);
-            border: 2px solid var(--gold-primary);
-            border-radius: var(--radius-md);
-            width: 100%;
-            max-width: 1180px;
-            height: 88vh;
+            background: var(--surface-card);
+            border: 1.5px solid var(--gold-border);
+            border-radius: var(--radius-default);
+            width: 95vw;
+            max-width: 1300px;
+            height: 90vh;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 16px 48px rgba(26, 15, 10, 0.4), var(--shadow-glow);
             overflow: hidden;
-            box-shadow: 0 0 35px rgba(202, 138, 4, 0.45), 0 20px 40px rgba(26, 15, 10, 0.3);
-            animation: modal-unfold 300ms ease;
-        }
-
-        @keyframes modal-unfold {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
         }
 
         .modal-header {
+            background: var(--surface-alt);
+            border-bottom: 2px solid var(--gold-primary);
+            padding: 14px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 24px;
-            background: var(--surface-card);
-            border-bottom: 1px solid var(--border-subtle);
-            border-top: 3px solid var(--gold-primary);
+            gap: 16px;
         }
 
         .modal-header h3 {
@@ -911,37 +1052,34 @@
         }
 
         .modal-header span {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
-            font-style: italic;
         }
 
         .modal-close-seal {
-            background: var(--red-light);
-            border: 1px solid var(--red-border);
-            color: var(--red-secondary);
-            width: 34px;
-            height: 34px;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-size: 18px;
+            width: 32px;
+            height: 32px;
             border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            font-weight: 700;
             cursor: pointer;
             transition: all 200ms ease;
         }
 
         .modal-close-seal:hover {
-            background: var(--red-secondary);
-            color: #FFFFFF;
+            background: var(--red-light);
+            border-color: var(--red-border);
+            color: var(--red-secondary);
         }
 
         .modal-body-iframe {
             flex: 1;
-            width: 100%;
-            height: 100%;
-            background: #2D2D2D;
+            background: #111;
         }
 
         .modal-body-iframe iframe {
@@ -950,64 +1088,315 @@
             border: none;
         }
 
-        /* Empty State */
-        .empty-tome {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 60px 20px;
-            background: var(--surface-card);
-            border: 1px dashed var(--border-subtle);
-            border-radius: var(--radius-default);
+        /* ======================================================== */
+        /* OPTION 1: QUESTUI PDF.JS STREAMING WEB READER MODAL      */
+        /* ======================================================== */
+        .pdf-reader-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 15, 10, 0.88);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
         }
 
-        .empty-tome h3 {
+        .pdf-reader-toolbar {
+            background: #FFFFFF;
+            border-bottom: 2px solid var(--gold-primary);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            box-shadow: 0 4px 16px rgba(26, 15, 10, 0.15);
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .pdf-toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 220px;
+        }
+
+        .pdf-realm-seal {
+            font-size: 26px;
+            width: 42px;
+            height: 42px;
+            background: var(--gold-light);
+            border: 1px solid var(--gold-border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .pdf-doc-meta h4 {
             font-family: var(--font-headline);
-            font-size: 18px;
+            font-size: 15px;
+            font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            line-height: 1.2;
+            max-width: 320px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .empty-tome p {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* Footer */
-        .royal-footer {
-            text-align: center;
-            padding: 24px;
-            font-size: 13px;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-subtle);
-            margin-top: 20px;
-            font-family: var(--font-headline);
+        .pdf-stream-badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--success);
             letter-spacing: 0.5px;
         }
 
+        .pdf-toolbar-center {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-page-jump-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 3px 8px;
+        }
+
+        .pdf-page-jump-wrap input {
+            width: 52px;
+            height: 28px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .pdf-page-jump-wrap input:focus {
+            border-color: var(--gold-primary);
+        }
+
+        .pdf-total-pages {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .pdf-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-zoom-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 3px 6px;
+        }
+
+        .pdf-zoom-text {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 44px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .pdf-tool-btn {
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: var(--font-headline);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 150ms ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pdf-tool-btn:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        .pdf-tool-btn-icon {
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 150ms ease;
+        }
+
+        .pdf-tool-btn-icon:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        .pdf-close-btn:hover {
+            background: var(--red-light);
+            border-color: var(--red-border);
+            color: var(--red-secondary);
+        }
+
+        .pdf-viewer-viewport {
+            flex: 1;
+            background: #EBE3D5;
+            background-image: radial-gradient(circle at 50% 50%, rgba(202, 138, 4, 0.05) 0%, transparent 80%);
+            overflow: auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            padding: 24px 20px 48px;
+        }
+
+        .pdf-stream-loader {
+            position: absolute;
+            top: 20px;
+            background: #FFFFFF;
+            border: 1px solid var(--gold-border);
+            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-sm);
+            padding: 8px 18px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 20;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .loader-rune-spinner {
+            animation: pulse-spin 1.2s infinite ease-in-out;
+            font-size: 18px;
+            color: var(--gold-primary);
+        }
+
+        @keyframes pulse-spin {
+            0% { transform: rotate(0deg) scale(0.9); }
+            50% { transform: rotate(180deg) scale(1.15); }
+            100% { transform: rotate(360deg) scale(0.9); }
+        }
+
+        .pdf-canvas-container {
+            position: relative;
+            box-shadow: 0 8px 32px rgba(26, 15, 10, 0.28), 0 0 0 1px rgba(202, 138, 4, 0.3);
+            border-radius: var(--radius-sm);
+            background: #FFFFFF;
+            margin: auto;
+            height: fit-content;
+        }
+
+        #pdfCanvas {
+            display: block;
+            border-radius: var(--radius-sm);
+        }
+
+        .floating-nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid var(--gold-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold-primary);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all 200ms ease;
+            z-index: 15;
+            user-select: none;
+        }
+
+        .floating-nav-btn.prev { left: 24px; }
+        .floating-nav-btn.next { right: 24px; }
+
+        .floating-nav-btn:hover {
+            background: var(--gold-primary);
+            color: #1A0F0A;
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* ROYAL FOOTER */
+        .royal-footer {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+            font-family: var(--font-headline);
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+        }
+
+        /* RESPONSIVE DESIGN */
         @media (max-width: 900px) {
-            .lore-kpi-row { grid-template-columns: repeat(2, 1fr); }
-            .quests-grid { grid-template-columns: 1fr; }
-            .realm-grid { grid-template-columns: 1fr; }
-            .royal-textbook-hero { flex-direction: column; align-items: flex-start; }
+            .pdf-toolbar-left { min-width: auto; }
+            .pdf-doc-meta h4 { max-width: 180px; }
+            .floating-nav-btn { display: none; }
         }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <!-- Medieval Royal Header -->
+        <!-- Royal Header -->
         <header class="royal-header">
             <div class="royal-brand">
                 <div class="royal-crest">⚜️</div>
                 <div class="royal-titles">
                     <h1>Aksorn Smart PPT <span class="edition-tag">QUEST & E-BOOK ARCHIVES</span></h1>
-                    <p>ระบบศูนย์รวมคัมภีร์สื่อการสอนอินเตอร์แอคทีฟ & หนังสือเรียนฉบับเต็ม PDF</p>
+                    <p>ระบบศูนย์รวมคัมภีร์สื่อการสอนอินเตอร์แอคทีฟ & หนังสือเรียนฉบับเต็ม PDF (Byte-Range Fast Streaming)</p>
                 </div>
             </div>
 
-            <div class="realm-status">
-                <span class="status-rune"></span>
-                <span>REALM ONLINE // RUNES ACTIVE</span>
+            <div class="header-actions">
+                <div class="realm-status">
+                    <span class="status-rune"></span>
+                    <span>REALM ONLINE // RUNES ACTIVE</span>
+                </div>
+                <button class="btn-mode-toggle" id="modeToggleBtn" onclick="toggleOverviewMode()">
+                    🌐 ดูเนื้อหาทั้งหมด (All-in-One)
+                </button>
             </div>
         </header>
 
@@ -1016,9 +1405,9 @@
             <div class="lore-kpi-card">
                 <div class="kpi-crest-icon crest-gold">🏰</div>
                 <div class="kpi-details">
-                    <span class="kpi-caption">วิชาที่เปิดรับ (REALMS)</span>
-                    <span class="kpi-number">4</span>
-                    <span class="kpi-desc">หมวดวิชาตามหลักสูตรแกนกลาง</span>
+                    <span class="kpi-caption">กลุ่มสาระการเรียนรู้</span>
+                    <span class="kpi-number">3</span>
+                    <span class="kpi-desc">หมวดวิชาหลักสูตรแกนกลาง</span>
                 </div>
             </div>
 
@@ -1027,7 +1416,7 @@
                 <div class="kpi-details">
                     <span class="kpi-caption">หนังสือเรียน (TEXTBOOKS)</span>
                     <span class="kpi-number">3</span>
-                    <span class="kpi-desc">ฉบับเต็ม PDF คมชัดสูง</span>
+                    <span class="kpi-desc">ฉบับเต็ม PDF สตรีมมิ่งความเร็วสูง</span>
                 </div>
             </div>
 
@@ -1045,60 +1434,90 @@
                 <div class="kpi-details">
                     <span class="kpi-caption">สไลด์เวทมนตร์ (SLIDES)</span>
                     <span class="kpi-number">666</span>
-                    <span class="kpi-desc">พร้อมสคริปต์และข้อสอบ</span>
+                    <span class="kpi-desc">พร้อมสคริปต์สอนและข้อสอบ</span>
                 </div>
             </div>
         </section>
 
-        <!-- STEP 1: REALM SELECTOR (เลือกวิชาก่อน) -->
-        <section class="realm-selection-section">
+        <!-- HIERARCHICAL INTERACTIVE BREADCRUMBS -->
+        <nav class="quest-breadcrumb-nav">
+            <div class="breadcrumb-trail">
+                <button class="breadcrumb-item" id="bcStep1" onclick="goToStep(1)">
+                    <span class="breadcrumb-icon">🏰</span> กลุ่มสาระการเรียนรู้
+                </button>
+                
+                <span class="breadcrumb-sep" id="bcSep1" style="display:none;">›</span>
+                <button class="breadcrumb-item" id="bcStep2" style="display:none;" onclick="goToStep(2)">
+                    <span class="breadcrumb-icon" id="bcGroupIcon">⚒️</span> <span id="bcGroupText">การงานอาชีพ</span>
+                </button>
+
+                <span class="breadcrumb-sep" id="bcSep2" style="display:none;">›</span>
+                <span class="breadcrumb-current" id="bcStep3" style="display:none;">
+                    <span class="breadcrumb-icon">🎓</span> <span id="bcGradeText">ม.1</span>
+                </span>
+            </div>
+
+            <div>
+                <button class="btn-quest-back" id="backStepBtn" style="display:none;" onclick="goBackStep()">
+                    ← ย้อนกลับ
+                </button>
+            </div>
+        </nav>
+
+        <!-- ======================================================== -->
+        <!-- VIEW CONTAINER: DYNAMICALLY SWITCHES STEPS 1, 2, 3       -->
+        <!-- ======================================================== -->
+
+        <!-- STEP 1 VIEW: เลือกกลุ่มสาระการเรียนรู้ -->
+        <section id="viewStep1" class="step-view">
             <div class="section-headline-bar">
                 <div class="headline-group">
                     <div class="step-rune-badge">I</div>
                     <div>
-                        <h2>ขั้นตอนที่ 1: เลือกวิชาเพื่อเริ่มต้นการสำรวจ (CHOOSE REALM)</h2>
-                        <p>เลือกอาณาจักรแห่งความรู้เพื่อเปิดดูหนังสือเรียนฉบับเต็ม (PDF) และเควสต์สไลด์การสอน</p>
+                        <h2>ขั้นตอนที่ 1: เลือกกลุ่มสาระการเรียนรู้ (SELECT SUBJECT REALM)</h2>
+                        <p>เลือกกลุ่มสาระวิชาเพื่อเจาะลึกไปยังระดับชั้น ตำราเรียน PDF และเควสต์สไลด์การสอน</p>
                     </div>
-                </div>
-
-                <div>
-                    <button class="quest-chip" id="showAllRealmsBtn" onclick="selectAllRealms()" style="cursor: pointer;">
-                        🌐 แสดงทุกวิชาพร้อมกัน
-                    </button>
                 </div>
             </div>
 
-            <div class="realm-grid" id="realmSelectorGrid">
-                <!-- Dynamically populated realm cards -->
+            <div class="group-cards-grid" id="groupCardsContainer">
+                <!-- Dynamically populated subject group cards -->
             </div>
         </section>
 
-        <!-- STEP 2: ACTIVE REALM, FULL TEXTBOOK HERO & QUEST CHAPTERS -->
-        <section class="quests-container">
-            <!-- Active Realm Heraldry Banner -->
-            <div class="active-realm-banner" id="activeRealmBanner">
-                <div class="banner-heraldry">
-                    <div class="heraldry-seal" id="bannerSeal">💼</div>
-                    <div class="banner-titles">
-                        <h2 id="bannerTitle">การงานอาชีพ ม.1</h2>
-                        <p id="bannerSubtitle">กลุ่มสาระการเรียนรู้การงานอาชีพ • 5 หน่วยการเรียนรู้ • 246 สไลด์</p>
+        <!-- STEP 2 VIEW: เลือกระดับชั้นการศึกษา -->
+        <section id="viewStep2" class="step-view" style="display:none;">
+            <div class="section-headline-bar">
+                <div class="headline-group">
+                    <div class="step-rune-badge">II</div>
+                    <div>
+                        <h2 id="step2Headline">ขั้นตอนที่ 2: เลือกระดับชั้นการศึกษา (SELECT GRADE LEVEL)</h2>
+                        <p id="step2Subtitle">ระดับชั้นที่เปิดสอนในกลุ่มสาระนี้</p>
                     </div>
                 </div>
+            </div>
 
-                <div>
-                    <span class="quest-chip" id="bannerStatsBadge" style="background: var(--gold-light); border-color: var(--gold-border); color: #1A0F0A; font-weight: 700;">
-                        ⚡ 5 เควสต์บทเรียน
-                    </span>
+            <div class="grade-cards-grid" id="gradeCardsContainer">
+                <!-- Dynamically populated grade cards -->
+            </div>
+        </section>
+
+        <!-- STEP 3 VIEW: ห้องเรียนรายวิชา ตำราเรียน PDF และเควสต์บทเรียน -->
+        <section id="viewStep3" class="step-view" style="display:none;">
+            <!-- Multiple courses switcher (if grade has >1 course) -->
+            <div id="courseTabsWrap" style="display:none; margin-bottom: 20px;">
+                <div class="course-tabs-bar" id="courseTabsContainer">
+                    <!-- Course buttons -->
                 </div>
             </div>
 
             <!-- Full Textbook PDF Hero Card -->
             <div id="textbookHeroContainer">
-                <!-- Dynamically injected textbook card -->
+                <!-- Injected textbook card -->
             </div>
 
-            <!-- Search and Filter Controls -->
-            <div class="quest-controls-bar">
+            <!-- Search and Filter Bar -->
+            <div class="quest-controls-bar" style="margin-top: 20px;">
                 <div class="search-scroll-wrap">
                     <span class="search-icon-rune">🔍</span>
                     <input type="text" id="searchInput" placeholder="ค้นหาชื่อเควสต์, หัวข้อบทเรียน, หรือคำสำคัญ..." oninput="handleSearch()">
@@ -1112,8 +1531,8 @@
             </div>
 
             <!-- Quests Grid -->
-            <div class="quests-grid" id="questsGrid">
-                <!-- Dynamically populated quest cards -->
+            <div class="quests-grid" id="questsGrid" style="margin-top: 20px;">
+                <!-- Injected quest cards -->
             </div>
         </section>
 
@@ -1123,7 +1542,63 @@
         </footer>
     </div>
 
-    <!-- Modal Manuscript Lightbox for Slide & PDF Presentation Inspection -->
+    <!-- ======================================================== -->
+    <!-- OPTION 1: QUESTUI PDF.JS STREAMING WEB READER MODAL      -->
+    <!-- ======================================================== -->
+    <div class="pdf-reader-modal" id="pdfReaderModal">
+        <!-- Top Toolbar -->
+        <div class="pdf-reader-toolbar">
+            <div class="pdf-toolbar-left">
+                <span class="pdf-realm-seal">📖</span>
+                <div class="pdf-doc-meta">
+                    <h4 id="pdfReaderTitle">หนังสือเรียนฉบับสมบูรณ์ PDF</h4>
+                    <span class="pdf-stream-badge">⚡ BYTE-RANGE STREAMING • โหลดทันที</span>
+                </div>
+            </div>
+
+            <div class="pdf-toolbar-center">
+                <button class="pdf-tool-btn" id="pdfPrevBtn" onclick="prevPdfPage()" title="หน้าก่อนหน้า (Arrow Left)">◀ หน้าก่อน</button>
+                <div class="pdf-page-jump-wrap">
+                    <input type="number" id="pdfPageInput" min="1" value="1" onchange="jumpPdfPage(this.value)" onkeydown="if(event.key==='Enter') jumpPdfPage(this.value)">
+                    <span class="pdf-total-pages" id="pdfTotalPages">/ ...</span>
+                </div>
+                <button class="pdf-tool-btn" id="pdfNextBtn" onclick="nextPdfPage()" title="หน้าถัดไป (Arrow Right)">ถัดไป ▶</button>
+            </div>
+
+            <div class="pdf-toolbar-right">
+                <div class="pdf-zoom-group">
+                    <button class="pdf-tool-btn-icon" onclick="zoomPdfOut()" title="ย่อขนาด (-)">−</button>
+                    <span class="pdf-zoom-text" id="pdfZoomLabel" onclick="zoomPdfFit()" title="คลิกเพื่อพอดีหน้าจอ">100%</span>
+                    <button class="pdf-tool-btn-icon" onclick="zoomPdfIn()" title="ขยายขนาด (+)">+</button>
+                    <button class="pdf-tool-btn" onclick="zoomPdfFit()" title="พอดีความกว้าง">พอดีจอ</button>
+                </div>
+                <a id="pdfDownloadLink" href="#" download class="pdf-tool-btn" style="background: var(--gold-light); border-color: var(--gold-border); color: #1A0F0A;" title="ดาวน์โหลดไฟล์ PDF เก็บไว้">
+                    ⬇️ ดาวน์โหลด
+                </a>
+                <button class="pdf-tool-btn-icon pdf-close-btn" onclick="closePdfReader()" title="ปิดโปรแกรมอ่าน (Esc)">✕</button>
+            </div>
+        </div>
+
+        <!-- Viewport -->
+        <div class="pdf-viewer-viewport" id="pdfViewport">
+            <!-- Shimmering Loading Progress Indicator -->
+            <div class="pdf-stream-loader" id="pdfStreamLoader">
+                <div class="loader-rune-spinner">⚡</div>
+                <span id="pdfLoadingText">กำลังสตรีมมิ่งหน้าแรกผ่าน Byte-Range Request...</span>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="pdf-canvas-container" id="pdfCanvasContainer">
+                <canvas id="pdfCanvas"></canvas>
+            </div>
+
+            <!-- Floating Chevrons -->
+            <button class="floating-nav-btn prev" onclick="prevPdfPage()" title="หน้าก่อนหน้า">‹</button>
+            <button class="floating-nav-btn next" onclick="nextPdfPage()" title="หน้าถัดไป">›</button>
+        </div>
+    </div>
+
+    <!-- Quick Inspect Slide Modal -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
         <div class="modal-manuscript">
             <div class="modal-header">
@@ -1139,127 +1614,198 @@
         </div>
     </div>
 
+    <!-- ======================================================== -->
+    <!-- JAVASCRIPT: LOGIC & STREAMING CONTROLLER                 -->
+    <!-- ======================================================== -->
     <script>
-        const coursesData = {"การงานอาชีพ_ม.1": {"clean_subj": "การงานอาชีพ_ม.1", "displayName": "การงานอาชีพ ม.1", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "units": [{"assetId": "e3641408-b5bf-410d-92b5-acf112431f63", "title": "หน่วยที่ 1 เรียนรู้กระบวนการทำงาน", "clean_unit": "หน่วยที่_1_เรียนรู้กระบวนการทำงาน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/e3641408-b5bf-410d-92b5-acf112431f63.jpg", "slideCount": 58, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "1af5533e-f358-44fa-bfd2-a59c2590293a", "title": "หน่วยที่ 2 การดูแลรักษาบ้าน", "clean_unit": "หน่วยที่_2_การดูแลรักษาบ้าน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/1af5533e-f358-44fa-bfd2-a59c2590293a.jpg", "slideCount": 106, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "123ba307-0ed5-4a77-a8b2-bb53e98767cd", "title": "หน่วยที่ 3 อาหารกับการดำรงชีวิต", "clean_unit": "หน่วยที่_3_อาหารกับการดำรงชีวิต", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/123ba307-0ed5-4a77-a8b2-bb53e98767cd.jpg", "slideCount": 89, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "35136d2c-ceda-4a2d-ac8b-bd1a83f53905", "title": "หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น", "clean_unit": "หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/35136d2c-ceda-4a2d-ac8b-bd1a83f53905.jpg", "slideCount": 116, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "a88c5677-981b-4c1e-ad9b-d0c779108f9d", "title": "หน่วยที่ 5 โลกของอาชีพ", "clean_unit": "หน่วยที่_5_โลกของอาชีพ", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/a88c5677-981b-4c1e-ad9b-d0c779108f9d.jpg", "slideCount": 96, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": {"title": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "url": "assets/ebooks/การงานอาชีพ_ม.1.pdf", "pages": 131, "size_mb": 36.8}}, "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1": {"clean_subj": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1", "displayName": "รายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "rawProductName": "หนังสือเรียน รายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "subjectGroup": "วิทยาศาสตร์และเทคโนโลยี", "gradeName": "grade12", "units": [{"assetId": "c07cee66-20ef-4a89-bf1a-2a6c55474d36", "title": "หน่วยที่ 4 ของไหล", "clean_unit": "หน่วยที่_4_ของไหล", "clean_subj": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1", "productName": "หนังสือเรียน รายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "subjectGroup": "วิทยาศาสตร์และเทคโนโลยี", "gradeName": "grade12", "coverImg": "assets/covers/c07cee66-20ef-4a89-bf1a-2a6c55474d36.jpg", "slideCount": 85, "hasNotes": true, "interactiveUrl": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1/หน่วยที่_4_ของไหล/index.html", "readingUrl": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1/หน่วยที่_4_ของไหล/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1/หน่วยที่_4_ของไหล/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": {"title": "หนังสือเรียนรายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "url": "assets/ebooks/ฟิสิกส์_ม.6_เล่ม_1.pdf", "pages": 227, "size_mb": 57.0}}, "ประวัติศาสตร์สากล_ม.4-6": {"clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "displayName": "ประวัติศาสตร์สากล ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "units": [{"assetId": "cf54bc41-5e9d-44ba-849b-afca7dfab203", "title": "หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_unit": "หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/cf54bc41-5e9d-44ba-849b-afca7dfab203.jpg", "slideCount": 74, "hasNotes": true, "interactiveUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/index.html", "readingUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": null}, "พระพุทธศาสนา_ม.4-6": {"clean_subj": "พระพุทธศาสนา_ม.4-6", "displayName": "พระพุทธศาสนา ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "units": [{"assetId": "7712640c-4d60-43c3-b3e2-fa7389b86ffa", "title": "หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา", "clean_unit": "หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา", "clean_subj": "พระพุทธศาสนา_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/7712640c-4d60-43c3-b3e2-fa7389b86ffa.jpg", "slideCount": 42, "hasNotes": true, "interactiveUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/index.html", "readingUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": {"title": "หนังสือเรียน พระพุทธศาสนา ม.4-6", "url": "assets/ebooks/พระพุทธศาสนา_ม.4-6.pdf", "pages": 179, "size_mb": 57.6}}};
+        const coursesData = {"การงานอาชีพ_ม.1": {"clean_subj": "การงานอาชีพ_ม.1", "displayName": "การงานอาชีพ ม.1", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "กลุ่มสาระการเรียนรู้การงานอาชีพ", "groupShort": "การงานอาชีพ", "groupIcon": "⚒️", "groupDesc": "ทักษะงานช่าง งานเกษตร งานประดิษฐ์ และการดำรงชีวิตเพื่ออาชีพ", "gradeName": "มัธยมศึกษาปีที่ 1 (ม.1)", "gradeBadge": "มัธยมศึกษาตอนต้น (ม.1)", "gradeShort": "ม.1", "units": [{"assetId": "e3641408-b5bf-410d-92b5-acf112431f63", "title": "หน่วยที่ 1 เรียนรู้กระบวนการทำงาน", "clean_unit": "หน่วยที่_1_เรียนรู้กระบวนการทำงาน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "กลุ่มสาระการเรียนรู้การงานอาชีพ", "gradeName": "มัธยมศึกษาปีที่ 1 (ม.1)", "coverImg": "assets/covers/e3641408-b5bf-410d-92b5-acf112431f63.jpg", "slideCount": 58, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "1af5533e-f358-44fa-bfd2-a59c2590293a", "title": "หน่วยที่ 2 การดูแลรักษาบ้าน", "clean_unit": "หน่วยที่_2_การดูแลรักษาบ้าน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "กลุ่มสาระการเรียนรู้การงานอาชีพ", "gradeName": "มัธยมศึกษาปีที่ 1 (ม.1)", "coverImg": "assets/covers/1af5533e-f358-44fa-bfd2-a59c2590293a.jpg", "slideCount": 106, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "123ba307-0ed5-4a77-a8b2-bb53e98767cd", "title": "หน่วยที่ 3 อาหารกับการดำรงชีวิต", "clean_unit": "หน่วยที่_3_อาหารกับการดำรงชีวิต", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "กลุ่มสาระการเรียนรู้การงานอาชีพ", "gradeName": "มัธยมศึกษาปีที่ 1 (ม.1)", "coverImg": "assets/covers/123ba307-0ed5-4a77-a8b2-bb53e98767cd.jpg", "slideCount": 89, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "35136d2c-ceda-4a2d-ac8b-bd1a83f53905", "title": "หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น", "clean_unit": "หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "กลุ่มสาระการเรียนรู้การงานอาชีพ", "gradeName": "มัธยมศึกษาปีที่ 1 (ม.1)", "coverImg": "assets/covers/35136d2c-ceda-4a2d-ac8b-bd1a83f53905.jpg", "slideCount": 116, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "a88c5677-981b-4c1e-ad9b-d0c779108f9d", "title": "หน่วยที่ 5 โลกของอาชีพ", "clean_unit": "หน่วยที่_5_โลกของอาชีพ", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "กลุ่มสาระการเรียนรู้การงานอาชีพ", "gradeName": "มัธยมศึกษาปีที่ 1 (ม.1)", "coverImg": "assets/covers/a88c5677-981b-4c1e-ad9b-d0c779108f9d.jpg", "slideCount": 96, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": {"title": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "url": "assets/ebooks/การงานอาชีพ_ม.1.pdf", "pages": 131, "size_mb": 36.8}}, "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1": {"clean_subj": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1", "displayName": "รายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "rawProductName": "หนังสือเรียน รายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "subjectGroup": "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี", "groupShort": "วิทยาศาสตร์ฯ", "groupIcon": "🔬", "groupDesc": "ฟิสิกส์ขั้นสูง สมบัติของสสาร ของไหล และกระบวนการคิดทางวิทยาศาสตร์", "gradeName": "มัธยมศึกษาปีที่ 6 (ม.6)", "gradeBadge": "มัธยมศึกษาตอนปลาย (ม.6)", "gradeShort": "ม.6", "units": [{"assetId": "c07cee66-20ef-4a89-bf1a-2a6c55474d36", "title": "หน่วยที่ 4 ของไหล", "clean_unit": "หน่วยที่_4_ของไหล", "clean_subj": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1", "productName": "หนังสือเรียน รายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "subjectGroup": "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี", "gradeName": "มัธยมศึกษาปีที่ 6 (ม.6)", "coverImg": "assets/covers/c07cee66-20ef-4a89-bf1a-2a6c55474d36.jpg", "slideCount": 85, "hasNotes": true, "interactiveUrl": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1/หน่วยที่_4_ของไหล/index.html", "readingUrl": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1/หน่วยที่_4_ของไหล/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1/หน่วยที่_4_ของไหล/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": {"title": "หนังสือเรียนรายวิชาเพิ่มเติม ฟิสิกส์ ม.6 เล่ม 1", "url": "assets/ebooks/ฟิสิกส์_ม.6_เล่ม_1.pdf", "pages": 227, "size_mb": 57.0}}, "ประวัติศาสตร์สากล_ม.4-6": {"clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "displayName": "ประวัติศาสตร์สากล ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม", "groupShort": "สังคมศึกษาฯ", "groupIcon": "☸️", "groupDesc": "หลักธรรมทางพระพุทธศาสนา ประวัติศาสตร์สากล และศีลธรรมคุณธรรม", "gradeName": "มัธยมศึกษาตอนปลาย (ม.4-6)", "gradeBadge": "มัธยมศึกษาตอนปลาย (ม.4-6)", "gradeShort": "ม.4-6", "units": [{"assetId": "cf54bc41-5e9d-44ba-849b-afca7dfab203", "title": "หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_unit": "หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม", "gradeName": "มัธยมศึกษาตอนปลาย (ม.4-6)", "coverImg": "assets/covers/cf54bc41-5e9d-44ba-849b-afca7dfab203.jpg", "slideCount": 74, "hasNotes": true, "interactiveUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/index.html", "readingUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": null}, "พระพุทธศาสนา_ม.4-6": {"clean_subj": "พระพุทธศาสนา_ม.4-6", "displayName": "พระพุทธศาสนา ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม", "groupShort": "สังคมศึกษาฯ", "groupIcon": "☸️", "groupDesc": "หลักธรรมทางพระพุทธศาสนา ประวัติศาสตร์สากล และศีลธรรมคุณธรรม", "gradeName": "มัธยมศึกษาตอนปลาย (ม.4-6)", "gradeBadge": "มัธยมศึกษาตอนปลาย (ม.4-6)", "gradeShort": "ม.4-6", "units": [{"assetId": "7712640c-4d60-43c3-b3e2-fa7389b86ffa", "title": "หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา", "clean_unit": "หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา", "clean_subj": "พระพุทธศาสนา_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม", "gradeName": "มัธยมศึกษาตอนปลาย (ม.4-6)", "coverImg": "assets/covers/7712640c-4d60-43c3-b3e2-fa7389b86ffa.jpg", "slideCount": 42, "hasNotes": true, "interactiveUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/index.html", "readingUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/สคริปต์ครู_และแนวคำตอบ.txt"}], "textbook": {"title": "หนังสือเรียน พระพุทธศาสนา ม.4-6", "url": "assets/ebooks/พระพุทธศาสนา_ม.4-6.pdf", "pages": 179, "size_mb": 57.6}}};
+        const hierarchyData = {"กลุ่มสาระการเรียนรู้การงานอาชีพ": {"groupName": "กลุ่มสาระการเรียนรู้การงานอาชีพ", "groupShort": "การงานอาชีพ", "groupIcon": "⚒️", "groupDesc": "ทักษะงานช่าง งานเกษตร งานประดิษฐ์ และการดำรงชีวิตเพื่ออาชีพ", "grades": {"มัธยมศึกษาปีที่ 1 (ม.1)": {"gradeName": "มัธยมศึกษาปีที่ 1 (ม.1)", "gradeBadge": "มัธยมศึกษาตอนต้น (ม.1)", "gradeShort": "ม.1", "courseKeys": ["การงานอาชีพ_ม.1"]}}}, "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี": {"groupName": "กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี", "groupShort": "วิทยาศาสตร์ฯ", "groupIcon": "🔬", "groupDesc": "ฟิสิกส์ขั้นสูง สมบัติของสสาร ของไหล และกระบวนการคิดทางวิทยาศาสตร์", "grades": {"มัธยมศึกษาปีที่ 6 (ม.6)": {"gradeName": "มัธยมศึกษาปีที่ 6 (ม.6)", "gradeBadge": "มัธยมศึกษาตอนปลาย (ม.6)", "gradeShort": "ม.6", "courseKeys": ["รายวิชาเพิ่มเติม_ฟิสิกส์_ม.6_เล่ม_1"]}}}, "กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม": {"groupName": "กลุ่มสาระการเรียนรู้สังคมศึกษา ศาสนา และวัฒนธรรม", "groupShort": "สังคมศึกษาฯ", "groupIcon": "☸️", "groupDesc": "หลักธรรมทางพระพุทธศาสนา ประวัติศาสตร์สากล และศีลธรรมคุณธรรม", "grades": {"มัธยมศึกษาตอนปลาย (ม.4-6)": {"gradeName": "มัธยมศึกษาตอนปลาย (ม.4-6)", "gradeBadge": "มัธยมศึกษาตอนปลาย (ม.4-6)", "gradeShort": "ม.4-6", "courseKeys": ["ประวัติศาสตร์สากล_ม.4-6", "พระพุทธศาสนา_ม.4-6"]}}}};
 
-        let currentSelectedSubject = null;
+        // Navigation State Machine
+        let currentStep = 1; // 1: Groups, 2: Grades, 3: Course & Materials
+        let selectedGroupName = null;
+        let selectedGradeName = null;
+        let selectedCourseKey = null;
+        let isOverviewMode = false;
+
         let currentFilter = 'all';
         let searchQuery = '';
 
-        const realmIcons = {
-            "การงานอาชีพ": "⚒️",
-            "พระพุทธศาสนา": "☸️",
-            "ประวัติศาสตร์สากล": "🌍",
-            "ฟิสิกส์": "⚛️",
-            "วิทยาศาสตร์": "🔬",
-            "คณิตศาสตร์": "📐"
-        };
-
-        function getRealmIcon(name) {
-            for (const [key, icon] of Object.entries(realmIcons)) {
-                if (name.includes(key)) return icon;
-            }
-            return "📜";
+        // Configure PDF.js Worker
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         }
 
-        // Render Step 1: Realm Cards
-        function renderRealmCards() {
-            const container = document.getElementById('realmSelectorGrid');
+        // PDF.js State Variables
+        let pdfDoc = null;
+        let pdfCurrentPage = 1;
+        let pdfTotalPagesCount = 0;
+        let pdfScale = 1.25;
+        let pdfIsRendering = false;
+        let pdfRenderQueue = null;
+
+        // ==========================================
+        // STEP 1: RENDER SUBJECT GROUPS
+        // ==========================================
+        function renderStep1Groups() {
+            const container = document.getElementById('groupCardsContainer');
             container.innerHTML = '';
 
-            const keys = Object.keys(coursesData);
-            if (keys.length > 0 && !currentSelectedSubject) {
-                currentSelectedSubject = keys[0];
-            }
+            Object.values(hierarchyData).forEach(grp => {
+                // Calculate aggregated statistics for this group
+                let groupCoursesCount = 0;
+                let groupUnitsCount = 0;
+                let groupSlidesCount = 0;
+                let groupPdfsCount = 0;
 
-            keys.forEach(subjKey => {
-                const course = coursesData[subjKey];
-                const totalUnits = course.units.length;
-                const totalSlides = course.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
-                const icon = getRealmIcon(course.displayName);
-                const isActive = currentSelectedSubject === subjKey;
-                const hasTextbook = Boolean(course.textbook);
+                Object.values(grp.grades).forEach(grd => {
+                    groupCoursesCount += grd.courseKeys.length;
+                    grd.courseKeys.forEach(ck => {
+                        const c = coursesData[ck];
+                        if (c) {
+                            groupUnitsCount += c.units.length;
+                            groupSlidesCount += c.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
+                            if (c.textbook) groupPdfsCount += 1;
+                        }
+                    });
+                });
+
+                const gradesCount = Object.keys(grp.grades).length;
 
                 const card = document.createElement('div');
-                card.className = `realm-card ${isActive ? 'active' : ''}`;
-                card.onclick = () => selectRealm(subjKey);
+                card.className = 'group-card';
+                card.onclick = () => selectGroup(grp.groupName);
 
                 card.innerHTML = `
-                    <div class="realm-card-top">
-                        <div class="realm-emblem">${icon}</div>
-                        <div class="realm-info">
-                            <h3>${course.displayName}</h3>
-                            <span class="grade-text">${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''}</span>
+                    <div class="group-card-header">
+                        <div class="group-emblem">${grp.groupIcon}</div>
+                        <div class="group-header-text">
+                            <h3>${grp.groupName}</h3>
+                            <p>${grp.groupDesc}</p>
                         </div>
                     </div>
-                    <div class="realm-pills">
-                        ${hasTextbook ? `<span class="quest-chip" style="background: var(--purple-light); color: var(--purple-tertiary); border: 1px solid var(--purple-border); font-weight: 700;">📖 มีหนังสือเรียน PDF (${course.textbook.pages} หน้า)</span>` : ''}
-                        <span class="quest-chip">📜 ${totalUnits} เควสต์บทเรียน</span>
-                        <span class="quest-chip">⚡ ${totalSlides} สไลด์</span>
+
+                    <div class="group-pills">
+                        <span class="quest-chip" style="background: var(--purple-light); color: var(--purple-tertiary); border-color: var(--purple-border); font-weight: 700;">
+                            🎓 ${gradesCount} ระดับชั้น (${groupCoursesCount} วิชา)
+                        </span>
+                        ${groupPdfsCount > 0 ? `<span class="quest-chip" style="background: var(--gold-light); color: #1A0F0A; border-color: var(--gold-border); font-weight: 700;">📖 มีหนังสือเรียน PDF</span>` : ''}
+                        <span class="quest-chip">📜 ${groupUnitsCount} เควสต์บทเรียน</span>
+                        <span class="quest-chip">⚡ ${groupSlidesCount} สไลด์</span>
                     </div>
-                    <div class="realm-footer-action">
-                        <span>${isActive ? '✦ เลือกวิชานี้อยู่' : 'คลิกเพื่อเลือกวิชานี้'}</span>
-                        <span>⚔️ →</span>
+
+                    <div class="group-footer-action">
+                        <span>เลือกระดับชั้นการศึกษา</span>
+                        <span>⚔️ เข้าสู่กลุ่มสาระนี้ →</span>
                     </div>
                 `;
                 container.appendChild(card);
             });
-
-            const allBtn = document.getElementById('showAllRealmsBtn');
-            if (allBtn) {
-                if (currentSelectedSubject === null) {
-                    allBtn.style.background = 'var(--gold-primary)';
-                    allBtn.style.color = '#1A0F0A';
-                    allBtn.style.fontWeight = '700';
-                } else {
-                    allBtn.style.background = 'var(--surface-card)';
-                    allBtn.style.color = 'var(--text-secondary)';
-                    allBtn.style.fontWeight = '400';
-                }
-            }
         }
 
-        function selectRealm(subjKey) {
-            currentSelectedSubject = subjKey;
-            renderRealmCards();
-            updateBanner();
-            renderTextbookHero();
-            renderQuests();
+        function selectGroup(groupName) {
+            selectedGroupName = groupName;
+            goToStep(2);
         }
 
-        function selectAllRealms() {
-            currentSelectedSubject = null;
-            renderRealmCards();
-            updateBanner();
-            renderTextbookHero();
-            renderQuests();
-        }
+        // ==========================================
+        // STEP 2: RENDER GRADE LEVELS
+        // ==========================================
+        function renderStep2Grades() {
+            const container = document.getElementById('gradeCardsContainer');
+            container.innerHTML = '';
 
-        function updateBanner() {
-            const bannerSeal = document.getElementById('bannerSeal');
-            const bannerTitle = document.getElementById('bannerTitle');
-            const bannerSubtitle = document.getElementById('bannerSubtitle');
-            const bannerStatsBadge = document.getElementById('bannerStatsBadge');
+            if (!selectedGroupName || !hierarchyData[selectedGroupName]) return;
+            const grp = hierarchyData[selectedGroupName];
 
-            if (currentSelectedSubject && coursesData[currentSelectedSubject]) {
-                const course = coursesData[currentSelectedSubject];
-                const totalUnits = course.units.length;
-                const totalSlides = course.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
-                bannerSeal.textContent = getRealmIcon(course.displayName);
-                bannerTitle.textContent = course.displayName;
-                bannerSubtitle.textContent = `${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''} • รวม ${totalUnits} เควสต์บทเรียน`;
-                bannerStatsBadge.textContent = `⚡ ${totalUnits} เควสต์ (${totalSlides} สไลด์)`;
-            } else {
-                bannerSeal.textContent = "🌐";
-                bannerTitle.textContent = "ทุกอาณาจักรความรู้ (ALL REALMS)";
-                bannerSubtitle.textContent = "แสดงเนื้อหา หนังสือเรียน PDF และเควสต์บทเรียนจากทุกรายวิชา";
-                let allUnits = 0, allSlides = 0;
-                Object.values(coursesData).forEach(c => {
-                    allUnits += c.units.length;
-                    allSlides += c.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
+            document.getElementById('step2Headline').textContent = `ขั้นตอนที่ 2: เลือกระดับชั้น (${grp.groupName})`;
+            document.getElementById('step2Subtitle').textContent = `คลิกเลือกระดับชั้นที่ต้องการเพื่อเปิดดูตำราเรียน PDF และเควสต์บทเรียน`;
+
+            Object.values(grp.grades).forEach(grd => {
+                let gradeUnitsCount = 0;
+                let gradeSlidesCount = 0;
+                let gradePdfsCount = 0;
+
+                grd.courseKeys.forEach(ck => {
+                    const c = coursesData[ck];
+                    if (c) {
+                        gradeUnitsCount += c.units.length;
+                        gradeSlidesCount += c.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
+                        if (c.textbook) gradePdfsCount += 1;
+                    }
                 });
-                bannerStatsBadge.textContent = `⚡ รวม ${allUnits} เควสต์ (${allSlides} สไลด์)`;
+
+                const card = document.createElement('div');
+                card.className = 'grade-card';
+                card.onclick = () => selectGrade(grd.gradeName);
+
+                card.innerHTML = `
+                    <div class="grade-card-top">
+                        <div class="grade-seal">${grd.gradeShort || 'ชั้น'}</div>
+                        <div class="grade-info">
+                            <h3>${grd.gradeName}</h3>
+                            <p>${grd.courseKeys.length} รายวิชาในระดับชั้นนี้</p>
+                        </div>
+                    </div>
+
+                    <div class="group-pills">
+                        ${gradePdfsCount > 0 ? `<span class="quest-chip" style="background: var(--purple-light); color: var(--purple-tertiary); border-color: var(--purple-border); font-weight: 700;">📖 มีหนังสือเรียน PDF (${gradePdfsCount} เล่ม)</span>` : ''}
+                        <span class="quest-chip">📜 ${gradeUnitsCount} เควสต์บทเรียน</span>
+                        <span class="quest-chip">⚡ ${gradeSlidesCount} สไลด์</span>
+                    </div>
+
+                    <div class="group-footer-action" style="color: var(--purple-tertiary);">
+                        <span>เข้าสู่ห้องเรียนและคัมภีร์ตำรา</span>
+                        <span>⚔️ เข้าสู่รายวิชา →</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectGrade(gradeName) {
+            selectedGradeName = gradeName;
+            const grp = hierarchyData[selectedGroupName];
+            const grd = grp.grades[gradeName];
+            
+            // Set first course as selected
+            if (grd.courseKeys.length > 0) {
+                selectedCourseKey = grd.courseKeys[0];
             }
+            goToStep(3);
+        }
+
+        // ==========================================
+        // STEP 3: RENDER COURSE & MATERIALS
+        // ==========================================
+        function renderStep3Course() {
+            const grp = hierarchyData[selectedGroupName];
+            const grd = grp.grades[selectedGradeName];
+
+            // Render Course Tabs if more than 1 course exists in this grade
+            const tabsWrap = document.getElementById('courseTabsWrap');
+            const tabsContainer = document.getElementById('courseTabsContainer');
+            tabsContainer.innerHTML = '';
+
+            if (grd.courseKeys.length > 1) {
+                tabsWrap.style.display = 'block';
+                grd.courseKeys.forEach(ck => {
+                    const c = coursesData[ck];
+                    const btn = document.createElement('button');
+                    btn.className = `course-tab-btn ${selectedCourseKey === ck ? 'active' : ''}`;
+                    btn.innerHTML = `${c.groupIcon || '📜'} ${c.displayName} ${c.textbook ? '(📖 มี PDF)' : ''}`;
+                    btn.onclick = () => {
+                        selectedCourseKey = ck;
+                        renderStep3Course();
+                    };
+                    tabsContainer.appendChild(btn);
+                });
+            } else {
+                tabsWrap.style.display = 'none';
+            }
+
+            renderTextbookHero();
+            renderQuests();
         }
 
         // Render Full Textbook PDF Hero Card
@@ -1267,8 +1813,8 @@
             const container = document.getElementById('textbookHeroContainer');
             if (!container) return;
 
-            if (currentSelectedSubject && coursesData[currentSelectedSubject]) {
-                const course = coursesData[currentSelectedSubject];
+            if (selectedCourseKey && coursesData[selectedCourseKey]) {
+                const course = coursesData[selectedCourseKey];
                 if (course.textbook) {
                     const tb = course.textbook;
                     container.innerHTML = `
@@ -1278,16 +1824,19 @@
                                 <div class="textbook-hero-meta">
                                     <span class="tome-tag">ROYAL TOME // หนังสือเรียนฉบับเต็ม PDF</span>
                                     <h3>${tb.title}</h3>
-                                    <p>ฉบับเต็ม ${tb.pages} หน้า • ความคมชัดสูง (Lossless Master) • ขนาดไฟล์ ${tb.size_mb} MB</p>
+                                    <p>ฉบับสมบูรณ์ ${tb.pages} หน้า • ความคมชัดสูง (Lossless Master) • ขนาดไฟล์ ${tb.size_mb} MB</p>
+                                    <div class="stream-speed-note">
+                                        ⚡ เปิดอ่านได้ทันทีใน 1 วินาที โดยไม่ต้องรอโหลดไฟล์ 60MB (Byte-Range Streaming)
+                                    </div>
                                 </div>
                             </div>
                             <div class="textbook-hero-actions">
-                                <a href="${tb.url}" target="_blank" class="btn-quest btn-primary" title="เปิดอ่านไฟล์ PDF เต็มจอในเบราว์เซอร์">
-                                    📖 เปิดอ่านหนังสือเรียน PDF
-                                </a>
-                                <button type="button" class="btn-quest btn-secondary" onclick="openPdfModal('${tb.url}', '${encodeURIComponent(tb.title)}')">
-                                    👁️ พรีวิวในหน้านี้
+                                <button type="button" class="btn-quest btn-primary" onclick="openPdfReader('${tb.url}', '${encodeURIComponent(tb.title)}', ${tb.pages})">
+                                    ⚡ เปิดอ่านหนังสือเรียนทันที
                                 </button>
+                                <a href="${tb.url}" target="_blank" class="btn-quest btn-secondary" title="เปิดไฟล์ PDF ในแท็บใหม่">
+                                    🌐 เปิดในแท็บใหม่
+                                </a>
                                 <a href="${tb.url}" download class="btn-quest btn-inspect" style="grid-column: auto;" title="ดาวน์โหลดไฟล์ PDF เก็บไว้ในเครื่อง">
                                     ⬇️ ดาวน์โหลด
                                 </a>
@@ -1319,12 +1868,13 @@
 
             let unitsToDisplay = [];
 
-            if (currentSelectedSubject && coursesData[currentSelectedSubject]) {
-                unitsToDisplay = coursesData[currentSelectedSubject].units;
-            } else {
+            if (isOverviewMode) {
+                // Overview mode: all courses
                 Object.values(coursesData).forEach(c => {
                     unitsToDisplay = unitsToDisplay.concat(c.units);
                 });
+            } else if (selectedCourseKey && coursesData[selectedCourseKey]) {
+                unitsToDisplay = coursesData[selectedCourseKey].units;
             }
 
             // Filter logic
@@ -1388,20 +1938,285 @@
             });
         }
 
-        // Modal Controls
+        // ==========================================
+        // NAVIGATION STEP TRANSITIONS & BREADCRUMBS
+        // ==========================================
+        function goToStep(step) {
+            currentStep = step;
+            isOverviewMode = false;
+            document.getElementById('modeToggleBtn').textContent = "🌐 ดูเนื้อหาทั้งหมด (All-in-One)";
+
+            const v1 = document.getElementById('viewStep1');
+            const v2 = document.getElementById('viewStep2');
+            const v3 = document.getElementById('viewStep3');
+
+            const bcStep1 = document.getElementById('bcStep1');
+            const bcSep1 = document.getElementById('bcSep1');
+            const bcStep2 = document.getElementById('bcStep2');
+            const bcSep2 = document.getElementById('bcSep2');
+            const bcStep3 = document.getElementById('bcStep3');
+            const backBtn = document.getElementById('backStepBtn');
+
+            v1.style.display = 'none';
+            v2.style.display = 'none';
+            v3.style.display = 'none';
+
+            if (step === 1) {
+                v1.style.display = 'block';
+                bcStep1.className = 'breadcrumb-item active';
+                bcSep1.style.display = 'none';
+                bcStep2.style.display = 'none';
+                bcSep2.style.display = 'none';
+                bcStep3.style.display = 'none';
+                backBtn.style.display = 'none';
+                renderStep1Groups();
+            } else if (step === 2) {
+                v2.style.display = 'block';
+                bcStep1.className = 'breadcrumb-item';
+                bcSep1.style.display = 'inline';
+                bcStep2.style.display = 'inline-flex';
+                bcStep2.className = 'breadcrumb-item active';
+
+                const grp = hierarchyData[selectedGroupName];
+                document.getElementById('bcGroupIcon').textContent = grp.groupIcon;
+                document.getElementById('bcGroupText').textContent = grp.groupShort;
+
+                bcSep2.style.display = 'none';
+                bcStep3.style.display = 'none';
+                backBtn.style.display = 'inline-flex';
+                renderStep2Grades();
+            } else if (step === 3) {
+                v3.style.display = 'block';
+                bcStep1.className = 'breadcrumb-item';
+                bcSep1.style.display = 'inline';
+                bcStep2.style.display = 'inline-flex';
+                bcStep2.className = 'breadcrumb-item';
+
+                const grp = hierarchyData[selectedGroupName];
+                document.getElementById('bcGroupIcon').textContent = grp.groupIcon;
+                document.getElementById('bcGroupText').textContent = grp.groupShort;
+
+                bcSep2.style.display = 'inline';
+                bcStep3.style.display = 'inline-flex';
+                document.getElementById('bcGradeText').textContent = selectedGradeName;
+
+                backBtn.style.display = 'inline-flex';
+                renderStep3Course();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBackStep() {
+            if (currentStep === 3) {
+                goToStep(2);
+            } else if (currentStep === 2) {
+                goToStep(1);
+            }
+        }
+
+        function toggleOverviewMode() {
+            isOverviewMode = !isOverviewMode;
+            const btn = document.getElementById('modeToggleBtn');
+            const v1 = document.getElementById('viewStep1');
+            const v2 = document.getElementById('viewStep2');
+            const v3 = document.getElementById('viewStep3');
+
+            if (isOverviewMode) {
+                btn.textContent = "🏰 สลับกลับสู่โหมดเลือกทีละส่วน";
+                v1.style.display = 'none';
+                v2.style.display = 'none';
+                v3.style.display = 'block';
+                document.getElementById('courseTabsWrap').style.display = 'none';
+                document.getElementById('textbookHeroContainer').innerHTML = '';
+                renderQuests();
+            } else {
+                btn.textContent = "🌐 ดูเนื้อหาทั้งหมด (All-in-One)";
+                goToStep(1);
+            }
+        }
+
+        // ==========================================
+        // OPTION 1: STREAMING PDF.JS WEB READER
+        // ==========================================
+        function openPdfReader(url, encodedTitle, totalPages) {
+            const title = decodeURIComponent(encodedTitle);
+            const modal = document.getElementById('pdfReaderModal');
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('pdfReaderTitle').textContent = title;
+            document.getElementById('pdfDownloadLink').href = url;
+            document.getElementById('pdfTotalPages').textContent = '/ ' + (totalPages || '...');
+            document.getElementById('pdfPageInput').value = 1;
+
+            showPdfLoader(true, 'กำลังเชื่อมต่อและสตรีมมิ่งหน้าแรก (Byte-Range Request)...');
+
+            if (pdfDoc) {
+                pdfDoc.destroy();
+                pdfDoc = null;
+            }
+
+            // Configure PDF.js for streaming byte-range loading
+            const loadingTask = pdfjsLib.getDocument({
+                url: url,
+                disableAutoFetch: true,       // Only download chunks needed for the current view!
+                disableStream: false,         // Enable streaming
+                rangeChunkSize: 262144,       // 256KB range requests
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                cMapPacked: true
+            });
+
+            loadingTask.promise.then(pdf => {
+                pdfDoc = pdf;
+                pdfTotalPagesCount = pdf.numPages;
+                document.getElementById('pdfTotalPages').textContent = '/ ' + pdfTotalPagesCount;
+                document.getElementById('pdfPageInput').max = pdfTotalPagesCount;
+                pdfCurrentPage = 1;
+                
+                calculateInitialPdfZoom();
+                renderPdfPage(1);
+            }).catch(err => {
+                console.error('PDF Streaming Load Error:', err);
+                showPdfLoader(true, '⚠️ การเชื่อมต่อขัดข้อง: ' + err.message);
+            });
+        }
+
+        function calculateInitialPdfZoom() {
+            const viewport = document.getElementById('pdfViewport');
+            const availableWidth = viewport.clientWidth - 80;
+            if (availableWidth > 400) {
+                pdfScale = Math.min(Math.max(availableWidth / 650, 0.8), 1.8);
+            } else {
+                pdfScale = 0.9;
+            }
+            updatePdfZoomLabel();
+        }
+
+        function updatePdfZoomLabel() {
+            document.getElementById('pdfZoomLabel').textContent = Math.round(pdfScale * 100) + '%';
+        }
+
+        function renderPdfPage(num) {
+            if (!pdfDoc) return;
+            if (pdfIsRendering) {
+                pdfRenderQueue = num;
+                return;
+            }
+
+            pdfIsRendering = true;
+            showPdfLoader(true, `กำลังสตรีมมิ่งหน้า ${num} จาก ${pdfTotalPagesCount}...`);
+
+            pdfDoc.getPage(num).then(page => {
+                const viewport = page.getViewport({ scale: pdfScale });
+                const canvas = document.getElementById('pdfCanvas');
+                const ctx = canvas.getContext('2d');
+
+                // Retina / High-DPI Crisp rendering
+                const pixelRatio = window.devicePixelRatio || 1;
+                canvas.width = Math.floor(viewport.width * pixelRatio);
+                canvas.height = Math.floor(viewport.height * pixelRatio);
+                canvas.style.width = Math.floor(viewport.width) + 'px';
+                canvas.style.height = Math.floor(viewport.height) + 'px';
+
+                const transform = pixelRatio !== 1 ? [pixelRatio, 0, 0, pixelRatio, 0, 0] : null;
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    transform: transform,
+                    viewport: viewport
+                };
+
+                const renderTask = page.render(renderContext);
+                renderTask.promise.then(() => {
+                    pdfIsRendering = false;
+                    showPdfLoader(false);
+                    pdfCurrentPage = num;
+                    document.getElementById('pdfPageInput').value = num;
+
+                    const vp = document.getElementById('pdfViewport');
+                    vp.scrollTop = 0;
+
+                    if (pdfRenderQueue !== null) {
+                        const nextNum = pdfRenderQueue;
+                        pdfRenderQueue = null;
+                        renderPdfPage(nextNum);
+                    }
+                }).catch(err => {
+                    pdfIsRendering = false;
+                    showPdfLoader(false);
+                    console.error('Page render error:', err);
+                });
+            }).catch(err => {
+                pdfIsRendering = false;
+                showPdfLoader(false);
+                console.error('Get page error:', err);
+            });
+        }
+
+        function prevPdfPage() {
+            if (pdfCurrentPage <= 1) return;
+            renderPdfPage(pdfCurrentPage - 1);
+        }
+
+        function nextPdfPage() {
+            if (!pdfDoc || pdfCurrentPage >= pdfTotalPagesCount) return;
+            renderPdfPage(pdfCurrentPage + 1);
+        }
+
+        function jumpPdfPage(val) {
+            const p = parseInt(val, 10);
+            if (!isNaN(p) && p >= 1 && p <= pdfTotalPagesCount) {
+                renderPdfPage(p);
+            } else {
+                document.getElementById('pdfPageInput').value = pdfCurrentPage;
+            }
+        }
+
+        function zoomPdfIn() {
+            if (pdfScale >= 3.0) return;
+            pdfScale = +(pdfScale + 0.2).toFixed(2);
+            updatePdfZoomLabel();
+            renderPdfPage(pdfCurrentPage);
+        }
+
+        function zoomPdfOut() {
+            if (pdfScale <= 0.5) return;
+            pdfScale = +(pdfScale - 0.2).toFixed(2);
+            updatePdfZoomLabel();
+            renderPdfPage(pdfCurrentPage);
+        }
+
+        function zoomPdfFit() {
+            calculateInitialPdfZoom();
+            renderPdfPage(pdfCurrentPage);
+        }
+
+        function closePdfReader() {
+            const modal = document.getElementById('pdfReaderModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            if (pdfDoc) {
+                pdfDoc.destroy();
+                pdfDoc = null;
+            }
+        }
+
+        function showPdfLoader(show, text) {
+            const loader = document.getElementById('pdfStreamLoader');
+            if (show) {
+                loader.style.display = 'flex';
+                if (text) document.getElementById('pdfLoadingText').textContent = text;
+            } else {
+                loader.style.display = 'none';
+            }
+        }
+
+        // Slide Modal Quick Inspect
         function openModal(url, encodedTitle) {
             const title = decodeURIComponent(encodedTitle);
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalSubtitle').textContent = "QuestUI Interactive Presentation Viewer";
-            document.getElementById('modalIframe').src = url;
-            document.getElementById('modalOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function openPdfModal(url, encodedTitle) {
-            const title = decodeURIComponent(encodedTitle);
-            document.getElementById('modalTitle').textContent = `📖 หนังสือเรียนฉบับเต็ม: ${title}`;
-            document.getElementById('modalSubtitle').textContent = "Aksorn Full Textbook PDF Viewer";
             document.getElementById('modalIframe').src = url;
             document.getElementById('modalOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1419,15 +2234,30 @@
             }
         }
 
+        // Keyboard navigation
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
+            const pdfModal = document.getElementById('pdfReaderModal');
+            const isPdfOpen = pdfModal.style.display === 'flex';
+
+            if (e.key === 'Escape') {
+                if (isPdfOpen) closePdfReader();
+                else closeModal();
+            } else if (isPdfOpen) {
+                if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                    prevPdfPage();
+                } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+                    nextPdfPage();
+                } else if (e.key === '+' || e.key === '=') {
+                    zoomPdfIn();
+                } else if (e.key === '-') {
+                    zoomPdfOut();
+                }
+            }
         });
 
+        // Initialization
         window.addEventListener('DOMContentLoaded', () => {
-            renderRealmCards();
-            updateBanner();
-            renderTextbookHero();
-            renderQuests();
+            goToStep(1);
         });
     </script>
 </body>
