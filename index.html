@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aksorn Smart PPT Portal | คลังสื่อการสอน Interactive ระดับพรีเมียม</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-head: 'Prompt', 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Sarabun', sans-serif;
+
+            /* Light Theme */
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-surface-elevated: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --primary-hover: #1d4ed8;
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #4f46e5 100%);
+            
+            --accent: #0ea5e9;
+            --success: #10b981;
+            --success-light: #ecfdf5;
+            --success-border: #a7f3d0;
+
+            --text-title: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --border-card: #cbd5e1;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.09), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 20px 25px -5px rgba(37, 99, 235, 0.12), 0 8px 10px -6px rgba(37, 99, 235, 0.08);
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0b1120;
+            --bg-surface: #1e293b;
+            --bg-surface-elevated: #334155;
+            --bg-subtle: #0f172a;
+            --bg-glass: rgba(30, 41, 59, 0.85);
+
+            --primary: #3b82f6;
+            --primary-light: rgba(59, 130, 246, 0.15);
+            --primary-hover: #60a5fa;
+
+            --text-title: #f8fafc;
+            --text-body: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-light: #334155;
+            --border-card: #475569;
+
+            --success-light: rgba(16, 185, 129, 0.15);
+            --success-border: #059669;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 20px 25px -5px rgba(59, 130, 246, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-body);
+            color: var(--text-body);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 24px;
+        }
+
+        .nav-container {
+            max-width: 1320px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+        }
+
+        .brand-name {
+            font-family: var(--font-head);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-title);
+            letter-spacing: -0.3px;
+        }
+
+        .brand-name span {
+            color: var(--primary);
+        }
+
+        .nav-tools {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-btn, .view-btn {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            color: var(--text-body);
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .theme-btn:hover, .view-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 35%, #2563eb 70%, #0284c7 100%);
+            color: white;
+            padding: 56px 24px 72px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -20%;
+            width: 140%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1320px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-family: var(--font-head);
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-desc {
+            font-size: 1.125rem;
+            color: #dbeafe;
+            max-width: 780px;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            max-width: 900px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat-icon {
+            font-size: 28px;
+        }
+
+        .stat-val {
+            font-family: var(--font-head);
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .stat-lbl {
+            font-size: 0.85rem;
+            color: #e0f2fe;
+        }
+
+        /* Main Content */
+        .main-wrapper {
+            max-width: 1320px;
+            margin: -36px auto 60px;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+            flex: 1;
+        }
+
+        /* Filter & Control Bar */
+        .control-panel {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            margin-bottom: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .search-field {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-icon-svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 18px 14px 48px;
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--border-light);
+            background: var(--bg-subtle);
+            color: var(--text-title);
+            font-family: var(--font-body);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: var(--bg-surface);
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* Category Chips */
+        .category-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-chip {
+            padding: 8px 18px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border-light);
+            background: var(--bg-subtle);
+            color: var(--text-body);
+            font-family: var(--font-head);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip:hover {
+            background: var(--border-light);
+            color: var(--text-title);
+            transform: translateY(-1px);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Groups & Sections */
+        .group-header {
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-title);
+            margin: 36px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .group-badge {
+            font-size: 13px;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-family: var(--font-body);
+        }
+
+        .course-title {
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-title);
+            margin: 20px 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 24px;
+        }
+
+        /* Unit Card */
+        .unit-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .card-top {
+            padding: 20px;
+            display: flex;
+            gap: 18px;
+            background: var(--bg-surface-elevated);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .cover-wrap {
+            position: relative;
+            flex-shrink: 0;
+            width: 84px;
+            height: 116px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            background: var(--bg-subtle);
+        }
+
+        .cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .unit-card:hover .cover-img {
+            transform: scale(1.05);
+        }
+
+        .card-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-subject {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .card-title {
+            font-family: var(--font-head);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-title);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .meta-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .pill {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pill-slides {
+            background: var(--bg-subtle);
+            color: var(--text-muted);
+            border: 1px solid var(--border-light);
+        }
+
+        .pill-script {
+            background: var(--success-light);
+            color: var(--success);
+            border: 1px solid var(--success-border);
+        }
+
+        .card-footer {
+            padding: 16px 20px;
+            background: var(--bg-surface);
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-family: var(--font-head);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            border: none;
+        }
+
+        .btn-main {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-main:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-ghost {
+            background: var(--bg-subtle);
+            color: var(--text-body);
+            border: 1px solid var(--border-light);
+            font-size: 13px;
+        }
+
+        .btn-ghost:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Modal Preview */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 1100px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-light);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            background: var(--bg-surface-elevated);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-family: var(--font-head);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-title);
+        }
+
+        .modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close-btn {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-light);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .modal-close-btn:hover {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .modal-body {
+            flex: 1;
+            background: #000;
+            position: relative;
+        }
+
+        .modal-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 64px 24px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px dashed var(--border-light);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--text-muted);
+        }
+
+        .empty-title {
+            font-family: var(--font-head);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-title);
+            margin-bottom: 8px;
+        }
+
+        .empty-desc {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-light);
+            padding: 32px 24px;
+            margin-top: auto;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .footer-content {
+            max-width: 1320px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 1.85rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .btn-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand">
+                <div class="brand-icon">✨</div>
+                <div class="brand-name">Smart PPT <span>Portal</span></div>
+            </a>
+            <div class="nav-tools">
+                <button class="theme-btn" id="themeToggle" title="สลับโหมดมืด/สว่าง">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="hero">
+        <div class="hero-container">
+            <div class="hero-badge">🚀 แพลตฟอร์มสื่อการสอน Interactive ระดับพรีเมียม</div>
+            <h1 class="hero-title">คลังสื่อการสอน Smart PPT</h1>
+            <p class="hero-desc">ศูนย์รวมสไลด์นำเสนอ Interactive ครบทุกกลุ่มสาระการเรียนรู้ จัดแยกตามรายวิชาและหน่วยการเรียนรู้ พร้อมระบบสคริปต์ครู แนวทางการสอน และเฉลยคำตอบในคลิกเดียว</p>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-icon">📚</span>
+                    <div>
+                        <div class="stat-val">2</div>
+                        <div class="stat-lbl">กลุ่มสาระการเรียนรู้</div>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-icon">📘</span>
+                    <div>
+                        <div class="stat-val">3</div>
+                        <div class="stat-lbl">รายวิชาที่จัดหมวดหมู่</div>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-icon">📑</span>
+                    <div>
+                        <div class="stat-val">7</div>
+                        <div class="stat-lbl">หน่วยการเรียนรู้</div>
+                    </div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-icon">📊</span>
+                    <div>
+                        <div class="stat-val">581</div>
+                        <div class="stat-lbl">สไลด์ Interactive รวม</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+
+        <!-- Control & Search Panel -->
+        <div class="control-panel">
+            <div class="search-row">
+                <div class="search-field">
+                    <span class="search-icon-svg">🔍</span>
+                    <input type="text" id="searchInput" class="search-input" placeholder="พิมพ์ชื่อหน่วยการเรียนรู้, ชื่อวิชา, หรือคำสำคัญเพื่อค้นหาทันที...">
+                    <button class="clear-search" id="clearSearch">✕</button>
+                </div>
+            </div>
+
+            <div class="category-row">
+                <span style="font-size: 13px; font-weight: 600; color: var(--text-muted); margin-right: 4px;">เลือกวิชา:</span>
+                <button class="filter-chip active" data-group="all">✨ ทั้งหมด (7)</button>
+                <button class="filter-chip" data-group="การงานอาชีพ">💼 การงานอาชีพ (5)</button>
+                <button class="filter-chip" data-group="สังคมศึกษา ศาสนาและวัฒนธรรม">🌏 สังคมศึกษา ศาสนาและวัฒนธรรม (2)</button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="contentArea">
+    
+        <section class="group-section" data-group="การงานอาชีพ">
+            <h2 class="group-header">
+                <span>💼 กลุ่มสาระฯ การงานอาชีพ</span>
+                <span class="group-badge">1 รายวิชา &bull; 5 หน่วย</span>
+            </h2>
+        
+            <div class="course-wrapper">
+                <h3 class="course-title">📘 การงานอาชีพ ม.1</h3>
+                <div class="cards-grid">
+            
+                    <div class="unit-card" data-search="หน่วยที่ 1 เรียนรู้กระบวนการทำงาน หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1 การงานอาชีพ">
+                        <div class="card-top">
+                            <div class="cover-wrap">
+                                <img src="assets/covers/e3641408-b5bf-410d-92b5-acf112431f63.jpg" alt="Cover" class="cover-img" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <div>
+                                    <div class="card-subject">การงานอาชีพ ม.1</div>
+                                    <h4 class="card-title">หน่วยที่ 1 เรียนรู้กระบวนการทำงาน</h4>
+                                </div>
+                                <div class="meta-pills">
+                                    <span class="pill pill-slides">📊 58 สไลด์</span>
+                                    <span class="pill pill-script">✓ มีสคริปต์สอน & เฉลย</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html" target="_blank" class="btn btn-main">
+                                🖥️ เปิดสไลด์ Interactive (เต็มจอ)
+                            </a>
+                            <div class="btn-row">
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-ghost">
+                                    📖 สรุปเนื้อหา & สคริปต์
+                                </a>
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-ghost">
+                                    📝 สคริปต์ (.txt)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="unit-card" data-search="หน่วยที่ 2 การดูแลรักษาบ้าน หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1 การงานอาชีพ">
+                        <div class="card-top">
+                            <div class="cover-wrap">
+                                <img src="assets/covers/1af5533e-f358-44fa-bfd2-a59c2590293a.jpg" alt="Cover" class="cover-img" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <div>
+                                    <div class="card-subject">การงานอาชีพ ม.1</div>
+                                    <h4 class="card-title">หน่วยที่ 2 การดูแลรักษาบ้าน</h4>
+                                </div>
+                                <div class="meta-pills">
+                                    <span class="pill pill-slides">📊 106 สไลด์</span>
+                                    <span class="pill pill-script">✓ มีสคริปต์สอน & เฉลย</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html" target="_blank" class="btn btn-main">
+                                🖥️ เปิดสไลด์ Interactive (เต็มจอ)
+                            </a>
+                            <div class="btn-row">
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-ghost">
+                                    📖 สรุปเนื้อหา & สคริปต์
+                                </a>
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-ghost">
+                                    📝 สคริปต์ (.txt)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="unit-card" data-search="หน่วยที่ 3 อาหารกับการดำรงชีวิต หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1 การงานอาชีพ">
+                        <div class="card-top">
+                            <div class="cover-wrap">
+                                <img src="assets/covers/123ba307-0ed5-4a77-a8b2-bb53e98767cd.jpg" alt="Cover" class="cover-img" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <div>
+                                    <div class="card-subject">การงานอาชีพ ม.1</div>
+                                    <h4 class="card-title">หน่วยที่ 3 อาหารกับการดำรงชีวิต</h4>
+                                </div>
+                                <div class="meta-pills">
+                                    <span class="pill pill-slides">📊 89 สไลด์</span>
+                                    <span class="pill pill-script">✓ มีสคริปต์สอน & เฉลย</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html" target="_blank" class="btn btn-main">
+                                🖥️ เปิดสไลด์ Interactive (เต็มจอ)
+                            </a>
+                            <div class="btn-row">
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-ghost">
+                                    📖 สรุปเนื้อหา & สคริปต์
+                                </a>
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-ghost">
+                                    📝 สคริปต์ (.txt)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="unit-card" data-search="หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1 การงานอาชีพ">
+                        <div class="card-top">
+                            <div class="cover-wrap">
+                                <img src="assets/covers/35136d2c-ceda-4a2d-ac8b-bd1a83f53905.jpg" alt="Cover" class="cover-img" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <div>
+                                    <div class="card-subject">การงานอาชีพ ม.1</div>
+                                    <h4 class="card-title">หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น</h4>
+                                </div>
+                                <div class="meta-pills">
+                                    <span class="pill pill-slides">📊 116 สไลด์</span>
+                                    <span class="pill pill-script">✓ มีสคริปต์สอน & เฉลย</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html" target="_blank" class="btn btn-main">
+                                🖥️ เปิดสไลด์ Interactive (เต็มจอ)
+                            </a>
+                            <div class="btn-row">
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-ghost">
+                                    📖 สรุปเนื้อหา & สคริปต์
+                                </a>
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-ghost">
+                                    📝 สคริปต์ (.txt)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="unit-card" data-search="หน่วยที่ 5 โลกของอาชีพ หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1 การงานอาชีพ">
+                        <div class="card-top">
+                            <div class="cover-wrap">
+                                <img src="assets/covers/a88c5677-981b-4c1e-ad9b-d0c779108f9d.jpg" alt="Cover" class="cover-img" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <div>
+                                    <div class="card-subject">การงานอาชีพ ม.1</div>
+                                    <h4 class="card-title">หน่วยที่ 5 โลกของอาชีพ</h4>
+                                </div>
+                                <div class="meta-pills">
+                                    <span class="pill pill-slides">📊 96 สไลด์</span>
+                                    <span class="pill pill-script">✓ มีสคริปต์สอน & เฉลย</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html" target="_blank" class="btn btn-main">
+                                🖥️ เปิดสไลด์ Interactive (เต็มจอ)
+                            </a>
+                            <div class="btn-row">
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-ghost">
+                                    📖 สรุปเนื้อหา & สคริปต์
+                                </a>
+                                <a href="การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-ghost">
+                                    📝 สคริปต์ (.txt)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            
+        </section>
+        
+        <section class="group-section" data-group="สังคมศึกษา ศาสนาและวัฒนธรรม">
+            <h2 class="group-header">
+                <span>🌏 กลุ่มสาระฯ สังคมศึกษา ศาสนาและวัฒนธรรม</span>
+                <span class="group-badge">2 รายวิชา &bull; 2 หน่วย</span>
+            </h2>
+        
+            <div class="course-wrapper">
+                <h3 class="course-title">📘 ประวัติศาสตร์สากล ม.4-6</h3>
+                <div class="cards-grid">
+            
+                    <div class="unit-card" data-search="หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6 สังคมศึกษา ศาสนาและวัฒนธรรม">
+                        <div class="card-top">
+                            <div class="cover-wrap">
+                                <img src="assets/covers/cf54bc41-5e9d-44ba-849b-afca7dfab203.jpg" alt="Cover" class="cover-img" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <div>
+                                    <div class="card-subject">ประวัติศาสตร์สากล ม.4-6</div>
+                                    <h4 class="card-title">หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล</h4>
+                                </div>
+                                <div class="meta-pills">
+                                    <span class="pill pill-slides">📊 74 สไลด์</span>
+                                    <span class="pill pill-script">✓ มีสคริปต์สอน & เฉลย</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/index.html" target="_blank" class="btn btn-main">
+                                🖥️ เปิดสไลด์ Interactive (เต็มจอ)
+                            </a>
+                            <div class="btn-row">
+                                <a href="ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-ghost">
+                                    📖 สรุปเนื้อหา & สคริปต์
+                                </a>
+                                <a href="ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-ghost">
+                                    📝 สคริปต์ (.txt)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            
+            <div class="course-wrapper">
+                <h3 class="course-title">📘 พระพุทธศาสนา ม.4-6</h3>
+                <div class="cards-grid">
+            
+                    <div class="unit-card" data-search="หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6 สังคมศึกษา ศาสนาและวัฒนธรรม">
+                        <div class="card-top">
+                            <div class="cover-wrap">
+                                <img src="assets/covers/7712640c-4d60-43c3-b3e2-fa7389b86ffa.jpg" alt="Cover" class="cover-img" loading="lazy">
+                            </div>
+                            <div class="card-info">
+                                <div>
+                                    <div class="card-subject">พระพุทธศาสนา ม.4-6</div>
+                                    <h4 class="card-title">หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา</h4>
+                                </div>
+                                <div class="meta-pills">
+                                    <span class="pill pill-slides">📊 42 สไลด์</span>
+                                    <span class="pill pill-script">✓ มีสคริปต์สอน & เฉลย</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/index.html" target="_blank" class="btn btn-main">
+                                🖥️ เปิดสไลด์ Interactive (เต็มจอ)
+                            </a>
+                            <div class="btn-row">
+                                <a href="พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-ghost">
+                                    📖 สรุปเนื้อหา & สคริปต์
+                                </a>
+                                <a href="พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-ghost">
+                                    📝 สคริปต์ (.txt)
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            
+        </section>
+        
+        </div>
+
+        <!-- Empty Search State -->
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">🔍</div>
+            <h3 class="empty-title">ไม่พบหน่วยการเรียนรู้ที่ตรงกับคำค้นหา</h3>
+            <p class="empty-desc">ลองค้นหาด้วยคำอื่น หรือกดที่หมวดหมู่เพื่อดูบทเรียนทั้งหมด</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p><strong>Aksorn Smart PPT Web Portal</strong> &bull; สื่อการสอน Interactive นวัตกรรมใหม่ จัดกลุ่มรายวิชาเพื่อการเรียนรู้ที่มีประสิทธิภาพ</p>
+            <p style="font-size: 13px; color: var(--text-muted);">รองรับการทำงานทั้งแบบ Offline บนเครื่อง และ Online ผ่าน Netlify Cloud Hosting</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Script -->
+    <script>
+        // Dark / Light Mode Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlEl = document.documentElement;
+        
+        const savedTheme = localStorage.getItem('smartppt_theme') || 'light';
+        htmlEl.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlEl.setAttribute('data-theme', newTheme);
+            localStorage.setItem('smartppt_theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+
+        // Search & Filter System
+        const searchInput = document.getElementById('searchInput');
+        const clearSearch = document.getElementById('clearSearch');
+        const filterChips = document.querySelectorAll('.filter-chip');
+        const groupSections = document.querySelectorAll('.group-section');
+        const emptyState = document.getElementById('emptyState');
+
+        let currentActiveGroup = 'all';
+
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase().trim();
+            clearSearch.style.display = query ? 'block' : 'none';
+
+            let totalVisible = 0;
+
+            groupSections.forEach(section => {
+                const groupName = section.getAttribute('data-group');
+                const isGroupMatch = (currentActiveGroup === 'all' || currentActiveGroup === groupName);
+
+                if (!isGroupMatch) {
+                    section.style.display = 'none';
+                    return;
+                }
+
+                let visibleInGroup = 0;
+                section.querySelectorAll('.course-wrapper').forEach(course => {
+                    let visibleInCourse = 0;
+                    course.querySelectorAll('.unit-card').forEach(card => {
+                        const searchText = card.getAttribute('data-search');
+                        const isMatch = !query || searchText.includes(query);
+
+                        if (isMatch) {
+                            card.style.display = 'flex';
+                            visibleInCourse++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (visibleInCourse > 0) {
+                        course.style.display = 'block';
+                        visibleInGroup += visibleInCourse;
+                    } else {
+                        course.style.display = 'none';
+                    }
+                });
+
+                if (visibleInGroup > 0) {
+                    section.style.display = 'block';
+                    totalVisible += visibleInGroup;
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+
+            emptyState.style.display = totalVisible === 0 ? 'block' : 'none';
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+
+        clearSearch.addEventListener('click', () => {
+            searchInput.value = '';
+            searchInput.focus();
+            applyFilters();
+        });
+
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                filterChips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                currentActiveGroup = chip.getAttribute('data-group');
+                applyFilters();
+            });
+        });
+    </script>
+</body>
+</html>

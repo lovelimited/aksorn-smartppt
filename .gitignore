@@ -1,0 +1,5 @@
+.netlify/
+*.bat
+pack_for_web.py
+Thumbs.db
+.DS_Store
