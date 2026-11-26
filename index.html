@@ -1,103 +1,97 @@
 <!DOCTYPE html>
-<html lang="th" data-theme="light">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aksorn Smart PPT // คลังสื่อการสอนอินเตอร์แอคทีฟ</title>
+    <title>QUEST UI // AKSORN SMART PPT ARCHIVES</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Fira+Code:wght@400;500;600;700&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Light Theme (Default) */
-            --bg-page: #F8FAFC;
-            --bg-card: #FFFFFF;
-            --bg-card-hover: #F1F5F9;
-            --bg-subtle: #F1F5F9;
-            --border-color: #E2E8F0;
-            --border-hover: #CBD5E1;
-            
-            --text-main: #0F172A;
-            --text-secondary: #475569;
-            --text-muted: #64748B;
-            --text-dim: #94A3B8;
+            /* QuestUI Light Theme (Illuminated Manuscript & Royal Parchment) */
+            --gold-primary: #CA8A04;
+            --gold-hover: #B8780A;
+            --gold-border: #DAA520;
+            --gold-light: #FEF9C3;
+            --gold-subtle: rgba(202, 138, 4, 0.12);
+            --gold-glow: rgba(202, 138, 4, 0.35);
 
-            --primary: #2563EB;
-            --primary-hover: #1D4ED8;
-            --primary-subtle: #EFF6FF;
-            --primary-border: #BFDBFE;
+            --red-secondary: #991B1B;
+            --red-hover: #7F1D1D;
+            --red-border: #B91C1C;
+            --red-light: #FEE2E2;
+            --red-subtle: rgba(153, 27, 27, 0.12);
 
-            --accent-gold: #D97706;
-            --accent-gold-bg: #FEF3C7;
-            --accent-purple: #7C3AED;
-            --accent-purple-bg: #F5F3FF;
-            --accent-emerald: #059669;
-            --accent-emerald-bg: #ECFDF5;
-            --accent-rose: #E11D48;
-            --accent-rose-bg: #FFE4E6;
+            --purple-tertiary: #581C87;
+            --purple-hover: #4C1D95;
+            --purple-light: #F3E8FF;
+            --purple-subtle: rgba(88, 28, 135, 0.12);
 
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-            --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.18);
+            --success: #15803D;
+            --success-light: #DCFCE7;
+            --success-subtle: rgba(21, 128, 61, 0.12);
 
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --radius-xl: 20px;
+            /* Surfaces: Royal Vellum & Antique Parchment */
+            --bg-page: #FAF5EB;          /* Warm illuminated parchment background */
+            --surface-card: #FFFFFF;     /* Crisp illuminated manuscript card */
+            --surface-elevated: #FDFBF7; /* Elevated card / hover state */
+            --surface-alt: #F4ECE0;      /* Inset sections & secondary surfaces */
+
+            /* Borders: Aged Leather & Ornate Brass */
+            --border-subtle: #D8C7A8;    /* Warm parchment/brass line */
+            --border-highlight: #C4AE88;
+            --border-gold: #CA8A04;
+
+            /* Medieval Iron-Gall Ink Text */
+            --text-primary: #1A0F0A;     /* Deep medieval ink (Very high contrast) */
+            --text-secondary: #5C3D2E;   /* Rich warm brown / aged leather */
+            --text-muted: #7E5A44;       /* Antique sepia */
+            --text-dim: #9C7860;
+
+            /* Dual-Serif Typography Stack */
+            --font-headline: 'Cinzel', 'Noto Serif Thai', serif;
+            --font-body: 'Spectral', 'Noto Serif Thai', serif;
+            --font-mono: 'Fira Code', monospace;
+
+            /* Spacing (Base unit 8px) */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+
+            /* Border Radii (Angular Medieval feel) */
+            --radius-sm: 2px;
+            --radius-default: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
             --radius-full: 9999px;
 
-            --font-ui: 'Plus Jakarta Sans', 'Prompt', sans-serif;
-            --font-body: 'Sarabun', 'Prompt', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-        }
-
-        [data-theme="dark"] {
-            --bg-page: #0B0F17;
-            --bg-card: #151D2A;
-            --bg-card-hover: #1E293B;
-            --bg-subtle: #192231;
-            --border-color: #27354A;
-            --border-hover: #384A66;
-            
-            --text-main: #F8FAFC;
-            --text-secondary: #CBD5E1;
-            --text-muted: #94A3B8;
-            --text-dim: #64748B;
-
-            --primary: #3B82F6;
-            --primary-hover: #60A5FA;
-            --primary-subtle: #1E3A8A40;
-            --primary-border: #1D4ED8;
-
-            --accent-gold: #F59E0B;
-            --accent-gold-bg: #78350F40;
-            --accent-purple: #A855F7;
-            --accent-purple-bg: #581C8740;
-            --accent-emerald: #10B981;
-            --accent-emerald-bg: #064E3B40;
-            --accent-rose: #F43F5E;
-            --accent-rose-bg: #88133740;
-
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 25px rgba(59, 130, 246, 0.3);
+            /* Elevation Shadows with Warm Gold Glow */
+            --shadow-sm: 0 1px 4px rgba(202, 138, 4, 0.12), 0 1px 2px rgba(26, 15, 10, 0.05);
+            --shadow-default: 0 3px 10px rgba(202, 138, 4, 0.18), 0 1px 3px rgba(26, 15, 10, 0.06);
+            --shadow-md: 0 6px 18px rgba(202, 138, 4, 0.22), 0 2px 6px rgba(26, 15, 10, 0.08);
+            --shadow-lg: 0 12px 30px rgba(202, 138, 4, 0.28), 0 4px 10px rgba(26, 15, 10, 0.1);
+            --shadow-glow: 0 0 20px rgba(202, 138, 4, 0.38);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
         }
 
         body {
             background-color: var(--bg-page);
-            color: var(--text-main);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(202, 138, 4, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 100% 100%, rgba(88, 28, 135, 0.04) 0%, transparent 50%);
+            color: var(--text-primary);
             font-family: var(--font-body);
-            font-size: 15px;
-            line-height: 1.6;
+            font-size: 16px;
+            line-height: 1.7;
             min-height: 100vh;
             padding: 24px 20px;
         }
@@ -110,447 +104,463 @@
             gap: 28px;
         }
 
-        /* Top Header Navbar */
-        .top-navbar {
+        /* Ornate Medieval Header */
+        .royal-header {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-top: 3px solid var(--gold-primary);
+            border-radius: var(--radius-default);
+            padding: 20px 28px;
+            box-shadow: var(--shadow-default);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 16px 24px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .brand-block {
-            display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 16px;
-        }
-
-        .brand-logo-badge {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #FFFFFF;
-            font-size: 22px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-        }
-
-        .brand-title-group h1 {
-            font-family: var(--font-ui);
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.3px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-title-group h1 span.pill-badge {
-            background: var(--primary-subtle);
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: var(--radius-full);
-            border: 1px solid var(--primary-border);
-            letter-spacing: 0.5px;
-        }
-
-        .brand-title-group p {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        /* Theme Toggle Button */
-        .theme-toggle-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--bg-subtle);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-family: var(--font-ui);
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .theme-toggle-btn:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-hover);
-            transform: translateY(-1px);
-        }
-
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--accent-emerald-bg);
-            border: 1px solid rgba(5, 150, 105, 0.25);
-            color: var(--accent-emerald);
-            padding: 6px 14px;
-            border-radius: var(--radius-full);
-            font-family: var(--font-ui);
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .status-pill .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent-emerald);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-emerald);
-            animation: pulse-ring 2s infinite;
-        }
-
-        @keyframes pulse-ring {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.5; }
-        }
-
-        /* Global Summary Stats Row */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 20px 24px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            gap: 18px;
             position: relative;
-            overflow: hidden;
         }
 
-        .stat-icon-wrapper {
+        .royal-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 20px;
+            right: 20px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+        }
+
+        .royal-brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .royal-crest {
             width: 52px;
             height: 52px;
-            border-radius: var(--radius-md);
+            background: var(--gold-light);
+            border: 2px solid var(--gold-primary);
+            border-radius: var(--radius-default);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: var(--shadow-sm);
+            color: var(--gold-primary);
+        }
+
+        .royal-titles h1 {
+            font-family: var(--font-headline);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .royal-titles h1 span.edition-tag {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--gold-primary);
+            background: var(--gold-subtle);
+            border: 1px solid var(--gold-border);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .royal-titles p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .realm-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--success-light);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-headline);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .status-rune {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: var(--radius-full);
+            box-shadow: 0 0 6px var(--success);
+            animation: pulse-rune 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-rune {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        /* KPI / Lore Stats Cards (3 Columns) */
+        .lore-kpi-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .lore-kpi-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-top: 2px solid var(--gold-primary);
+            border-radius: var(--radius-default);
+            padding: 22px 24px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            position: relative;
+            transition: all 300ms ease;
+        }
+
+        .lore-kpi-card:hover {
+            background: var(--surface-elevated);
+            border-color: var(--gold-border);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .kpi-crest-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-default);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             flex-shrink: 0;
+            border: 1px solid var(--border-subtle);
         }
 
-        .stat-icon-blue { background: var(--primary-subtle); color: var(--primary); }
-        .stat-icon-amber { background: var(--accent-gold-bg); color: var(--accent-gold); }
-        .stat-icon-purple { background: var(--accent-purple-bg); color: var(--accent-purple); }
+        .crest-gold { background: var(--gold-light); border-color: var(--gold-border); }
+        .crest-red { background: var(--red-light); border-color: var(--red-border); }
+        .crest-purple { background: var(--purple-light); border-color: var(--purple-tertiary); }
 
-        .stat-content-box {
+        .kpi-details {
             display: flex;
             flex-direction: column;
         }
 
-        .stat-content-box .stat-label {
-            font-family: var(--font-ui);
+        .kpi-caption {
+            font-family: var(--font-headline);
             font-size: 12px;
             font-weight: 700;
             color: var(--text-muted);
+            letter-spacing: 1px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .stat-content-box .stat-number {
+        .kpi-number {
             font-family: var(--font-mono);
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.2;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.15;
             margin-top: 2px;
         }
 
-        .stat-content-box .stat-desc {
-            font-size: 12px;
-            color: var(--text-dim);
+        .kpi-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
         }
 
-        /* STEP 1: SUBJECT SELECTOR SECTION (เลือกวิชาก่อน) */
-        .step-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-xl);
-            padding: 24px 28px;
-            box-shadow: var(--shadow-sm);
+        /* STEP 1: REALM SELECTOR (เลือกวิชาก่อน) */
+        .realm-selection-section {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-top: 3px solid var(--gold-primary);
+            border-radius: var(--radius-default);
+            padding: 26px 28px;
+            box-shadow: var(--shadow-default);
         }
 
-        .step-header {
+        .section-headline-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 14px;
         }
 
-        .step-title-group {
+        .headline-group {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
-        .step-badge {
+        .step-rune-badge {
             width: 32px;
             height: 32px;
-            background: var(--primary);
-            color: #FFFFFF;
-            font-family: var(--font-ui);
+            background: var(--gold-primary);
+            color: #1A0F0A;
+            font-family: var(--font-headline);
             font-weight: 800;
             font-size: 14px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
-        }
-
-        .step-title-group h2 {
-            font-family: var(--font-ui);
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.2px;
-        }
-
-        .step-title-group p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .subject-selector-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 18px;
-        }
-
-        .subject-card {
-            background: var(--bg-subtle);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 22px;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .subject-card:hover {
-            background: var(--bg-card);
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .subject-card.active {
-            background: var(--bg-card);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-glow), var(--shadow-md);
-        }
-
-        .subject-card.active::before {
-            content: '✓ กำลังเลือกวิชานี้';
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: var(--primary);
-            color: #FFFFFF;
-            font-family: var(--font-ui);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: var(--radius-full);
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
-        }
-
-        .subject-card-top {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .subject-emblem {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            flex-shrink: 0;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .subject-title-box h3 {
-            font-family: var(--font-ui);
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1.3;
-        }
-
-        .subject-title-box span.grade-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-            display: block;
-        }
-
-        .subject-stats-pills {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .mini-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 4px 10px;
             border-radius: var(--radius-sm);
-            font-family: var(--font-mono);
-            font-size: 12px;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gold-border);
+        }
+
+        .headline-group h2 {
+            font-family: var(--font-headline);
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .headline-group p {
+            font-size: 14px;
             color: var(--text-secondary);
         }
 
-        .subject-footer-btn {
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-family: var(--font-ui);
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary);
-            padding-top: 10px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        /* STEP 2: ACTIVE REALM / UNITS CONTAINER */
-        .units-section {
-            display: flex;
-            flex-direction: column;
+        .realm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
         }
 
-        .active-subject-banner {
-            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-subtle) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-xl);
-            padding: 24px 28px;
+        .realm-card {
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            border-top: 2px solid var(--border-subtle);
+            border-radius: var(--radius-default);
+            padding: 22px;
+            cursor: pointer;
+            transition: all 300ms ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .realm-card:hover {
+            background: var(--surface-elevated);
+            border-color: var(--gold-border);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+
+        .realm-card.active {
+            background: #FFFDF9;
+            border: 1.5px solid var(--gold-primary);
+            border-top: 3px solid var(--gold-primary);
+            box-shadow: var(--shadow-glow), var(--shadow-md);
+        }
+
+        .realm-card.active::before {
+            content: '⚔️ REALM CHOSEN';
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--gold-primary);
+            color: #1A0F0A;
+            font-family: var(--font-headline);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gold-border);
+        }
+
+        .realm-card-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .realm-emblem {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            flex-shrink: 0;
             box-shadow: var(--shadow-sm);
+        }
+
+        .realm-info h3 {
+            font-family: var(--font-headline);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .realm-info span.grade-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-style: italic;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .realm-pills {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .quest-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-headline);
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .realm-footer-action {
+            margin-top: 6px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--font-headline);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--gold-primary);
+        }
+
+        /* STEP 2: ACTIVE QUEST REALM & UNITS */
+        .quests-container {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .active-realm-banner {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-top: 3px solid var(--gold-primary);
+            border-radius: var(--radius-default);
+            padding: 22px 28px;
+            box-shadow: var(--shadow-default);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 18px;
         }
 
-        .banner-left {
+        .banner-heraldry {
             display: flex;
             align-items: center;
             gap: 18px;
         }
 
-        .banner-icon {
-            font-size: 36px;
-            width: 64px;
-            height: 64px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+        .heraldry-seal {
+            font-size: 32px;
+            width: 60px;
+            height: 60px;
+            background: var(--gold-light);
+            border: 1.5px solid var(--gold-border);
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: var(--shadow-sm);
         }
 
-        .banner-title-box h2 {
-            font-family: var(--font-ui);
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--text-main);
-            letter-spacing: -0.3px;
+        .banner-titles h2 {
+            font-family: var(--font-headline);
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
         }
 
-        .banner-title-box p {
+        .banner-titles p {
             font-size: 14px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
+            font-style: italic;
             margin-top: 2px;
         }
 
-        /* Search and Filter Controls Bar */
-        .controls-bar {
+        /* Quest Controls Bar */
+        .quest-controls-bar {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-default);
+            padding: 14px 20px;
+            box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
             flex-wrap: wrap;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 14px 20px;
-            box-shadow: var(--shadow-sm);
         }
 
-        .search-box-wrap {
+        .search-scroll-wrap {
             position: relative;
             flex: 1;
             min-width: 280px;
         }
 
-        .search-box-wrap input {
+        .search-scroll-wrap input {
             width: 100%;
-            height: 44px;
-            background: var(--bg-subtle);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
+            height: 42px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-default);
             padding: 0 16px 0 42px;
             font-family: var(--font-body);
-            font-size: 14px;
-            color: var(--text-main);
+            font-size: 15px;
+            color: var(--text-primary);
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 200ms ease;
         }
 
-        .search-box-wrap input:focus {
-            background: var(--bg-card);
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        .search-scroll-wrap input:hover {
+            border-color: var(--gold-border);
         }
 
-        .search-icon {
+        .search-scroll-wrap input:focus {
+            background: var(--surface-card);
+            border: 2px solid var(--gold-primary);
+            box-shadow: 0 0 0 3px rgba(202, 138, 4, 0.2);
+        }
+
+        .search-icon-rune {
             position: absolute;
             left: 14px;
             top: 50%;
@@ -560,141 +570,129 @@
             pointer-events: none;
         }
 
-        .filter-chips-group {
+        .filter-runes-group {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
         }
 
-        .filter-chip {
-            background: var(--bg-subtle);
-            border: 1px solid var(--border-color);
+        .filter-btn-rune {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-family: var(--font-ui);
-            font-size: 13px;
+            padding: 6px 16px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-headline);
+            font-size: 11px;
             font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 200ms ease;
         }
 
-        .filter-chip:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-hover);
+        .filter-btn-rune:hover {
+            background: var(--surface-alt);
+            border-color: var(--gold-border);
+            color: var(--gold-primary);
         }
 
-        .filter-chip.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #FFFFFF;
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        .filter-btn-rune.active {
+            background: var(--gold-primary);
+            border-color: var(--gold-border);
+            color: #1A0F0A;
+            box-shadow: var(--shadow-sm);
+            font-weight: 700;
         }
 
-        /* Units Cards Grid */
-        .units-grid {
+        /* Quest Chapters Grid */
+        .quests-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 22px;
         }
 
-        .unit-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+        .quest-card {
+            background: var(--surface-card);
+            border: 1px solid var(--border-subtle);
+            border-top: 2px solid var(--gold-primary);
+            border-radius: var(--radius-default);
             padding: 24px;
             box-shadow: var(--shadow-sm);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 20px;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            gap: 18px;
             position: relative;
-            overflow: hidden;
+            transition: all 300ms ease;
         }
 
-        .unit-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--primary);
-            opacity: 0.8;
+        .quest-card:hover {
+            background: var(--surface-elevated);
+            border-color: var(--gold-border);
+            box-shadow: var(--shadow-glow), var(--shadow-md);
+            transform: translateY(-3px);
         }
 
-        .unit-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .unit-card-header {
+        .quest-card-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             gap: 12px;
         }
 
-        .unit-meta-pills {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .unit-number-tag {
-            background: var(--primary-subtle);
-            color: var(--primary);
-            font-family: var(--font-ui);
+        .quest-number-seal {
+            background: var(--gold-subtle);
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-border);
+            font-family: var(--font-headline);
             font-size: 11px;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: var(--radius-sm);
+            font-weight: 700;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 3px 10px;
+            border-radius: var(--radius-sm);
         }
 
-        .slide-counter-badge {
-            background: var(--bg-subtle);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
+        .quest-slide-counter {
             font-family: var(--font-mono);
             font-size: 12px;
             font-weight: 700;
+            background: var(--surface-alt);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
             padding: 3px 8px;
             border-radius: var(--radius-sm);
         }
 
-        .unit-card-body {
+        .quest-card-body {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .unit-card-title {
-            font-family: var(--font-ui);
-            font-size: 17px;
+        .quest-title {
+            font-family: var(--font-headline);
+            font-size: 18px;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--text-primary);
             line-height: 1.4;
         }
 
-        .unit-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.5;
+        .quest-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
-        .teacher-script-badge {
+        .lore-notes-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: var(--accent-purple-bg);
-            color: var(--accent-purple);
-            border: 1px solid rgba(124, 58, 237, 0.2);
+            background: var(--purple-light);
+            color: var(--purple-tertiary);
+            border: 1px solid rgba(88, 28, 135, 0.3);
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             font-size: 12px;
@@ -702,80 +700,97 @@
             width: fit-content;
         }
 
-        /* Unit Action Buttons */
-        .unit-actions-row {
+        /* Quest Action Buttons */
+        .quest-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            padding-top: 14px;
-            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+            border-top: 1px solid var(--border-subtle);
         }
 
-        .btn {
+        /* QuestUI Buttons Specification */
+        .btn-quest {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            height: 42px;
-            padding: 0 16px;
-            border-radius: var(--radius-md);
-            font-family: var(--font-ui);
-            font-size: 13px;
+            height: 40px;
+            padding: 8px 18px;
+            border-radius: var(--radius-default);
+            font-family: var(--font-headline);
+            font-size: 12px;
             font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 250ms ease;
         }
 
+        /* Primary Button: #CA8A04 fill, #1A0F0A text, 1px #DAA520 border, #B8780A hover */
         .btn-primary {
-            background: var(--primary);
-            color: #FFFFFF;
-            border: 1px solid var(--primary);
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+            background: var(--gold-primary);
+            color: #1A0F0A;
+            border: 1px solid var(--gold-border);
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary:hover {
-            background: var(--primary-hover);
+            background: var(--gold-hover);
+            box-shadow: var(--shadow-glow);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
         }
 
+        /* Secondary Button: transparent fill, #CA8A04 text, 1px #CA8A04 border */
         .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
         }
 
         .btn-secondary:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-hover);
-            color: var(--primary);
+            background: var(--gold-subtle);
+            box-shadow: 0 0 10px rgba(202, 138, 4, 0.2);
+            color: var(--gold-hover);
         }
 
-        .btn-preview-full {
+        /* Ghost / Inspect Button */
+        .btn-inspect {
             grid-column: span 2;
-            background: var(--bg-subtle);
+            background: var(--surface-alt);
             color: var(--text-secondary);
-            border: 1px dashed var(--border-color);
+            border: 1px dashed var(--border-subtle);
             height: 36px;
-            font-size: 12px;
+            font-size: 11px;
         }
 
-        .btn-preview-full:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--primary);
-            color: var(--primary);
+        .btn-inspect:hover {
+            background: var(--surface-card);
+            border-color: var(--gold-primary);
+            color: var(--gold-primary);
         }
 
-        /* Modal Preview Lightbox */
+        /* Destructive Button: #991B1B */
+        .btn-destructive {
+            background: var(--red-secondary);
+            color: #FFFFFF;
+            border: 1px solid var(--red-border);
+        }
+
+        .btn-destructive:hover {
+            background: var(--red-hover);
+        }
+
+        /* Modal Lightbox for Slide Viewing */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(8px);
+            background: rgba(26, 15, 10, 0.7);
+            backdrop-filter: blur(6px);
             z-index: 9999;
             display: none;
             align-items: center;
@@ -787,22 +802,22 @@
             display: flex;
         }
 
-        .modal-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-xl);
+        .modal-manuscript {
+            background: var(--bg-page);
+            border: 2px solid var(--gold-primary);
+            border-radius: var(--radius-md);
             width: 100%;
-            max-width: 1100px;
-            height: 85vh;
+            max-width: 1150px;
+            height: 86vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            animation: modal-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 35px rgba(202, 138, 4, 0.45), 0 20px 40px rgba(26, 15, 10, 0.3);
+            animation: modal-unfold 300ms ease;
         }
 
-        @keyframes modal-enter {
-            from { opacity: 0; transform: scale(0.96); }
+        @keyframes modal-unfold {
+            from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
 
@@ -811,233 +826,227 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 24px;
-            border-bottom: 1px solid var(--border-color);
-            background: var(--bg-card);
+            background: var(--surface-card);
+            border-bottom: 1px solid var(--border-subtle);
+            border-top: 3px solid var(--gold-primary);
         }
 
-        .modal-title-wrap h3 {
-            font-family: var(--font-ui);
-            font-size: 16px;
+        .modal-header h3 {
+            font-family: var(--font-headline);
+            font-size: 17px;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--text-primary);
         }
 
-        .modal-title-wrap span {
-            font-size: 12px;
-            color: var(--text-muted);
+        .modal-header span {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-style: italic;
         }
 
-        .modal-close-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-full);
-            background: var(--bg-subtle);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
+        .modal-close-seal {
+            background: var(--red-light);
+            border: 1px solid var(--red-border);
+            color: var(--red-secondary);
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 18px;
-            transition: all 0.2s ease;
+            transition: all 200ms ease;
         }
 
-        .modal-close-btn:hover {
-            background: var(--accent-rose-bg);
-            color: var(--accent-rose);
-            border-color: var(--accent-rose);
+        .modal-close-seal:hover {
+            background: var(--red-secondary);
+            color: #FFFFFF;
         }
 
-        .modal-iframe-container {
+        .modal-body-iframe {
             flex: 1;
             width: 100%;
             height: 100%;
             background: #000000;
         }
 
-        .modal-iframe-container iframe {
+        .modal-body-iframe iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
         /* Empty State */
-        .empty-state {
+        .empty-tome {
             grid-column: 1 / -1;
             text-align: center;
             padding: 60px 20px;
-            background: var(--bg-card);
-            border: 1px dashed var(--border-color);
-            border-radius: var(--radius-lg);
+            background: var(--surface-card);
+            border: 1px dashed var(--border-subtle);
+            border-radius: var(--radius-default);
         }
 
-        .empty-state h3 {
-            font-family: var(--font-ui);
+        .empty-tome h3 {
+            font-family: var(--font-headline);
             font-size: 18px;
-            color: var(--text-main);
+            color: var(--text-primary);
             margin-bottom: 8px;
         }
 
-        .empty-state p {
+        .empty-tome p {
             font-size: 14px;
-            color: var(--text-muted);
+            color: var(--text-secondary);
         }
 
         /* Footer */
-        .footer-bar {
+        .royal-footer {
             text-align: center;
             padding: 24px;
             font-size: 13px;
             color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-subtle);
             margin-top: 20px;
+            font-family: var(--font-headline);
+            letter-spacing: 0.5px;
         }
 
         @media (max-width: 900px) {
-            .stats-row {
-                grid-template-columns: 1fr;
-            }
-            .units-grid {
-                grid-template-columns: 1fr;
-            }
-            .subject-selector-grid {
-                grid-template-columns: 1fr;
-            }
+            .lore-kpi-row { grid-template-columns: 1fr; }
+            .quests-grid { grid-template-columns: 1fr; }
+            .realm-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Top Navbar -->
-        <header class="top-navbar">
-            <div class="brand-block">
-                <div class="brand-logo-badge">⚡</div>
-                <div class="brand-title-group">
-                    <h1>Aksorn Smart PPT <span class="pill-badge">PORTAL</span></h1>
-                    <p>ระบบศูนย์รวมสื่อการสอนอินเตอร์แอคทีฟ & สคริปต์แนวการจัดการเรียนรู้</p>
+        <!-- Medieval Royal Header -->
+        <header class="royal-header">
+            <div class="royal-brand">
+                <div class="royal-crest">⚜️</div>
+                <div class="royal-titles">
+                    <h1>Aksorn Smart PPT <span class="edition-tag">QUEST ARCHIVES</span></h1>
+                    <p>ระบบศูนย์รวมคัมภีร์สื่อการสอนอินเตอร์แอคทีฟ & สคริปต์ผู้สอนฉบับสมบูรณ์</p>
                 </div>
             </div>
 
-            <div class="nav-actions">
-                <div class="status-pill">
-                    <span class="pulse-dot"></span>
-                    <span>ONLINE // คลังสื่อพร้อมใช้งาน</span>
-                </div>
-                <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
-                    <span id="themeIcon">☀️</span>
-                    <span id="themeText">ธีมสว่าง</span>
-                </button>
+            <div class="realm-status">
+                <span class="status-rune"></span>
+                <span>REALM ONLINE // RUNES ACTIVE</span>
             </div>
         </header>
 
-        <!-- KPI Summary Stats -->
-        <section class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon-wrapper stat-icon-blue">📚</div>
-                <div class="stat-content-box">
-                    <span class="stat-label">วิชาทั้งหมด</span>
-                    <span class="stat-number">3</span>
-                    <span class="stat-desc">คอร์สวิชาครอบคลุมหลักสูตรแกนกลาง</span>
+        <!-- 3-Column Lore KPI Row -->
+        <section class="lore-kpi-row">
+            <div class="lore-kpi-card">
+                <div class="kpi-crest-icon crest-gold">🏰</div>
+                <div class="kpi-details">
+                    <span class="kpi-caption">วิชาที่เปิดรับ (REALMS)</span>
+                    <span class="kpi-number">3</span>
+                    <span class="kpi-desc">หมวดวิชาตามหลักสูตรแกนกลาง</span>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon-wrapper stat-icon-amber">📂</div>
-                <div class="stat-content-box">
-                    <span class="stat-label">หน่วยการเรียนรู้</span>
-                    <span class="stat-number">7</span>
-                    <span class="stat-desc">บทเรียน Smart PPT พร้อมสอนทันที</span>
+            <div class="lore-kpi-card">
+                <div class="kpi-crest-icon crest-red">📜</div>
+                <div class="kpi-details">
+                    <span class="kpi-caption">เควสต์บทเรียน (QUESTS)</span>
+                    <span class="kpi-number">7</span>
+                    <span class="kpi-desc">หน่วยการเรียนรู้ Smart PPT ครบชุด</span>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon-wrapper stat-icon-purple">🖼️</div>
-                <div class="stat-content-box">
-                    <span class="stat-label">สไลด์อินเตอร์แอคทีฟ</span>
-                    <span class="stat-number">581</span>
-                    <span class="stat-desc">พร้อมสคริปต์ครู แนวคำตอบ และกิจกรรม</span>
+            <div class="lore-kpi-card">
+                <div class="kpi-crest-icon crest-purple">⚡</div>
+                <div class="kpi-details">
+                    <span class="kpi-caption">สไลด์เวทมนตร์ (SLIDES)</span>
+                    <span class="kpi-number">581</span>
+                    <span class="kpi-desc">พร้อมสคริปต์บรรยายและแนวคำตอบ</span>
                 </div>
             </div>
         </section>
 
-        <!-- STEP 1: SUBJECT SELECTOR (เลือกวิชาก่อน) -->
-        <section class="step-section">
-            <div class="step-header">
-                <div class="step-title-group">
-                    <div class="step-badge">1</div>
+        <!-- STEP 1: REALM SELECTOR (เลือกวิชาก่อน) -->
+        <section class="realm-selection-section">
+            <div class="section-headline-bar">
+                <div class="headline-group">
+                    <div class="step-rune-badge">I</div>
                     <div>
-                        <h2>ขั้นตอนที่ 1: เลือกวิชาที่ต้องการเรียนรู้หรือจัดการสอน</h2>
-                        <p>คลิกเลือกรายวิชาเพื่อกรองและแสดงเฉพาะหน่วยการเรียนรู้ของวิชานั้น</p>
+                        <h2>ขั้นตอนที่ 1: เลือกวิชาเพื่อเริ่มต้นการสำรวจ (CHOOSE REALM)</h2>
+                        <p>เลือกอาณาจักรแห่งความรู้เพื่อกรองและแสดงเควสต์บทเรียนประจำวิชา</p>
                     </div>
                 </div>
 
                 <div>
-                    <button class="filter-chip" id="showAllSubjectsBtn" onclick="selectAllSubjects()">
+                    <button class="quest-chip" id="showAllRealmsBtn" onclick="selectAllRealms()" style="cursor: pointer;">
                         🌐 แสดงทุกวิชาพร้อมกัน
                     </button>
                 </div>
             </div>
 
-            <div class="subject-selector-grid" id="subjectSelectorGrid">
-                <!-- Dynamically populated subject cards -->
+            <div class="realm-grid" id="realmSelectorGrid">
+                <!-- Dynamically populated realm cards -->
             </div>
         </section>
 
-        <!-- STEP 2: ACTIVE SUBJECT & UNITS LIST -->
-        <section class="units-section">
-            <!-- Active Subject Banner -->
-            <div class="active-subject-banner" id="activeSubjectBanner">
-                <div class="banner-left">
-                    <div class="banner-icon" id="bannerIcon">💼</div>
-                    <div class="banner-title-box">
+        <!-- STEP 2: ACTIVE REALM & QUEST CHAPTERS -->
+        <section class="quests-container">
+            <!-- Active Realm Heraldry Banner -->
+            <div class="active-realm-banner" id="activeRealmBanner">
+                <div class="banner-heraldry">
+                    <div class="heraldry-seal" id="bannerSeal">💼</div>
+                    <div class="banner-titles">
                         <h2 id="bannerTitle">การงานอาชีพ ม.1</h2>
                         <p id="bannerSubtitle">กลุ่มสาระการเรียนรู้การงานอาชีพ • 5 หน่วยการเรียนรู้ • 246 สไลด์</p>
                     </div>
                 </div>
 
-                <div class="banner-right">
-                    <span class="mini-pill" id="bannerStatsBadge">⚡ 5 หน่วยการเรียนรู้</span>
+                <div>
+                    <span class="quest-chip" id="bannerStatsBadge" style="background: var(--gold-light); border-color: var(--gold-border); color: #1A0F0A; font-weight: 700;">
+                        ⚡ 5 เควสต์บทเรียน
+                    </span>
                 </div>
             </div>
 
             <!-- Search and Filter Controls -->
-            <div class="controls-bar">
-                <div class="search-box-wrap">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" id="searchInput" placeholder="พิมพ์คำค้นหา เช่น ชื่อหน่วย, หัวข้อ, หรือรหัสสื่อ..." oninput="handleSearch()">
+            <div class="quest-controls-bar">
+                <div class="search-scroll-wrap">
+                    <span class="search-icon-rune">🔍</span>
+                    <input type="text" id="searchInput" placeholder="ค้นหาชื่อเควสต์, หัวข้อบทเรียน, หรือคำสำคัญ..." oninput="handleSearch()">
                 </div>
 
-                <div class="filter-chips-group">
-                    <button class="filter-chip active" id="chipAll" onclick="setFilter('all')">ทั้งหมด</button>
-                    <button class="filter-chip" id="chipNotes" onclick="setFilter('notes')">📜 มีสคริปต์ผู้สอน</button>
-                    <button class="filter-chip" id="chipLarge" onclick="setFilter('large')">⚡ สไลด์จำนวนมาก (>50)</button>
+                <div class="filter-runes-group">
+                    <button class="filter-btn-rune active" id="chipAll" onclick="setFilter('all')">เควสต์ทั้งหมด</button>
+                    <button class="filter-btn-rune" id="chipNotes" onclick="setFilter('notes')">📜 มีคัมภีร์สคริปต์สอน</button>
+                    <button class="filter-btn-rune" id="chipLarge" onclick="setFilter('large')">⚡ สไลด์เนื้อหาแน่น (>50)</button>
                 </div>
             </div>
 
-            <!-- Units Grid -->
-            <div class="units-grid" id="unitsGrid">
-                <!-- Dynamically populated unit cards -->
+            <!-- Quests Grid -->
+            <div class="quests-grid" id="questsGrid">
+                <!-- Dynamically populated quest cards -->
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer-bar">
-            Aksorn Smart PPT Interactive Portal • พัฒนาระบบแสดงผลเพื่อการเรียนรู้และจัดการเรียนการสอนแบบสากล
+        <!-- Royal Footer -->
+        <footer class="royal-footer">
+            QUEST UI DESIGN SYSTEM • THE CHRONICLES OF AKSORN SMART PPT ARCHIVES
         </footer>
     </div>
 
-    <!-- Modal Lightbox for Interactive Slide Inspection -->
+    <!-- Modal Manuscript Lightbox for Slide Presentation Inspection -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
-        <div class="modal-box">
+        <div class="modal-manuscript">
             <div class="modal-header">
-                <div class="modal-title-wrap">
-                    <h3 id="modalTitle">พรีวิวสไลด์</h3>
-                    <span id="modalSubtitle">Smart PPT Interactive Presentation Viewer</span>
+                <div>
+                    <h3 id="modalTitle">คัมภีร์สไลด์นำเสนอ</h3>
+                    <span id="modalSubtitle">QuestUI Interactive Presentation Viewer</span>
                 </div>
-                <button class="modal-close-btn" onclick="closeModal()" title="ปิดหน้าต่าง">✕</button>
+                <button class="modal-close-seal" onclick="closeModal()" title="ปิดหน้าต่าง">✕</button>
             </div>
-            <div class="modal-iframe-container">
+            <div class="modal-body-iframe">
                 <iframe id="modalIframe" src="" allowfullscreen></iframe>
             </div>
         </div>
@@ -1046,60 +1055,32 @@
     <script>
         const coursesData = {"การงานอาชีพ_ม.1": {"clean_subj": "การงานอาชีพ_ม.1", "displayName": "การงานอาชีพ ม.1", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "units": [{"assetId": "e3641408-b5bf-410d-92b5-acf112431f63", "title": "หน่วยที่ 1 เรียนรู้กระบวนการทำงาน", "clean_unit": "หน่วยที่_1_เรียนรู้กระบวนการทำงาน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/e3641408-b5bf-410d-92b5-acf112431f63.jpg", "slideCount": 58, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "1af5533e-f358-44fa-bfd2-a59c2590293a", "title": "หน่วยที่ 2 การดูแลรักษาบ้าน", "clean_unit": "หน่วยที่_2_การดูแลรักษาบ้าน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/1af5533e-f358-44fa-bfd2-a59c2590293a.jpg", "slideCount": 106, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "123ba307-0ed5-4a77-a8b2-bb53e98767cd", "title": "หน่วยที่ 3 อาหารกับการดำรงชีวิต", "clean_unit": "หน่วยที่_3_อาหารกับการดำรงชีวิต", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/123ba307-0ed5-4a77-a8b2-bb53e98767cd.jpg", "slideCount": 89, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "35136d2c-ceda-4a2d-ac8b-bd1a83f53905", "title": "หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น", "clean_unit": "หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/35136d2c-ceda-4a2d-ac8b-bd1a83f53905.jpg", "slideCount": 116, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "a88c5677-981b-4c1e-ad9b-d0c779108f9d", "title": "หน่วยที่ 5 โลกของอาชีพ", "clean_unit": "หน่วยที่_5_โลกของอาชีพ", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/a88c5677-981b-4c1e-ad9b-d0c779108f9d.jpg", "slideCount": 96, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/สคริปต์ครู_และแนวคำตอบ.txt"}]}, "ประวัติศาสตร์สากล_ม.4-6": {"clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "displayName": "ประวัติศาสตร์สากล ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "units": [{"assetId": "cf54bc41-5e9d-44ba-849b-afca7dfab203", "title": "หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_unit": "หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/cf54bc41-5e9d-44ba-849b-afca7dfab203.jpg", "slideCount": 74, "hasNotes": true, "interactiveUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/index.html", "readingUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/สคริปต์ครู_และแนวคำตอบ.txt"}]}, "พระพุทธศาสนา_ม.4-6": {"clean_subj": "พระพุทธศาสนา_ม.4-6", "displayName": "พระพุทธศาสนา ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "units": [{"assetId": "7712640c-4d60-43c3-b3e2-fa7389b86ffa", "title": "หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา", "clean_unit": "หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา", "clean_subj": "พระพุทธศาสนา_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/7712640c-4d60-43c3-b3e2-fa7389b86ffa.jpg", "slideCount": 42, "hasNotes": true, "interactiveUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/index.html", "readingUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/สคริปต์ครู_และแนวคำตอบ.txt"}]}};
 
-        let currentSelectedSubject = null; // null means 'all', or clean_subj string
-        let currentFilter = 'all'; // 'all', 'notes', 'large'
+        let currentSelectedSubject = null;
+        let currentFilter = 'all';
         let searchQuery = '';
 
-        // Initialize Theme from localStorage or Default to 'light'
-        function initTheme() {
-            const savedTheme = localStorage.getItem('smartppt_theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeUI(savedTheme);
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('smartppt_theme', newTheme);
-            updateThemeUI(newTheme);
-        }
-
-        function updateThemeUI(theme) {
-            const icon = document.getElementById('themeIcon');
-            const text = document.getElementById('themeText');
-            if (theme === 'dark') {
-                icon.textContent = '🌙';
-                text.textContent = 'ธีมมืด';
-            } else {
-                icon.textContent = '☀️';
-                text.textContent = 'ธีมสว่าง';
-            }
-        }
-
-        const subjectIcons = {
-            "การงานอาชีพ": "💼",
+        const realmIcons = {
+            "การงานอาชีพ": "⚒️",
             "พระพุทธศาสนา": "☸️",
             "ประวัติศาสตร์สากล": "🌍",
             "วิทยาศาสตร์": "🔬",
             "คณิตศาสตร์": "📐"
         };
 
-        function getSubjectIcon(name) {
-            for (const [key, icon] of Object.entries(subjectIcons)) {
+        function getRealmIcon(name) {
+            for (const [key, icon] of Object.entries(realmIcons)) {
                 if (name.includes(key)) return icon;
             }
-            return "📚";
+            return "📜";
         }
 
-        // Render Step 1: Subject Selection Cards
-        function renderSubjectCards() {
-            const container = document.getElementById('subjectSelectorGrid');
+        // Render Step 1: Realm Cards
+        function renderRealmCards() {
+            const container = document.getElementById('realmSelectorGrid');
             container.innerHTML = '';
 
             const keys = Object.keys(coursesData);
             if (keys.length > 0 && !currentSelectedSubject) {
-                // Default select the first subject (e.g. การงานอาชีพ ม.1)
                 currentSelectedSubject = keys[0];
             }
 
@@ -1107,59 +1088,63 @@
                 const course = coursesData[subjKey];
                 const totalUnits = course.units.length;
                 const totalSlides = course.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
-                const icon = getSubjectIcon(course.displayName);
+                const icon = getRealmIcon(course.displayName);
                 const isActive = currentSelectedSubject === subjKey;
 
                 const card = document.createElement('div');
-                card.className = `subject-card ${isActive ? 'active' : ''}`;
-                card.onclick = () => selectSubject(subjKey);
+                card.className = `realm-card ${isActive ? 'active' : ''}`;
+                card.onclick = () => selectRealm(subjKey);
 
                 card.innerHTML = `
-                    <div class="subject-card-top">
-                        <div class="subject-emblem">${icon}</div>
-                        <div class="subject-title-box">
+                    <div class="realm-card-top">
+                        <div class="realm-emblem">${icon}</div>
+                        <div class="realm-info">
                             <h3>${course.displayName}</h3>
-                            <span class="grade-label">${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''}</span>
+                            <span class="grade-text">${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''}</span>
                         </div>
                     </div>
-                    <div class="subject-stats-pills">
-                        <span class="mini-pill">📁 ${totalUnits} หน่วยการเรียนรู้</span>
-                        <span class="mini-pill">⚡ ${totalSlides} สไลด์</span>
+                    <div class="realm-pills">
+                        <span class="quest-chip">📜 ${totalUnits} เควสต์บทเรียน</span>
+                        <span class="quest-chip">⚡ ${totalSlides} สไลด์</span>
                     </div>
-                    <div class="subject-footer-btn">
-                        <span>${isActive ? '✓ เลือกวิชานี้อยู่' : 'คลิกเพื่อเลือกวิชานี้'}</span>
-                        <span>→</span>
+                    <div class="realm-footer-action">
+                        <span>${isActive ? '✦ เลือกวิชานี้อยู่' : 'คลิกเพื่อเลือกวิชานี้'}</span>
+                        <span>⚔️ →</span>
                     </div>
                 `;
                 container.appendChild(card);
             });
 
-            const allBtn = document.getElementById('showAllSubjectsBtn');
+            const allBtn = document.getElementById('showAllRealmsBtn');
             if (allBtn) {
                 if (currentSelectedSubject === null) {
-                    allBtn.classList.add('active');
+                    allBtn.style.background = 'var(--gold-primary)';
+                    allBtn.style.color = '#1A0F0A';
+                    allBtn.style.fontWeight = '700';
                 } else {
-                    allBtn.classList.remove('active');
+                    allBtn.style.background = 'var(--surface-card)';
+                    allBtn.style.color = 'var(--text-secondary)';
+                    allBtn.style.fontWeight = '400';
                 }
             }
         }
 
-        function selectSubject(subjKey) {
+        function selectRealm(subjKey) {
             currentSelectedSubject = subjKey;
-            renderSubjectCards();
+            renderRealmCards();
             updateBanner();
-            renderUnits();
+            renderQuests();
         }
 
-        function selectAllSubjects() {
+        function selectAllRealms() {
             currentSelectedSubject = null;
-            renderSubjectCards();
+            renderRealmCards();
             updateBanner();
-            renderUnits();
+            renderQuests();
         }
 
         function updateBanner() {
-            const bannerIcon = document.getElementById('bannerIcon');
+            const bannerSeal = document.getElementById('bannerSeal');
             const bannerTitle = document.getElementById('bannerTitle');
             const bannerSubtitle = document.getElementById('bannerSubtitle');
             const bannerStatsBadge = document.getElementById('bannerStatsBadge');
@@ -1168,20 +1153,20 @@
                 const course = coursesData[currentSelectedSubject];
                 const totalUnits = course.units.length;
                 const totalSlides = course.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
-                bannerIcon.textContent = getSubjectIcon(course.displayName);
+                bannerSeal.textContent = getRealmIcon(course.displayName);
                 bannerTitle.textContent = course.displayName;
-                bannerSubtitle.textContent = `${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''} • รวม ${totalUnits} หน่วยการเรียนรู้`;
-                bannerStatsBadge.textContent = `⚡ ${totalUnits} หน่วย (${totalSlides} สไลด์)`;
+                bannerSubtitle.textContent = `${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''} • รวม ${totalUnits} เควสต์บทเรียน`;
+                bannerStatsBadge.textContent = `⚡ ${totalUnits} เควสต์ (${totalSlides} สไลด์)`;
             } else {
-                bannerIcon.textContent = "🌐";
-                bannerTitle.textContent = "ทุกวิชาทั้งหมด (All Subjects)";
-                bannerSubtitle.textContent = "แสดงเนื้อหาและหน่วยการเรียนรู้จากทุกวิชาในระบบ";
+                bannerSeal.textContent = "🌐";
+                bannerTitle.textContent = "ทุกอาณาจักรความรู้ (ALL REALMS)";
+                bannerSubtitle.textContent = "แสดงเนื้อหาและเควสต์บทเรียนจากทุกรายวิชาในระบบ";
                 let allUnits = 0, allSlides = 0;
                 Object.values(coursesData).forEach(c => {
                     allUnits += c.units.length;
                     allSlides += c.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
                 });
-                bannerStatsBadge.textContent = `⚡ รวม ${allUnits} หน่วย (${allSlides} สไลด์)`;
+                bannerStatsBadge.textContent = `⚡ รวม ${allUnits} เควสต์ (${allSlides} สไลด์)`;
             }
         }
 
@@ -1190,16 +1175,16 @@
             document.getElementById('chipAll').classList.toggle('active', type === 'all');
             document.getElementById('chipNotes').classList.toggle('active', type === 'notes');
             document.getElementById('chipLarge').classList.toggle('active', type === 'large');
-            renderUnits();
+            renderQuests();
         }
 
         function handleSearch() {
             searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
-            renderUnits();
+            renderQuests();
         }
 
-        function renderUnits() {
-            const grid = document.getElementById('unitsGrid');
+        function renderQuests() {
+            const grid = document.getElementById('questsGrid');
             grid.innerHTML = '';
 
             let unitsToDisplay = [];
@@ -1229,9 +1214,9 @@
 
             if (unitsToDisplay.length === 0) {
                 grid.innerHTML = `
-                    <div class="empty-state">
-                        <h3>🔍 ไม่พบหน่วยการเรียนรู้ที่ตรงกับเงื่อนไข</h3>
-                        <p>ลองปรับคำค้นหา หรือเปลี่ยนตัวกรองเพื่อค้นหาบทเรียนที่ต้องการ</p>
+                    <div class="empty-tome">
+                        <h3>📜 ไม่พบบันทึกเควสต์ที่ตรงกับเงื่อนไข</h3>
+                        <p>ลองปรับคำค้นหา หรือเลือกตัวกรองใหม่เพื่อเปิดดูคัมภีร์บทเรียน</p>
                     </div>
                 `;
                 return;
@@ -1239,35 +1224,33 @@
 
             unitsToDisplay.forEach((unit, idx) => {
                 const card = document.createElement('div');
-                card.className = 'unit-card';
+                card.className = 'quest-card';
 
                 const notesBadge = unit.hasNotes 
-                    ? `<span class="teacher-script-badge">📜 มีสคริปต์ผู้สอนและแนวคำตอบ</span>` 
+                    ? `<span class="lore-notes-badge">📜 คัมภีร์สคริปต์ผู้สอน & แนวคำตอบ</span>` 
                     : ``;
 
                 card.innerHTML = `
-                    <div class="unit-card-header">
-                        <div class="unit-meta-pills">
-                            <span class="unit-number-tag">หน่วยที่ ${idx + 1}</span>
-                            <span class="slide-counter-badge">⚡ ${unit.slideCount || 0} สไลด์</span>
-                        </div>
+                    <div class="quest-card-header">
+                        <span class="quest-number-seal">QUEST #${idx + 1}</span>
+                        <span class="quest-slide-counter">⚡ ${unit.slideCount || 0} SLIDES</span>
                     </div>
 
-                    <div class="unit-card-body">
-                        <h3 class="unit-card-title">${unit.title}</h3>
-                        <p class="unit-desc">วิชา: ${unit.displayName || unit.clean_subj.replace(/_/g, ' ')} • ${unit.gradeName || ''}</p>
+                    <div class="quest-card-body">
+                        <h3 class="quest-title">${unit.title}</h3>
+                        <p class="quest-desc">วิชา: ${unit.displayName || unit.clean_subj.replace(/_/g, ' ')} • ${unit.gradeName || ''}</p>
                         ${notesBadge}
                     </div>
 
-                    <div class="unit-actions-row">
-                        <a href="${unit.interactiveUrl}" target="_blank" class="btn btn-primary" title="เปิดสื่อสไลด์นำเสนอเต็มจอในหน้าต่างใหม่">
-                            🚀 เปิดสไลด์สอน
+                    <div class="quest-actions">
+                        <a href="${unit.interactiveUrl}" target="_blank" class="btn-quest btn-primary" title="เปิดสไลด์นำเสนอเต็มจอ">
+                            ⚔️ เปิดสไลด์สอน
                         </a>
-                        <a href="${unit.readingUrl}" target="_blank" class="btn btn-secondary" title="อ่านสไลด์ทุกหน้าพร้อมสคริปต์และข้อสอบ">
-                            📖 อ่านเนื้อหา
+                        <a href="${unit.readingUrl}" target="_blank" class="btn-quest btn-secondary" title="อ่านเนื้อหาและสคริปต์ทั้งหมด">
+                            📜 อ่านคัมภีร์
                         </a>
-                        <button type="button" class="btn btn-preview-full" onclick="openModal('${unit.interactiveUrl}', '${encodeURIComponent(unit.title)}')">
-                            👁️ พรีวิวในหน้านี้ทันที (Modal)
+                        <button type="button" class="btn-quest btn-inspect" onclick="openModal('${unit.interactiveUrl}', '${encodeURIComponent(unit.title)}')">
+                            👁️ ส่องดูแบบด่วน (QUICK INSPECT)
                         </button>
                     </div>
                 `;
@@ -1275,7 +1258,7 @@
             });
         }
 
-        // Modal Control Functions
+        // Modal Control
         function openModal(url, encodedTitle) {
             const title = decodeURIComponent(encodedTitle);
             document.getElementById('modalTitle').textContent = title;
@@ -1300,12 +1283,10 @@
             if (e.key === 'Escape') closeModal();
         });
 
-        // Initialization
         window.addEventListener('DOMContentLoaded', () => {
-            initTheme();
-            renderSubjectCards();
+            renderRealmCards();
             updateBanner();
-            renderUnits();
+            renderQuests();
         });
     </script>
 </body>
