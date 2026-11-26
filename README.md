@@ -2,6 +2,12 @@
 
 ศูนย์รวมสื่อสไลด์นำเสนอ Interactive ครบทุกกลุ่มสาระการเรียนรู้ จัดแยกตามรายวิชาและหน่วยการเรียนรู้ พร้อมระบบสคริปต์ครู แนวทางการสอน และเฉลยคำตอบ
 
+## 🌐 เว็บไซต์ออนไลน์หลัก
+- **Vercel (Production):** [https://aksorn-smartppt.vercel.app](https://aksorn-smartppt.vercel.app)
+- **GitHub Pages (สำรอง):** [https://lovelimited.github.io/aksorn-smartppt/](https://lovelimited.github.io/aksorn-smartppt/)
+
+---
+
 ## 📚 รายวิชาที่มีในระบบ
 - **การงานอาชีพ ม.1** (5 หน่วยการเรียนรู้)
   - หน่วยที่ 1 เรียนรู้กระบวนการทำงาน
@@ -18,9 +24,5 @@
 - **สลับธีม 🌙 Dark / ☀️ Light Mode ได้ทันที**
 - **ค้นหาบทเรียนแบบ Real-time Live Search**
 - **เลือกดูตามกลุ่มสาระฯ ด้วย One-click Filter Chips**
-- **สไลด์ Interactive เต็มรูปแบบ พร้อมเสียงและแอนิเมชัน**
+- **สไลด์ Interactive เต็มรูปแบบ พร้อมเสียงและแอนิเมชันบน Edge Cloud**
 - **มีหน้าสรุปเนื้อหาสำหรับพิมพ์หรืออ่านต่อเนื่อง**
-
-## 🚀 เว็บไซต์ออนไลน์และการ Deploy
-- **Live บน GitHub Pages:** [https://lovelimited.github.io/aksorn-smartppt/](https://lovelimited.github.io/aksorn-smartppt/)
-- **1-Click Deploy บน Vercel:** [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https://github.com/lovelimited/aksorn-smartppt)
