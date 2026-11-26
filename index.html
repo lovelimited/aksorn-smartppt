@@ -1,635 +1,906 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WATTVISION // SMART-PPT DASHBOARD</title>
+    <title>Aksorn Smart PPT // คลังสื่อการสอนอินเตอร์แอคทีฟ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #121212;
-            --bg-card: #1E1E1E;
-            --bg-hover: #252525;
-            --border-subtle: #2C2C2E;
-            --border-highlight: #3A3A3C;
+            /* Light Theme (Default) */
+            --bg-page: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F5F9;
+            --bg-subtle: #F1F5F9;
+            --border-color: #E2E8F0;
+            --border-hover: #CBD5E1;
+            
+            --text-main: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #64748B;
+            --text-dim: #94A3B8;
 
-            --accent-cyan: #00E5FF;
-            --accent-cyan-glow: rgba(0, 229, 255, 0.25);
-            --accent-green: #32D74B;
-            --accent-green-bg: rgba(50, 215, 75, 0.12);
-            --accent-red: #FF453A;
-            --accent-red-bg: #3A1C1C;
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --primary-subtle: #EFF6FF;
+            --primary-border: #BFDBFE;
 
-            --text-primary: #FFFFFF;
-            --text-secondary: #98989D;
-            --text-muted: #636366;
+            --accent-gold: #D97706;
+            --accent-gold-bg: #FEF3C7;
+            --accent-purple: #7C3AED;
+            --accent-purple-bg: #F5F3FF;
+            --accent-emerald: #059669;
+            --accent-emerald-bg: #ECFDF5;
+            --accent-rose: #E11D48;
+            --accent-rose-bg: #FFE4E6;
 
-            --font-ui: 'Inter', 'Prompt', sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-            --font-thai: 'Sarabun', sans-serif;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.18);
+
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-full: 9999px;
+
+            --font-ui: 'Plus Jakarta Sans', 'Prompt', sans-serif;
+            --font-body: 'Sarabun', 'Prompt', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0B0F17;
+            --bg-card: #151D2A;
+            --bg-card-hover: #1E293B;
+            --bg-subtle: #192231;
+            --border-color: #27354A;
+            --border-hover: #384A66;
+            
+            --text-main: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --text-dim: #64748B;
+
+            --primary: #3B82F6;
+            --primary-hover: #60A5FA;
+            --primary-subtle: #1E3A8A40;
+            --primary-border: #1D4ED8;
+
+            --accent-gold: #F59E0B;
+            --accent-gold-bg: #78350F40;
+            --accent-purple: #A855F7;
+            --accent-purple-bg: #581C8740;
+            --accent-emerald: #10B981;
+            --accent-emerald-bg: #064E3B40;
+            --accent-rose: #F43F5E;
+            --accent-rose-bg: #88133740;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 25px rgba(59, 130, 246, 0.3);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
         }
 
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: var(--font-ui);
-            font-size: 14px;
-            line-height: 1.5;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 24px;
+            padding: 24px 20px;
         }
 
-        .dashboard-container {
-            max-width: 1400px;
+        .container {
+            max-width: 1360px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 28px;
         }
 
-        /* Header / Navigation Bar */
-        .header-bar {
+        /* Top Header Navbar */
+        .top-navbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
             padding: 16px 24px;
+            box-shadow: var(--shadow-sm);
         }
 
-        .brand-section {
+        .brand-block {
             display: flex;
             align-items: center;
             gap: 16px;
         }
 
-        .brand-icon {
-            width: 42px;
-            height: 42px;
-            background: #121212;
-            border: 1.5px solid var(--accent-cyan);
-            border-radius: 10px;
+        .brand-logo-badge {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent-cyan);
-            font-family: var(--font-mono);
+            color: #FFFFFF;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .brand-title-group h1 {
+            font-family: var(--font-ui);
+            font-size: 20px;
             font-weight: 800;
-            font-size: 18px;
-            box-shadow: 0 0 15px var(--accent-cyan-glow);
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .brand-info h1 {
-            font-size: 18px;
+        .brand-title-group h1 span.pill-badge {
+            background: var(--primary-subtle);
+            color: var(--primary);
+            font-size: 11px;
             font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--primary-border);
             letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--text-primary);
         }
 
-        .brand-info span {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--accent-cyan);
-            letter-spacing: 1px;
+        .brand-title-group p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 1px;
         }
 
-        .status-badge {
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-family: var(--font-ui);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-1px);
+        }
+
+        .status-pill {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--accent-green-bg);
-            border: 1px solid var(--accent-green);
-            color: var(--accent-green);
+            background: var(--accent-emerald-bg);
+            border: 1px solid rgba(5, 150, 105, 0.25);
+            color: var(--accent-emerald);
             padding: 6px 14px;
-            border-radius: 20px;
-            font-family: var(--font-mono);
+            border-radius: var(--radius-full);
+            font-family: var(--font-ui);
             font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            font-weight: 700;
         }
 
-        .status-dot {
+        .status-pill .pulse-dot {
             width: 8px;
             height: 8px;
-            background: var(--accent-green);
+            background: var(--accent-emerald);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-green);
-            animation: pulse 2s infinite;
+            box-shadow: 0 0 8px var(--accent-emerald);
+            animation: pulse-ring 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+        @keyframes pulse-ring {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.5; }
         }
 
-        /* 3-Column Top KPI Cards */
-        .kpi-row {
+        /* Global Summary Stats Row */
+        .stats-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 18px;
         }
 
-        .kpi-card {
+        .stat-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            box-shadow: var(--shadow-sm);
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            gap: 18px;
             position: relative;
             overflow: hidden;
         }
 
-        .kpi-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--accent-cyan);
-        }
-
-        .kpi-label {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .stat-icon-wrapper {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
         }
 
-        .kpi-value-row {
+        .stat-icon-blue { background: var(--primary-subtle); color: var(--primary); }
+        .stat-icon-amber { background: var(--accent-gold-bg); color: var(--accent-gold); }
+        .stat-icon-purple { background: var(--accent-purple-bg); color: var(--accent-purple); }
+
+        .stat-content-box {
             display: flex;
-            align-items: baseline;
-            gap: 10px;
+            flex-direction: column;
         }
 
-        .kpi-value {
-            font-family: var(--font-mono);
-            font-size: 36px;
-            font-weight: 800;
-            color: var(--text-primary);
-            line-height: 1;
-        }
-
-        .kpi-unit {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            color: var(--accent-cyan);
-            font-weight: 600;
-        }
-
-        .kpi-subtext {
+        .stat-content-box .stat-label {
+            font-family: var(--font-ui);
             font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* STEP 1: SUBJECT SELECTOR (เลือกวิชาก่อน) */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-        }
-
-        .section-title {
-            font-size: 15px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            color: var(--text-muted);
             text-transform: uppercase;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            letter-spacing: 0.5px;
         }
 
-        .section-title span.tag {
-            color: var(--accent-cyan);
+        .stat-content-box .stat-number {
             font-family: var(--font-mono);
-            font-size: 11px;
-            background: rgba(0, 229, 255, 0.1);
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 229, 255, 0.3);
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+
+        .stat-content-box .stat-desc {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        /* STEP 1: SUBJECT SELECTOR SECTION (เลือกวิชาก่อน) */
+        .step-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 24px 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .step-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-badge {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-family: var(--font-ui);
+            font-weight: 800;
+            font-size: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+        }
+
+        .step-title-group h2 {
+            font-family: var(--font-ui);
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
+        }
+
+        .step-title-group p {
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
         .subject-selector-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 16px;
+            gap: 18px;
         }
 
         .subject-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 20px;
+            background: var(--bg-subtle);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 22px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .subject-card:hover {
-            background: var(--bg-hover);
-            border-color: var(--border-highlight);
-            transform: translateY(-2px);
+            background: var(--bg-card);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
 
         .subject-card.active {
-            background: #17242B;
-            border: 1.5px solid var(--accent-cyan);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+            background: var(--bg-card);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow), var(--shadow-md);
         }
 
-        .subject-card.active::after {
-            content: 'SELECTED';
+        .subject-card.active::before {
+            content: '✓ กำลังเลือกวิชานี้';
             position: absolute;
-            top: 16px;
-            right: 16px;
-            font-family: var(--font-mono);
-            font-size: 10px;
+            top: 14px;
+            right: 14px;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-family: var(--font-ui);
+            font-size: 11px;
             font-weight: 700;
-            color: #000;
-            background: var(--accent-cyan);
-            padding: 2px 8px;
-            border-radius: 4px;
-            letter-spacing: 0.5px;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
         }
 
-        .subject-header {
+        .subject-card-top {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
-        .subject-icon-box {
-            width: 36px;
-            height: 36px;
-            background: #121212;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
+        .subject-emblem {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
         }
 
-        .subject-card.active .subject-icon-box {
-            border-color: var(--accent-cyan);
-        }
-
-        .subject-name {
+        .subject-title-box h3 {
+            font-family: var(--font-ui);
             font-size: 16px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--text-main);
+            line-height: 1.3;
         }
 
-        .subject-meta-row {
+        .subject-title-box span.grade-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            display: block;
+        }
+
+        .subject-stats-pills {
             display: flex;
-            gap: 12px;
             align-items: center;
-            border-top: 1px solid var(--border-subtle);
-            padding-top: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .sub-kpi {
+        .mini-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
             font-family: var(--font-mono);
             font-size: 12px;
+            font-weight: 600;
             color: var(--text-secondary);
         }
 
-        .sub-kpi strong {
-            color: var(--accent-cyan);
-            font-size: 13px;
-        }
-
-        /* STEP 2: UNITS / MODULES VIEW (12-COLUMN DASHBOARD) */
-        .workspace-grid {
-            display: grid;
-            grid-template-columns: 8fr 4fr;
-            gap: 24px;
-        }
-
-        .units-column {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .active-course-banner {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 18px 24px;
+        .subject-footer-btn {
+            margin-top: 4px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            font-family: var(--font-ui);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
         }
 
-        .active-course-title {
+        /* STEP 2: ACTIVE REALM / UNITS CONTAINER */
+        .units-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .active-subject-banner {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-subtle) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 24px 28px;
+            box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-primary);
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .search-container {
+        .banner-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .banner-icon {
+            font-size: 36px;
+            width: 64px;
+            height: 64px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .banner-title-box h2 {
+            font-family: var(--font-ui);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .banner-title-box p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Search and Filter Controls Bar */
+        .controls-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 14px 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-box-wrap {
             position: relative;
+            flex: 1;
             min-width: 280px;
         }
 
-        .search-input {
+        .search-box-wrap input {
             width: 100%;
-            background: #121212;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 8px 14px 8px 34px;
-            color: var(--text-primary);
-            font-family: var(--font-ui);
-            font-size: 13px;
+            height: 44px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0 16px 0 42px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-main);
             outline: none;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
-        .search-input:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 10px var(--accent-cyan-glow);
+        .search-box-wrap input:focus {
+            background: var(--bg-card);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
         .search-icon {
             position: absolute;
-            left: 10px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
-        /* Unit Cards */
-        .unit-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            gap: 20px;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .unit-card:hover {
-            background: var(--bg-hover);
-            border-color: var(--border-highlight);
-        }
-
-        .unit-cover-wrap {
-            width: 80px;
-            height: 110px;
-            flex-shrink: 0;
-            background: #121212;
-            border: 1px solid var(--border-subtle);
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        .unit-cover-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .unit-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .unit-top-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-
-        .unit-tag {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            color: var(--accent-cyan);
-            font-weight: 700;
-            letter-spacing: 1px;
-            background: rgba(0, 229, 255, 0.08);
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 229, 255, 0.2);
-        }
-
-        .unit-stats-pills {
-            display: flex;
-            gap: 8px;
-        }
-
-        .pill-dark {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 4px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: #121212;
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-        }
-
-        .pill-green {
-            background: var(--accent-green-bg);
-            border: 1px solid var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        .unit-title {
             font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 14px;
-            line-height: 1.4;
+            color: var(--text-muted);
+            pointer-events: none;
         }
 
-        .unit-actions {
+        .filter-chips-group {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
-        /* Buttons according to DESIGN.md */
+        .filter-chip {
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-family: var(--font-ui);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #FFFFFF;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        /* Units Cards Grid */
+        .units-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 22px;
+        }
+
+        .unit-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 20px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .unit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary);
+            opacity: 0.8;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .unit-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .unit-meta-pills {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .unit-number-tag {
+            background: var(--primary-subtle);
+            color: var(--primary);
+            font-family: var(--font-ui);
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .slide-counter-badge {
+            background: var(--bg-subtle);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .unit-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .unit-card-title {
+            font-family: var(--font-ui);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.4;
+        }
+
+        .unit-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .teacher-script-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--accent-purple-bg);
+            color: var(--accent-purple);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            width: fit-content;
+        }
+
+        /* Unit Action Buttons */
+        .unit-actions-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-color);
+        }
+
         .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 42px;
+            padding: 0 16px;
+            border-radius: var(--radius-md);
             font-family: var(--font-ui);
             font-size: 13px;
             font-weight: 700;
             text-decoration: none;
-            padding: 9px 16px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
             cursor: pointer;
-            transition: all 0.2s;
-            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: 1px solid var(--primary);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            color: var(--primary);
+        }
+
+        .btn-preview-full {
+            grid-column: span 2;
+            background: var(--bg-subtle);
+            color: var(--text-secondary);
+            border: 1px dashed var(--border-color);
+            height: 36px;
+            font-size: 12px;
+        }
+
+        .btn-preview-full:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Modal Preview Lightbox */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 1100px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: modal-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modal-enter {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        .modal-title-wrap h3 {
+            font-family: var(--font-ui);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-title-wrap span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .modal-close-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--bg-subtle);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--accent-rose-bg);
+            color: var(--accent-rose);
+            border-color: var(--accent-rose);
+        }
+
+        .modal-iframe-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+        }
+
+        .modal-iframe-container iframe {
+            width: 100%;
+            height: 100%;
             border: none;
         }
 
-        .btn-cyan {
-            background: var(--accent-cyan);
-            color: #000000;
-            box-shadow: 0 0 12px var(--accent-cyan-glow);
-        }
-
-        .btn-cyan:hover {
-            background: #33EBFF;
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline {
-            background: #121212;
-            color: var(--text-primary);
-            border: 1px solid var(--border-subtle);
-        }
-
-        .btn-outline:hover {
-            background: var(--bg-hover);
-            border-color: var(--border-highlight);
-            color: var(--accent-cyan);
-        }
-
-        /* Right Sidebar (4 Columns) */
-        .telemetry-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .telemetry-panel {
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
             background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 20px;
+            border: 1px dashed var(--border-color);
+            border-radius: var(--radius-lg);
         }
 
-        .panel-title {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .empty-state h3 {
+            font-family: var(--font-ui);
+            font-size: 18px;
+            color: var(--text-main);
+            margin-bottom: 8px;
         }
 
-        .quick-nav-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+        .empty-state p {
+            font-size: 14px;
+            color: var(--text-muted);
         }
 
-        .quick-nav-item {
-            padding: 10px 12px;
-            background: #121212;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.2s;
-            font-size: 13px;
-        }
-
-        .quick-nav-item:hover {
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            background: #17242B;
-        }
-
-        .quick-nav-item span.count {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        /* Alert Panel (Styled exactly from DESIGN.md) */
-        .alert-box {
-            background: #18281E;
-            border-left: 4px solid var(--accent-green);
-            padding: 14px 16px;
-            border-radius: 8px;
-            margin-top: 14px;
-        }
-
-        .alert-header {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--accent-green);
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .alert-body {
-            font-size: 12px;
-            color: #C2ECCF;
-            line-height: 1.5;
-        }
-
+        /* Footer */
         .footer-bar {
             text-align: center;
-            padding: 24px 0 12px;
+            padding: 24px;
+            font-size: 13px;
             color: var(--text-muted);
-            font-family: var(--font-mono);
-            font-size: 12px;
-            border-top: 1px solid var(--border-subtle);
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
         }
 
-        @media (max-width: 992px) {
-            .workspace-grid {
+        @media (max-width: 900px) {
+            .stats-row {
                 grid-template-columns: 1fr;
             }
-            .kpi-row {
+            .units-grid {
+                grid-template-columns: 1fr;
+            }
+            .subject-selector-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -637,529 +908,405 @@
 </head>
 <body>
 
-    <div class="dashboard-container">
-
-        <!-- Top Header Navigation -->
-        <header class="header-bar">
-            <div class="brand-section">
-                <div class="brand-icon">&gt;_</div>
-                <div class="brand-info">
-                    <h1>WATTVISION // SMART-PPT PORTAL</h1>
-                    <span>CONTROL CONSOLE &bull; CLOUD HOSTED ON VERCEL</span>
+    <div class="container">
+        <!-- Top Navbar -->
+        <header class="top-navbar">
+            <div class="brand-block">
+                <div class="brand-logo-badge">⚡</div>
+                <div class="brand-title-group">
+                    <h1>Aksorn Smart PPT <span class="pill-badge">PORTAL</span></h1>
+                    <p>ระบบศูนย์รวมสื่อการสอนอินเตอร์แอคทีฟ & สคริปต์แนวการจัดการเรียนรู้</p>
                 </div>
             </div>
 
-            <div class="status-badge">
-                <div class="status-dot"></div>
-                SYSTEM LIVE &bull; 100% OPERATIONAL
+            <div class="nav-actions">
+                <div class="status-pill">
+                    <span class="pulse-dot"></span>
+                    <span>ONLINE // คลังสื่อพร้อมใช้งาน</span>
+                </div>
+                <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
+                    <span id="themeIcon">☀️</span>
+                    <span id="themeText">ธีมสว่าง</span>
+                </button>
             </div>
         </header>
 
-        <!-- 3-Column Top KPI Cards (Power BI Aesthetic) -->
-        <div class="kpi-row">
-            <div class="kpi-card">
-                <div class="kpi-label">
-                    <span>COURSES ENROLLED</span>
-                    <span>KPI-01</span>
-                </div>
-                <div class="kpi-value-row">
-                    <div class="kpi-value">03</div>
-                    <div class="kpi-unit">COURSES</div>
-                </div>
-                <div class="kpi-subtext">กลุ่มสาระการเรียนรู้ที่พร้อมใช้งาน</div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-label">
-                    <span>ACTIVE MODULES</span>
-                    <span>KPI-02</span>
-                </div>
-                <div class="kpi-value-row">
-                    <div class="kpi-value">07</div>
-                    <div class="kpi-unit">UNITS</div>
-                </div>
-                <div class="kpi-subtext">หน่วยการเรียนรู้ Interactive สมบูรณ์</div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-label">
-                    <span>TOTAL SLIDES DEPLOYED</span>
-                    <span>KPI-03</span>
-                </div>
-                <div class="kpi-value-row">
-                    <div class="kpi-value">581</div>
-                    <div class="kpi-unit">SLIDES</div>
-                </div>
-                <div class="kpi-subtext">พร้อมสคริปต์การสอนและแนวคำตอบ</div>
-            </div>
-        </div>
-
-        <!-- STEP 1: CHOOSE SUBJECT FIRST (เลือกวิชาก่อน) -->
-        <div>
-            <div class="section-header">
-                <div class="section-title">
-                    <span>01. SELECT TARGET COURSE</span>
-                    <span class="tag">กรุณาเลือกวิชาที่ต้องการเข้าถึงเนื้อหา</span>
-                </div>
-                <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);">
-                    3 COURSES AVAILABLE
-                </span>
-            </div>
-
-            <div class="subject-selector-grid" id="courseSelectorGrid">
-    
-                <div class="subject-card active" data-course="การงานอาชีพ_ม.1" onclick="selectCourse('การงานอาชีพ_ม.1')">
-                    <div class="subject-header">
-                        <div class="subject-icon-box">💼</div>
-                        <div>
-                            <div class="subject-name">การงานอาชีพ ม.1</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">การงานอาชีพ</div>
-                        </div>
-                    </div>
-                    <div class="subject-meta-row">
-                        <div class="sub-kpi">UNITS: <strong>5</strong></div>
-                        <div class="sub-kpi">SLIDES: <strong>465</strong></div>
-                        <div class="sub-kpi" style="margin-left:auto; color:var(--accent-green);">● ONLINE</div>
-                    </div>
-                </div>
-        
-                <div class="subject-card " data-course="ประวัติศาสตร์สากล_ม.4-6" onclick="selectCourse('ประวัติศาสตร์สากล_ม.4-6')">
-                    <div class="subject-header">
-                        <div class="subject-icon-box">🌍</div>
-                        <div>
-                            <div class="subject-name">ประวัติศาสตร์สากล ม.4-6</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">สังคมศึกษา ศาสนาและวัฒนธรรม</div>
-                        </div>
-                    </div>
-                    <div class="subject-meta-row">
-                        <div class="sub-kpi">UNITS: <strong>1</strong></div>
-                        <div class="sub-kpi">SLIDES: <strong>74</strong></div>
-                        <div class="sub-kpi" style="margin-left:auto; color:var(--accent-green);">● ONLINE</div>
-                    </div>
-                </div>
-        
-                <div class="subject-card " data-course="พระพุทธศาสนา_ม.4-6" onclick="selectCourse('พระพุทธศาสนา_ม.4-6')">
-                    <div class="subject-header">
-                        <div class="subject-icon-box">☸️</div>
-                        <div>
-                            <div class="subject-name">พระพุทธศาสนา ม.4-6</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">สังคมศึกษา ศาสนาและวัฒนธรรม</div>
-                        </div>
-                    </div>
-                    <div class="subject-meta-row">
-                        <div class="sub-kpi">UNITS: <strong>1</strong></div>
-                        <div class="sub-kpi">SLIDES: <strong>42</strong></div>
-                        <div class="sub-kpi" style="margin-left:auto; color:var(--accent-green);">● ONLINE</div>
-                    </div>
-                </div>
-        
-            </div>
-        </div>
-
-        <!-- STEP 2: COURSE WORKSPACE (12-COLUMN LAYOUT) -->
-        <div class="workspace-grid">
-
-            <!-- Main Content Area: 8 Columns -->
-            <div class="units-column">
-                
-                <div class="active-course-banner">
-                    <div class="active-course-title">
-                        <span id="activeCourseIcon">💼</span>
-                        <span id="activeCourseName">การงานอาชีพ ม.1</span>
-                    </div>
-
-                    <div class="search-container">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="unitSearchInput" class="search-input" placeholder="ค้นหาหน่วยการเรียนรู้...">
-                    </div>
-                </div>
-
-                <div id="unitsContainer" style="display:flex; flex-direction:column; gap:16px;">
-    
-                    <div class="unit-card" data-parent-course="การงานอาชีพ_ม.1" data-title="หน่วยที่ 1 เรียนรู้กระบวนการทำงาน" style="display: flex;">
-                        <div class="unit-cover-wrap">
-                            <img src="assets/covers/e3641408-b5bf-410d-92b5-acf112431f63.jpg" alt="Cover" class="unit-cover-img">
-                        </div>
-                        <div class="unit-body">
-                            <div>
-                                <div class="unit-top-meta">
-                                    <span class="unit-tag">MODULE 01</span>
-                                    <div class="unit-stats-pills">
-                                        <div class="pill-dark">SLIDES: 58</div>
-                                        <div class="pill-dark pill-green">✓ SCRIPT READY</div>
-                                    </div>
-                                </div>
-                                <h3 class="unit-title">หน่วยที่ 1 เรียนรู้กระบวนการทำงาน</h3>
-                            </div>
-                            <div class="unit-actions">
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html" target="_blank" class="btn btn-cyan">
-                                    ▶ LAUNCH SLIDES
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-outline">
-                                    📖 TEACHER NOTES & SUMMARY
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-outline">
-                                    📄 RAW TXT
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="unit-card" data-parent-course="การงานอาชีพ_ม.1" data-title="หน่วยที่ 2 การดูแลรักษาบ้าน" style="display: flex;">
-                        <div class="unit-cover-wrap">
-                            <img src="assets/covers/1af5533e-f358-44fa-bfd2-a59c2590293a.jpg" alt="Cover" class="unit-cover-img">
-                        </div>
-                        <div class="unit-body">
-                            <div>
-                                <div class="unit-top-meta">
-                                    <span class="unit-tag">MODULE 02</span>
-                                    <div class="unit-stats-pills">
-                                        <div class="pill-dark">SLIDES: 106</div>
-                                        <div class="pill-dark pill-green">✓ SCRIPT READY</div>
-                                    </div>
-                                </div>
-                                <h3 class="unit-title">หน่วยที่ 2 การดูแลรักษาบ้าน</h3>
-                            </div>
-                            <div class="unit-actions">
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html" target="_blank" class="btn btn-cyan">
-                                    ▶ LAUNCH SLIDES
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-outline">
-                                    📖 TEACHER NOTES & SUMMARY
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-outline">
-                                    📄 RAW TXT
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="unit-card" data-parent-course="การงานอาชีพ_ม.1" data-title="หน่วยที่ 3 อาหารกับการดำรงชีวิต" style="display: flex;">
-                        <div class="unit-cover-wrap">
-                            <img src="assets/covers/123ba307-0ed5-4a77-a8b2-bb53e98767cd.jpg" alt="Cover" class="unit-cover-img">
-                        </div>
-                        <div class="unit-body">
-                            <div>
-                                <div class="unit-top-meta">
-                                    <span class="unit-tag">MODULE 03</span>
-                                    <div class="unit-stats-pills">
-                                        <div class="pill-dark">SLIDES: 89</div>
-                                        <div class="pill-dark pill-green">✓ SCRIPT READY</div>
-                                    </div>
-                                </div>
-                                <h3 class="unit-title">หน่วยที่ 3 อาหารกับการดำรงชีวิต</h3>
-                            </div>
-                            <div class="unit-actions">
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html" target="_blank" class="btn btn-cyan">
-                                    ▶ LAUNCH SLIDES
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-outline">
-                                    📖 TEACHER NOTES & SUMMARY
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-outline">
-                                    📄 RAW TXT
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="unit-card" data-parent-course="การงานอาชีพ_ม.1" data-title="หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น" style="display: flex;">
-                        <div class="unit-cover-wrap">
-                            <img src="assets/covers/35136d2c-ceda-4a2d-ac8b-bd1a83f53905.jpg" alt="Cover" class="unit-cover-img">
-                        </div>
-                        <div class="unit-body">
-                            <div>
-                                <div class="unit-top-meta">
-                                    <span class="unit-tag">MODULE 04</span>
-                                    <div class="unit-stats-pills">
-                                        <div class="pill-dark">SLIDES: 116</div>
-                                        <div class="pill-dark pill-green">✓ SCRIPT READY</div>
-                                    </div>
-                                </div>
-                                <h3 class="unit-title">หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น</h3>
-                            </div>
-                            <div class="unit-actions">
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html" target="_blank" class="btn btn-cyan">
-                                    ▶ LAUNCH SLIDES
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-outline">
-                                    📖 TEACHER NOTES & SUMMARY
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-outline">
-                                    📄 RAW TXT
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="unit-card" data-parent-course="การงานอาชีพ_ม.1" data-title="หน่วยที่ 5 โลกของอาชีพ" style="display: flex;">
-                        <div class="unit-cover-wrap">
-                            <img src="assets/covers/a88c5677-981b-4c1e-ad9b-d0c779108f9d.jpg" alt="Cover" class="unit-cover-img">
-                        </div>
-                        <div class="unit-body">
-                            <div>
-                                <div class="unit-top-meta">
-                                    <span class="unit-tag">MODULE 05</span>
-                                    <div class="unit-stats-pills">
-                                        <div class="pill-dark">SLIDES: 96</div>
-                                        <div class="pill-dark pill-green">✓ SCRIPT READY</div>
-                                    </div>
-                                </div>
-                                <h3 class="unit-title">หน่วยที่ 5 โลกของอาชีพ</h3>
-                            </div>
-                            <div class="unit-actions">
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html" target="_blank" class="btn btn-cyan">
-                                    ▶ LAUNCH SLIDES
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-outline">
-                                    📖 TEACHER NOTES & SUMMARY
-                                </a>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-outline">
-                                    📄 RAW TXT
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="unit-card" data-parent-course="ประวัติศาสตร์สากล_ม.4-6" data-title="หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล" style="display: none;">
-                        <div class="unit-cover-wrap">
-                            <img src="assets/covers/cf54bc41-5e9d-44ba-849b-afca7dfab203.jpg" alt="Cover" class="unit-cover-img">
-                        </div>
-                        <div class="unit-body">
-                            <div>
-                                <div class="unit-top-meta">
-                                    <span class="unit-tag">MODULE 01</span>
-                                    <div class="unit-stats-pills">
-                                        <div class="pill-dark">SLIDES: 74</div>
-                                        <div class="pill-dark pill-green">✓ SCRIPT READY</div>
-                                    </div>
-                                </div>
-                                <h3 class="unit-title">หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล</h3>
-                            </div>
-                            <div class="unit-actions">
-                                <a href="ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/index.html" target="_blank" class="btn btn-cyan">
-                                    ▶ LAUNCH SLIDES
-                                </a>
-                                <a href="ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-outline">
-                                    📖 TEACHER NOTES & SUMMARY
-                                </a>
-                                <a href="ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-outline">
-                                    📄 RAW TXT
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="unit-card" data-parent-course="พระพุทธศาสนา_ม.4-6" data-title="หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา" style="display: none;">
-                        <div class="unit-cover-wrap">
-                            <img src="assets/covers/7712640c-4d60-43c3-b3e2-fa7389b86ffa.jpg" alt="Cover" class="unit-cover-img">
-                        </div>
-                        <div class="unit-body">
-                            <div>
-                                <div class="unit-top-meta">
-                                    <span class="unit-tag">MODULE 01</span>
-                                    <div class="unit-stats-pills">
-                                        <div class="pill-dark">SLIDES: 42</div>
-                                        <div class="pill-dark pill-green">✓ SCRIPT READY</div>
-                                    </div>
-                                </div>
-                                <h3 class="unit-title">หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา</h3>
-                            </div>
-                            <div class="unit-actions">
-                                <a href="พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/index.html" target="_blank" class="btn btn-cyan">
-                                    ▶ LAUNCH SLIDES
-                                </a>
-                                <a href="พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/อ่านสไลด์และสคริปต์ทั้งหมด.html" target="_blank" class="btn btn-outline">
-                                    📖 TEACHER NOTES & SUMMARY
-                                </a>
-                                <a href="พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/สคริปต์ครู_และแนวคำตอบ.txt" target="_blank" class="btn btn-outline">
-                                    📄 RAW TXT
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-            
+        <!-- KPI Summary Stats -->
+        <section class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon-wrapper stat-icon-blue">📚</div>
+                <div class="stat-content-box">
+                    <span class="stat-label">วิชาทั้งหมด</span>
+                    <span class="stat-number">3</span>
+                    <span class="stat-desc">คอร์สวิชาครอบคลุมหลักสูตรแกนกลาง</span>
                 </div>
             </div>
 
-            <!-- Telemetry Sidebar: 4 Columns -->
-            <div class="telemetry-sidebar">
-                
-                <div class="telemetry-panel">
-                    <div class="panel-title">
-                        <span>COURSE TELEMETRY</span>
-                        <span>LIVE</span>
-                    </div>
-
-                    <div style="margin-bottom: 16px;">
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">CURRENT SCOPE</div>
-                        <div style="font-size: 15px; font-weight: 700; color: var(--accent-cyan);" id="telemetryCourseName">
-                            การงานอาชีพ ม.1
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 16px;">
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 6px;">MODULE QUICK-JUMP</div>
-                        <ul class="quick-nav-list" id="quickNavList">
-    
-                            <li>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html" target="_blank" class="quick-nav-item">
-                                    <span>1. หน่วยที่ 1 เรียนรู้กระบวนการทำงา...</span>
-                                    <span class="count">58s</span>
-                                </a>
-                            </li>
-        
-                            <li>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html" target="_blank" class="quick-nav-item">
-                                    <span>2. หน่วยที่ 2 การดูแลรักษาบ้าน...</span>
-                                    <span class="count">106s</span>
-                                </a>
-                            </li>
-        
-                            <li>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html" target="_blank" class="quick-nav-item">
-                                    <span>3. หน่วยที่ 3 อาหารกับการดำรงชีวิต...</span>
-                                    <span class="count">89s</span>
-                                </a>
-                            </li>
-        
-                            <li>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html" target="_blank" class="quick-nav-item">
-                                    <span>4. หน่วยที่ 4 การประดิษฐ์ของใช้ ของ...</span>
-                                    <span class="count">116s</span>
-                                </a>
-                            </li>
-        
-                            <li>
-                                <a href="การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html" target="_blank" class="quick-nav-item">
-                                    <span>5. หน่วยที่ 5 โลกของอาชีพ...</span>
-                                    <span class="count">96s</span>
-                                </a>
-                            </li>
-        
-                        </ul>
-                    </div>
-
-                    <div class="alert-box">
-                        <div class="alert-header">
-                            <span>⚡ SYSTEM STATUS: OPTIMAL</span>
-                        </div>
-                        <div class="alert-body">
-                            สื่อ Smart PPT และสไลด์ Interactive พร้อมใช้งานบน Edge Cloud เรียบร้อย รองรับทั้งคอมพิวเตอร์ โปรเจกเตอร์ และแท็บเล็ต
-                        </div>
-                    </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper stat-icon-amber">📂</div>
+                <div class="stat-content-box">
+                    <span class="stat-label">หน่วยการเรียนรู้</span>
+                    <span class="stat-number">7</span>
+                    <span class="stat-desc">บทเรียน Smart PPT พร้อมสอนทันที</span>
                 </div>
-
-                <div class="telemetry-panel">
-                    <div class="panel-title">
-                        <span>DEPLOYMENT DETAILS</span>
-                        <span>VERCEL</span>
-                    </div>
-                    <div style="display:flex; flex-direction:column; gap:10px; font-family:var(--font-mono); font-size:12px;">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span style="color:var(--text-secondary);">HOST:</span>
-                            <span style="color:var(--text-primary);">Vercel Edge</span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between;">
-                            <span style="color:var(--text-secondary);">SSL / TLS:</span>
-                            <span style="color:var(--accent-green);">TLS 1.3 SECURE</span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between;">
-                            <span style="color:var(--text-secondary);">GIT SYNC:</span>
-                            <span style="color:var(--accent-cyan);">ACTIVE (main)</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-        </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrapper stat-icon-purple">🖼️</div>
+                <div class="stat-content-box">
+                    <span class="stat-label">สไลด์อินเตอร์แอคทีฟ</span>
+                    <span class="stat-number">581</span>
+                    <span class="stat-desc">พร้อมสคริปต์ครู แนวคำตอบ และกิจกรรม</span>
+                </div>
+            </div>
+        </section>
 
+        <!-- STEP 1: SUBJECT SELECTOR (เลือกวิชาก่อน) -->
+        <section class="step-section">
+            <div class="step-header">
+                <div class="step-title-group">
+                    <div class="step-badge">1</div>
+                    <div>
+                        <h2>ขั้นตอนที่ 1: เลือกวิชาที่ต้องการเรียนรู้หรือจัดการสอน</h2>
+                        <p>คลิกเลือกรายวิชาเพื่อกรองและแสดงเฉพาะหน่วยการเรียนรู้ของวิชานั้น</p>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="filter-chip" id="showAllSubjectsBtn" onclick="selectAllSubjects()">
+                        🌐 แสดงทุกวิชาพร้อมกัน
+                    </button>
+                </div>
+            </div>
+
+            <div class="subject-selector-grid" id="subjectSelectorGrid">
+                <!-- Dynamically populated subject cards -->
+            </div>
+        </section>
+
+        <!-- STEP 2: ACTIVE SUBJECT & UNITS LIST -->
+        <section class="units-section">
+            <!-- Active Subject Banner -->
+            <div class="active-subject-banner" id="activeSubjectBanner">
+                <div class="banner-left">
+                    <div class="banner-icon" id="bannerIcon">💼</div>
+                    <div class="banner-title-box">
+                        <h2 id="bannerTitle">การงานอาชีพ ม.1</h2>
+                        <p id="bannerSubtitle">กลุ่มสาระการเรียนรู้การงานอาชีพ • 5 หน่วยการเรียนรู้ • 246 สไลด์</p>
+                    </div>
+                </div>
+
+                <div class="banner-right">
+                    <span class="mini-pill" id="bannerStatsBadge">⚡ 5 หน่วยการเรียนรู้</span>
+                </div>
+            </div>
+
+            <!-- Search and Filter Controls -->
+            <div class="controls-bar">
+                <div class="search-box-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="พิมพ์คำค้นหา เช่น ชื่อหน่วย, หัวข้อ, หรือรหัสสื่อ..." oninput="handleSearch()">
+                </div>
+
+                <div class="filter-chips-group">
+                    <button class="filter-chip active" id="chipAll" onclick="setFilter('all')">ทั้งหมด</button>
+                    <button class="filter-chip" id="chipNotes" onclick="setFilter('notes')">📜 มีสคริปต์ผู้สอน</button>
+                    <button class="filter-chip" id="chipLarge" onclick="setFilter('large')">⚡ สไลด์จำนวนมาก (>50)</button>
+                </div>
+            </div>
+
+            <!-- Units Grid -->
+            <div class="units-grid" id="unitsGrid">
+                <!-- Dynamically populated unit cards -->
+            </div>
+        </section>
+
+        <!-- Footer -->
         <footer class="footer-bar">
-            WATTVISION DESIGN SYSTEM &bull; POWER BI CONTROL DASHBOARD &bull; AKSORN SMART-PPT
+            Aksorn Smart PPT Interactive Portal • พัฒนาระบบแสดงผลเพื่อการเรียนรู้และจัดการเรียนการสอนแบบสากล
         </footer>
-
     </div>
 
-    <!-- Client-side Course Selector and Search Engine -->
+    <!-- Modal Lightbox for Interactive Slide Inspection -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <h3 id="modalTitle">พรีวิวสไลด์</h3>
+                    <span id="modalSubtitle">Smart PPT Interactive Presentation Viewer</span>
+                </div>
+                <button class="modal-close-btn" onclick="closeModal()" title="ปิดหน้าต่าง">✕</button>
+            </div>
+            <div class="modal-iframe-container">
+                <iframe id="modalIframe" src="" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const coursesData = {"การงานอาชีพ_ม.1": {"clean_subj": "การงานอาชีพ_ม.1", "displayName": "การงานอาชีพ ม.1", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "units": [{"assetId": "e3641408-b5bf-410d-92b5-acf112431f63", "title": "หน่วยที่ 1 เรียนรู้กระบวนการทำงาน", "clean_unit": "หน่วยที่_1_เรียนรู้กระบวนการทำงาน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/e3641408-b5bf-410d-92b5-acf112431f63.jpg", "slideCount": 58, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "1af5533e-f358-44fa-bfd2-a59c2590293a", "title": "หน่วยที่ 2 การดูแลรักษาบ้าน", "clean_unit": "หน่วยที่_2_การดูแลรักษาบ้าน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/1af5533e-f358-44fa-bfd2-a59c2590293a.jpg", "slideCount": 106, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "123ba307-0ed5-4a77-a8b2-bb53e98767cd", "title": "หน่วยที่ 3 อาหารกับการดำรงชีวิต", "clean_unit": "หน่วยที่_3_อาหารกับการดำรงชีวิต", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/123ba307-0ed5-4a77-a8b2-bb53e98767cd.jpg", "slideCount": 89, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "35136d2c-ceda-4a2d-ac8b-bd1a83f53905", "title": "หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น", "clean_unit": "หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/35136d2c-ceda-4a2d-ac8b-bd1a83f53905.jpg", "slideCount": 116, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "a88c5677-981b-4c1e-ad9b-d0c779108f9d", "title": "หน่วยที่ 5 โลกของอาชีพ", "clean_unit": "หน่วยที่_5_โลกของอาชีพ", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/a88c5677-981b-4c1e-ad9b-d0c779108f9d.jpg", "slideCount": 96, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/สคริปต์ครู_และแนวคำตอบ.txt"}]}, "ประวัติศาสตร์สากล_ม.4-6": {"clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "displayName": "ประวัติศาสตร์สากล ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "units": [{"assetId": "cf54bc41-5e9d-44ba-849b-afca7dfab203", "title": "หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_unit": "หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/cf54bc41-5e9d-44ba-849b-afca7dfab203.jpg", "slideCount": 74, "hasNotes": true, "interactiveUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/index.html", "readingUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/สคริปต์ครู_และแนวคำตอบ.txt"}]}, "พระพุทธศาสนา_ม.4-6": {"clean_subj": "พระพุทธศาสนา_ม.4-6", "displayName": "พระพุทธศาสนา ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "units": [{"assetId": "7712640c-4d60-43c3-b3e2-fa7389b86ffa", "title": "หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา", "clean_unit": "หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา", "clean_subj": "พระพุทธศาสนา_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/7712640c-4d60-43c3-b3e2-fa7389b86ffa.jpg", "slideCount": 42, "hasNotes": true, "interactiveUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/index.html", "readingUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/สคริปต์ครู_และแนวคำตอบ.txt"}]}};
-        let activeCourseKey = 'การงานอาชีพ_ม.1';
+        const coursesData = {"การงานอาชีพ_ม.1": {"clean_subj": "การงานอาชีพ_ม.1", "displayName": "การงานอาชีพ ม.1", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "units": [{"assetId": "e3641408-b5bf-410d-92b5-acf112431f63", "title": "หน่วยที่ 1 เรียนรู้กระบวนการทำงาน", "clean_unit": "หน่วยที่_1_เรียนรู้กระบวนการทำงาน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/e3641408-b5bf-410d-92b5-acf112431f63.jpg", "slideCount": 58, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_1_เรียนรู้กระบวนการทำงาน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "1af5533e-f358-44fa-bfd2-a59c2590293a", "title": "หน่วยที่ 2 การดูแลรักษาบ้าน", "clean_unit": "หน่วยที่_2_การดูแลรักษาบ้าน", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/1af5533e-f358-44fa-bfd2-a59c2590293a.jpg", "slideCount": 106, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_2_การดูแลรักษาบ้าน/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "123ba307-0ed5-4a77-a8b2-bb53e98767cd", "title": "หน่วยที่ 3 อาหารกับการดำรงชีวิต", "clean_unit": "หน่วยที่_3_อาหารกับการดำรงชีวิต", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/123ba307-0ed5-4a77-a8b2-bb53e98767cd.jpg", "slideCount": 89, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_3_อาหารกับการดำรงชีวิต/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "35136d2c-ceda-4a2d-ac8b-bd1a83f53905", "title": "หน่วยที่ 4 การประดิษฐ์ของใช้ ของตกแต่งจากวัสดุในท้องถิ่น", "clean_unit": "หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/35136d2c-ceda-4a2d-ac8b-bd1a83f53905.jpg", "slideCount": 116, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_4_การประดิษฐ์ของใช้_ของตกแต่งจากวัสดุในท้องถิ่น/สคริปต์ครู_และแนวคำตอบ.txt"}, {"assetId": "a88c5677-981b-4c1e-ad9b-d0c779108f9d", "title": "หน่วยที่ 5 โลกของอาชีพ", "clean_unit": "หน่วยที่_5_โลกของอาชีพ", "clean_subj": "การงานอาชีพ_ม.1", "productName": "หนังสือเรียน รายวิชาพื้นฐาน การงานอาชีพ ม.1", "subjectGroup": "การงานอาชีพ", "gradeName": "grade7", "coverImg": "assets/covers/a88c5677-981b-4c1e-ad9b-d0c779108f9d.jpg", "slideCount": 96, "hasNotes": true, "interactiveUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/index.html", "readingUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "การงานอาชีพ_ม.1/หน่วยที่_5_โลกของอาชีพ/สคริปต์ครู_และแนวคำตอบ.txt"}]}, "ประวัติศาสตร์สากล_ม.4-6": {"clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "displayName": "ประวัติศาสตร์สากล ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "units": [{"assetId": "cf54bc41-5e9d-44ba-849b-afca7dfab203", "title": "หน่วยที่ 1 เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_unit": "หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล", "clean_subj": "ประวัติศาสตร์สากล_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน ประวัติศาสตร์สากล ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/cf54bc41-5e9d-44ba-849b-afca7dfab203.jpg", "slideCount": 74, "hasNotes": true, "interactiveUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/index.html", "readingUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "ประวัติศาสตร์สากล_ม.4-6/หน่วยที่_1_เวลาและการแบ่งยุคสมัยทางประวัติศาสตร์สากล/สคริปต์ครู_และแนวคำตอบ.txt"}]}, "พระพุทธศาสนา_ม.4-6": {"clean_subj": "พระพุทธศาสนา_ม.4-6", "displayName": "พระพุทธศาสนา ม.4-6", "rawProductName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "units": [{"assetId": "7712640c-4d60-43c3-b3e2-fa7389b86ffa", "title": "หน่วยที่ 1 ประวัติและความสำคัญของพระพุทธศาสนา", "clean_unit": "หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา", "clean_subj": "พระพุทธศาสนา_ม.4-6", "productName": "หนังสือเรียน รายวิชาพื้นฐาน พระพุทธศาสนา ม.4-6", "subjectGroup": "สังคมศึกษา ศาสนาและวัฒนธรรม", "gradeName": "grade12", "coverImg": "assets/covers/7712640c-4d60-43c3-b3e2-fa7389b86ffa.jpg", "slideCount": 42, "hasNotes": true, "interactiveUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/index.html", "readingUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/อ่านสไลด์และสคริปต์ทั้งหมด.html", "notesUrl": "พระพุทธศาสนา_ม.4-6/หน่วยที่_1_ประวัติและความสำคัญของพระพุทธศาสนา/สคริปต์ครู_และแนวคำตอบ.txt"}]}};
 
-        const courseSelectorCards = document.querySelectorAll('.subject-card');
-        const unitCards = document.querySelectorAll('.unit-card');
-        const activeCourseIcon = document.getElementById('activeCourseIcon');
-        const activeCourseName = document.getElementById('activeCourseName');
-        const telemetryCourseName = document.getElementById('telemetryCourseName');
-        const quickNavList = document.getElementById('quickNavList');
-        const unitSearchInput = document.getElementById('unitSearchInput');
+        let currentSelectedSubject = null; // null means 'all', or clean_subj string
+        let currentFilter = 'all'; // 'all', 'notes', 'large'
+        let searchQuery = '';
 
-        const icons = {"การงานอาชีพ": "💼", "พระพุทธศาสนา": "☸️", "ประวัติศาสตร์สากล": "🌍", "วิทยาศาสตร์": "🔬", "คณิตศาสตร์": "📐"};
+        // Initialize Theme from localStorage or Default to 'light'
+        function initTheme() {
+            const savedTheme = localStorage.getItem('smartppt_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeUI(savedTheme);
+        }
 
-        function getIcon(name) {
-            for (let k in icons) {
-                if (name.includes(k)) return icons[k];
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('smartppt_theme', newTheme);
+            updateThemeUI(newTheme);
+        }
+
+        function updateThemeUI(theme) {
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            if (theme === 'dark') {
+                icon.textContent = '🌙';
+                text.textContent = 'ธีมมืด';
+            } else {
+                icon.textContent = '☀️';
+                text.textContent = 'ธีมสว่าง';
             }
-            return '📁';
         }
 
-        function selectCourse(courseKey) {
-            activeCourseKey = courseKey;
-            const course = coursesData[courseKey];
-            if (!course) return;
+        const subjectIcons = {
+            "การงานอาชีพ": "💼",
+            "พระพุทธศาสนา": "☸️",
+            "ประวัติศาสตร์สากล": "🌍",
+            "วิทยาศาสตร์": "🔬",
+            "คณิตศาสตร์": "📐"
+        };
 
-            // Update Active Card UI
-            courseSelectorCards.forEach(card => {
-                if (card.getAttribute('data-course') === courseKey) {
-                    card.classList.add('active');
-                } else {
-                    card.classList.remove('active');
-                }
-            });
+        function getSubjectIcon(name) {
+            for (const [key, icon] of Object.entries(subjectIcons)) {
+                if (name.includes(key)) return icon;
+            }
+            return "📚";
+        }
 
-            // Update Banner & Telemetry
-            const icon = getIcon(course.displayName);
-            activeCourseIcon.textContent = icon;
-            activeCourseName.textContent = course.displayName;
-            telemetryCourseName.textContent = course.displayName;
+        // Render Step 1: Subject Selection Cards
+        function renderSubjectCards() {
+            const container = document.getElementById('subjectSelectorGrid');
+            container.innerHTML = '';
 
-            // Rebuild Quick Jump list
-            quickNavList.innerHTML = '';
-            course.units.forEach((u, i) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <a href="${u.interactiveUrl}" target="_blank" class="quick-nav-item">
-                        <span>${i+1}. ${u.title.substring(0, 32)}...</span>
-                        <span class="count">${u.slideCount}s</span>
-                    </a>
+            const keys = Object.keys(coursesData);
+            if (keys.length > 0 && !currentSelectedSubject) {
+                // Default select the first subject (e.g. การงานอาชีพ ม.1)
+                currentSelectedSubject = keys[0];
+            }
+
+            keys.forEach(subjKey => {
+                const course = coursesData[subjKey];
+                const totalUnits = course.units.length;
+                const totalSlides = course.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
+                const icon = getSubjectIcon(course.displayName);
+                const isActive = currentSelectedSubject === subjKey;
+
+                const card = document.createElement('div');
+                card.className = `subject-card ${isActive ? 'active' : ''}`;
+                card.onclick = () => selectSubject(subjKey);
+
+                card.innerHTML = `
+                    <div class="subject-card-top">
+                        <div class="subject-emblem">${icon}</div>
+                        <div class="subject-title-box">
+                            <h3>${course.displayName}</h3>
+                            <span class="grade-label">${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''}</span>
+                        </div>
+                    </div>
+                    <div class="subject-stats-pills">
+                        <span class="mini-pill">📁 ${totalUnits} หน่วยการเรียนรู้</span>
+                        <span class="mini-pill">⚡ ${totalSlides} สไลด์</span>
+                    </div>
+                    <div class="subject-footer-btn">
+                        <span>${isActive ? '✓ เลือกวิชานี้อยู่' : 'คลิกเพื่อเลือกวิชานี้'}</span>
+                        <span>→</span>
+                    </div>
                 `;
-                quickNavList.appendChild(li);
+                container.appendChild(card);
             });
 
-            // Filter Unit Cards
-            filterUnits();
-        }
-
-        function filterUnits() {
-            const query = unitSearchInput.value.toLowerCase().trim();
-
-            unitCards.forEach(card => {
-                const parentCourse = card.getAttribute('data-parent-course');
-                const title = card.getAttribute('data-title');
-
-                const isCourseMatch = (parentCourse === activeCourseKey);
-                const isSearchMatch = !query || title.includes(query);
-
-                if (isCourseMatch && isSearchMatch) {
-                    card.style.display = 'flex';
+            const allBtn = document.getElementById('showAllSubjectsBtn');
+            if (allBtn) {
+                if (currentSelectedSubject === null) {
+                    allBtn.classList.add('active');
                 } else {
-                    card.style.display = 'none';
+                    allBtn.classList.remove('active');
                 }
+            }
+        }
+
+        function selectSubject(subjKey) {
+            currentSelectedSubject = subjKey;
+            renderSubjectCards();
+            updateBanner();
+            renderUnits();
+        }
+
+        function selectAllSubjects() {
+            currentSelectedSubject = null;
+            renderSubjectCards();
+            updateBanner();
+            renderUnits();
+        }
+
+        function updateBanner() {
+            const bannerIcon = document.getElementById('bannerIcon');
+            const bannerTitle = document.getElementById('bannerTitle');
+            const bannerSubtitle = document.getElementById('bannerSubtitle');
+            const bannerStatsBadge = document.getElementById('bannerStatsBadge');
+
+            if (currentSelectedSubject && coursesData[currentSelectedSubject]) {
+                const course = coursesData[currentSelectedSubject];
+                const totalUnits = course.units.length;
+                const totalSlides = course.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
+                bannerIcon.textContent = getSubjectIcon(course.displayName);
+                bannerTitle.textContent = course.displayName;
+                bannerSubtitle.textContent = `${course.subjectGroup || 'กลุ่มสาระการเรียนรู้'} • ${course.gradeName || ''} • รวม ${totalUnits} หน่วยการเรียนรู้`;
+                bannerStatsBadge.textContent = `⚡ ${totalUnits} หน่วย (${totalSlides} สไลด์)`;
+            } else {
+                bannerIcon.textContent = "🌐";
+                bannerTitle.textContent = "ทุกวิชาทั้งหมด (All Subjects)";
+                bannerSubtitle.textContent = "แสดงเนื้อหาและหน่วยการเรียนรู้จากทุกวิชาในระบบ";
+                let allUnits = 0, allSlides = 0;
+                Object.values(coursesData).forEach(c => {
+                    allUnits += c.units.length;
+                    allSlides += c.units.reduce((acc, u) => acc + (u.slideCount || 0), 0);
+                });
+                bannerStatsBadge.textContent = `⚡ รวม ${allUnits} หน่วย (${allSlides} สไลด์)`;
+            }
+        }
+
+        function setFilter(type) {
+            currentFilter = type;
+            document.getElementById('chipAll').classList.toggle('active', type === 'all');
+            document.getElementById('chipNotes').classList.toggle('active', type === 'notes');
+            document.getElementById('chipLarge').classList.toggle('active', type === 'large');
+            renderUnits();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            renderUnits();
+        }
+
+        function renderUnits() {
+            const grid = document.getElementById('unitsGrid');
+            grid.innerHTML = '';
+
+            let unitsToDisplay = [];
+
+            if (currentSelectedSubject && coursesData[currentSelectedSubject]) {
+                unitsToDisplay = coursesData[currentSelectedSubject].units;
+            } else {
+                Object.values(coursesData).forEach(c => {
+                    unitsToDisplay = unitsToDisplay.concat(c.units);
+                });
+            }
+
+            // Filter logic
+            if (currentFilter === 'notes') {
+                unitsToDisplay = unitsToDisplay.filter(u => u.hasNotes);
+            } else if (currentFilter === 'large') {
+                unitsToDisplay = unitsToDisplay.filter(u => (u.slideCount || 0) >= 50);
+            }
+
+            // Search query logic
+            if (searchQuery) {
+                unitsToDisplay = unitsToDisplay.filter(u => {
+                    const fullText = `${u.title} ${u.clean_subj} ${u.productName} ${u.subjectGroup}`.toLowerCase();
+                    return fullText.includes(searchQuery);
+                });
+            }
+
+            if (unitsToDisplay.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>🔍 ไม่พบหน่วยการเรียนรู้ที่ตรงกับเงื่อนไข</h3>
+                        <p>ลองปรับคำค้นหา หรือเปลี่ยนตัวกรองเพื่อค้นหาบทเรียนที่ต้องการ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            unitsToDisplay.forEach((unit, idx) => {
+                const card = document.createElement('div');
+                card.className = 'unit-card';
+
+                const notesBadge = unit.hasNotes 
+                    ? `<span class="teacher-script-badge">📜 มีสคริปต์ผู้สอนและแนวคำตอบ</span>` 
+                    : ``;
+
+                card.innerHTML = `
+                    <div class="unit-card-header">
+                        <div class="unit-meta-pills">
+                            <span class="unit-number-tag">หน่วยที่ ${idx + 1}</span>
+                            <span class="slide-counter-badge">⚡ ${unit.slideCount || 0} สไลด์</span>
+                        </div>
+                    </div>
+
+                    <div class="unit-card-body">
+                        <h3 class="unit-card-title">${unit.title}</h3>
+                        <p class="unit-desc">วิชา: ${unit.displayName || unit.clean_subj.replace(/_/g, ' ')} • ${unit.gradeName || ''}</p>
+                        ${notesBadge}
+                    </div>
+
+                    <div class="unit-actions-row">
+                        <a href="${unit.interactiveUrl}" target="_blank" class="btn btn-primary" title="เปิดสื่อสไลด์นำเสนอเต็มจอในหน้าต่างใหม่">
+                            🚀 เปิดสไลด์สอน
+                        </a>
+                        <a href="${unit.readingUrl}" target="_blank" class="btn btn-secondary" title="อ่านสไลด์ทุกหน้าพร้อมสคริปต์และข้อสอบ">
+                            📖 อ่านเนื้อหา
+                        </a>
+                        <button type="button" class="btn btn-preview-full" onclick="openModal('${unit.interactiveUrl}', '${encodeURIComponent(unit.title)}')">
+                            👁️ พรีวิวในหน้านี้ทันที (Modal)
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
             });
         }
 
-        unitSearchInput.addEventListener('input', filterUnits);
-    </script>
+        // Modal Control Functions
+        function openModal(url, encodedTitle) {
+            const title = decodeURIComponent(encodedTitle);
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalIframe').src = url;
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.getElementById('modalIframe').src = '';
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnBackdrop(e) {
+            if (e.target.id === 'modalOverlay') {
+                closeModal();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderSubjectCards();
+            updateBanner();
+            renderUnits();
+        });
+    </script>
 </body>
 </html>
