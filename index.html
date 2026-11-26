@@ -1356,6 +1356,52 @@
             transform: scale(1.2);
         }
 
+        .eraser-modes-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .eraser-mode-label {
+            font-size: 11px;
+            font-family: var(--font-headline);
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-right: 2px;
+            white-space: nowrap;
+        }
+
+        .eraser-mode-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            height: 28px;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--border-subtle);
+            background: #FFFFFF;
+            color: var(--text-secondary);
+            font-family: var(--font-headline);
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 150ms ease;
+            white-space: nowrap;
+        }
+
+        .eraser-mode-chip:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-border);
+            color: var(--gold-hover);
+        }
+
+        .eraser-mode-chip.active {
+            background: var(--gold-primary);
+            border-color: var(--gold-border);
+            color: #1A0F0A;
+            box-shadow: var(--shadow-sm);
+        }
+
         .annot-sizes-group {
             display: flex;
             align-items: center;
@@ -1772,8 +1818,8 @@
                 <button class="annot-btn" id="toolHighlighterBtn" onclick="setAnnotTool('highlighter')" title="ไฮไลท์ข้อความโปร่งแสง (H)">
                     <span>🖍️</span> ไฮไลท์
                 </button>
-                <button class="annot-btn" id="toolEraserBtn" onclick="setAnnotTool('eraser')" title="ยางลบ (E)">
-                    <span>🧹</span> ยางลบ
+                <button class="annot-btn" id="toolEraserBtn" onclick="setAnnotTool('eraser')" title="ยางลบ (E) - กดซ้ำเพื่อสลับโหมด">
+                    <span id="eraserIcon">🧹</span> <span id="eraserLabel">ยางลบ</span>
                 </button>
             </div>
 
@@ -1887,9 +1933,11 @@
         // ANNOTATION TOOLS STATE & VARIABLES
         // ==========================================
         let currentAnnotTool = 'view'; // 'view' | 'pen' | 'highlighter' | 'eraser'
+        let currentEraserMode = 'partial'; // 'partial' (ลบบางส่วน) | 'object' (ลบทั้งวัตถุ)
         let currentPenColor = '#DC2626'; // Red default for pen
         let currentHighlighterColor = '#FFE600'; // Fluorescent Yellow default for highlighter
         let currentSizeLevel = 'sm';
+        const pageStrokesMap = {};     // { [pageNum]: [stroke, ...] }
 
         // Pre-defined color palettes
         const penColors = [
@@ -2526,15 +2574,45 @@
             if (show) {
                 loader.style.display = 'flex';
                 if (text) document.getElementById('pdfLoadingText').textContent = text;
-            } else {
-                loader.style.display = 'none';
+     // ANNOTATION ENGINE: VECTOR STROKES, REAL MULTIPLY HIGHLIGHTER & DUAL ERASER (OBJECT vs PARTIAL)
+        // ========================================================
+        function distToSegment(p, v, w) {
+            const l2 = (w.x - v.x) ** 2 + (w.y - v.y) ** 2;
+            if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
+            let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+            t = Math.max(0, Math.min(1, t));
+            return Math.hypot(p.x - (v.x + t * (w.x - v.x)), p.y - (v.y + t * (w.y - v.y)));
+        }
+
+        function setEraserMode(mode) {
+            currentEraserMode = mode;
+            const partialChip = document.getElementById('eraserModePartialChip');
+            const objectChip = document.getElementById('eraserModeObjectChip');
+            if (partialChip) partialChip.classList.toggle('active', mode === 'partial');
+            if (objectChip) objectChip.classList.toggle('active', mode === 'object');
+
+            const label = document.getElementById('eraserLabel');
+            if (label) {
+                label.textContent = mode === 'object' ? 'ลบทั้งวัตถุ' : 'ลบบางส่วน';
+            }
+            const icon = document.getElementById('eraserIcon');
+            if (icon) {
+                icon.textContent = mode === 'object' ? '🎯' : '🧹';
+            }
+
+            const eventCanvas = document.getElementById('eventCanvas');
+            if (eventCanvas && currentAnnotTool === 'eraser') {
+                eventCanvas.style.cursor = mode === 'object' ? 'crosshair' : 'cell';
             }
         }
 
-        // ========================================================
-        // ANNOTATION ENGINE: REAL MULTIPLY HIGHLIGHTER, PEN & ERASER
-        // ========================================================
         function setAnnotTool(tool) {
+            if (tool === 'eraser' && currentAnnotTool === 'eraser') {
+                // Toggle mode if clicking eraser while already active
+                setEraserMode(currentEraserMode === 'partial' ? 'object' : 'partial');
+                return;
+            }
+
             currentAnnotTool = tool;
             const eventCanvas = document.getElementById('eventCanvas');
 
@@ -2546,35 +2624,53 @@
             if (tool === 'view') {
                 eventCanvas.style.pointerEvents = 'none';
                 eventCanvas.style.cursor = 'default';
+                renderMiddleToolbarGroup(null);
             } else if (tool === 'pen') {
                 eventCanvas.style.pointerEvents = 'auto';
                 eventCanvas.style.cursor = 'crosshair';
-                renderColorSwatches('pen');
+                renderMiddleToolbarGroup('pen');
             } else if (tool === 'highlighter') {
                 eventCanvas.style.pointerEvents = 'auto';
                 eventCanvas.style.cursor = 'crosshair';
-                renderColorSwatches('highlighter');
+                renderMiddleToolbarGroup('highlighter');
             } else if (tool === 'eraser') {
                 eventCanvas.style.pointerEvents = 'auto';
-                eventCanvas.style.cursor = 'cell';
+                eventCanvas.style.cursor = currentEraserMode === 'object' ? 'crosshair' : 'cell';
+                renderMiddleToolbarGroup('eraser');
             }
         }
 
-        function renderColorSwatches(tool) {
+        function renderMiddleToolbarGroup(tool) {
             const container = document.getElementById('annotColorsGroup');
+            if (!container) return;
             container.innerHTML = '';
 
-            const list = tool === 'highlighter' ? highlighterColors : penColors;
-            const activeColor = tool === 'highlighter' ? currentHighlighterColor : currentPenColor;
+            if (tool === 'pen' || tool === 'highlighter') {
+                const list = tool === 'highlighter' ? highlighterColors : penColors;
+                const activeColor = tool === 'highlighter' ? currentHighlighterColor : currentPenColor;
 
-            list.forEach(c => {
-                const dot = document.createElement('span');
-                dot.className = `color-swatch ${activeColor === c.hex ? 'active' : ''}`;
-                dot.style.background = c.hex;
-                dot.title = c.name;
-                dot.onclick = () => selectAnnotColor(c.hex, dot);
-                container.appendChild(dot);
-            });
+                list.forEach(c => {
+                    const dot = document.createElement('span');
+                    dot.className = `color-swatch ${activeColor === c.hex ? 'active' : ''}`;
+                    dot.style.background = c.hex;
+                    dot.title = c.name;
+                    dot.onclick = () => selectAnnotColor(c.hex, dot);
+                    container.appendChild(dot);
+                });
+            } else if (tool === 'eraser') {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'eraser-modes-wrapper';
+                wrapper.innerHTML = `
+                    <span class="eraser-mode-label">โหมดยางลบ:</span>
+                    <button type="button" class="eraser-mode-chip ${currentEraserMode === 'partial' ? 'active' : ''}" id="eraserModePartialChip" onclick="setEraserMode('partial')" title="ลบบางส่วน (ถูผ่านตรงไหน ลบเฉพาะตรงนั้น)">
+                        <span>✂️</span> ลบบางส่วน
+                    </button>
+                    <button type="button" class="eraser-mode-chip ${currentEraserMode === 'object' ? 'active' : ''}" id="eraserModeObjectChip" onclick="setEraserMode('object')" title="ลบทั้งวัตถุ (แตะโดนเส้นไหน ลบทั้งเส้นทันที)">
+                        <span>🎯</span> ลบทั้งวัตถุ
+                    </button>
+                `;
+                container.appendChild(wrapper);
+            }
         }
 
         function selectAnnotColor(color, el) {
@@ -2618,47 +2714,74 @@
             const coords = getCanvasCoords(e);
             strokePoints = [coords];
 
-            // Save undo snapshot
             saveUndoSnapshot();
 
             if (currentAnnotTool === 'eraser') {
-                eraseAt(coords.x, coords.y);
+                executeEraser(coords.x, coords.y);
+                drawEraserCursor(coords.x, coords.y);
             } else {
-                // Draw initial point on eventCanvas
                 drawStrokeOnCanvas(document.getElementById('eventCanvas'), strokePoints);
             }
         }
 
         function handlePointerMove(e) {
-            if (!isDrawing || currentAnnotTool === 'view') return;
             const coords = getCanvasCoords(e);
 
             if (currentAnnotTool === 'eraser') {
-                eraseAt(coords.x, coords.y);
+                if (isDrawing) {
+                    executeEraser(coords.x, coords.y);
+                }
+                drawEraserCursor(coords.x, coords.y);
+                return;
+            }
+
+            if (!isDrawing || currentAnnotTool === 'view') return;
+
+            const lastPoint = strokePoints[strokePoints.length - 1];
+            const dist = Math.hypot(coords.x - lastPoint.x, coords.y - lastPoint.y);
+
+            // Interpolate dense intermediate points (spacing <= 2.5px) for smooth polyline & cutting
+            if (dist > 3) {
+                const steps = Math.ceil(dist / 2.5);
+                for (let s = 1; s <= steps; s++) {
+                    const t = s / steps;
+                    strokePoints.push({
+                        x: lastPoint.x + t * (coords.x - lastPoint.x),
+                        y: lastPoint.y + t * (coords.y - lastPoint.y)
+                    });
+                }
             } else {
                 strokePoints.push(coords);
-                // Clear temporary canvas and redraw stroke with single pass (NO alpha stacking!)
-                const eventCanvas = document.getElementById('eventCanvas');
-                const ctx = eventCanvas.getContext('2d');
-                ctx.clearRect(0, 0, eventCanvas.width, eventCanvas.height);
-                drawStrokeOnCanvas(eventCanvas, strokePoints);
             }
+
+            const eventCanvas = document.getElementById('eventCanvas');
+            const ctx = eventCanvas.getContext('2d');
+            ctx.clearRect(0, 0, eventCanvas.width, eventCanvas.height);
+            drawStrokeOnCanvas(eventCanvas, strokePoints);
         }
 
         function handlePointerUp(e) {
-            if (!isDrawing) return;
+            if (!isDrawing && currentAnnotTool !== 'eraser') return;
             isDrawing = false;
             const eventCanvas = document.getElementById('eventCanvas');
             try { eventCanvas.releasePointerCapture(e.pointerId); } catch(err) {}
 
-            if (currentAnnotTool === 'highlighter') {
-                // Bake single-pass stroke onto highlighterCanvas (with mix-blend-mode: multiply)
-                const hlCanvas = document.getElementById('highlighterCanvas');
-                drawStrokeOnCanvas(hlCanvas, strokePoints);
-            } else if (currentAnnotTool === 'pen') {
-                // Bake single-pass stroke onto penCanvas
-                const penCanvas = document.getElementById('penCanvas');
-                drawStrokeOnCanvas(penCanvas, strokePoints);
+            if (currentAnnotTool === 'highlighter' || currentAnnotTool === 'pen') {
+                if (strokePoints.length > 0) {
+                    const newStroke = {
+                        id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                        type: currentAnnotTool,
+                        color: currentAnnotTool === 'highlighter' ? currentHighlighterColor : currentPenColor,
+                        sizeLevel: currentSizeLevel,
+                        points: strokePoints
+                    };
+                    if (!pageStrokesMap[pdfCurrentPage]) pageStrokesMap[pdfCurrentPage] = [];
+                    pageStrokesMap[pdfCurrentPage].push(newStroke);
+
+                    // Bake stroke directly to appropriate canvas
+                    const targetCanvas = document.getElementById(currentAnnotTool === 'highlighter' ? 'highlighterCanvas' : 'penCanvas');
+                    drawStrokeOnCanvas(targetCanvas, strokePoints);
+                }
             }
 
             // Clear temporary stroke canvas
@@ -2667,6 +2790,55 @@
             strokePoints = [];
 
             saveCurrentPageAnnotation();
+        }
+
+        function handlePointerLeave(e) {
+            if (currentAnnotTool === 'eraser' && !isDrawing) {
+                const eventCanvas = document.getElementById('eventCanvas');
+                if (eventCanvas) {
+                    const ctx = eventCanvas.getContext('2d');
+                    ctx.clearRect(0, 0, eventCanvas.width, eventCanvas.height);
+                }
+            }
+        }
+
+        // Draw live circular eraser cursor on eventCanvas
+        function drawEraserCursor(x, y) {
+            const eventCanvas = document.getElementById('eventCanvas');
+            if (!eventCanvas) return;
+            const ctx = eventCanvas.getContext('2d');
+            ctx.clearRect(0, 0, eventCanvas.width, eventCanvas.height);
+
+            const pixelRatio = window.devicePixelRatio || 1;
+            const radius = (sizeConfig[currentSizeLevel].eraser * pixelRatio) / 2;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            if (currentEraserMode === 'object') {
+                ctx.strokeStyle = '#991B1B';
+                ctx.fillStyle = 'rgba(153, 27, 27, 0.18)';
+                ctx.lineWidth = 1.5 * pixelRatio;
+                ctx.setLineDash([4 * pixelRatio, 4 * pixelRatio]);
+                ctx.stroke();
+                ctx.fill();
+
+                // Target crosshair in center
+                ctx.beginPath();
+                ctx.moveTo(x - 5 * pixelRatio, y);
+                ctx.lineTo(x + 5 * pixelRatio, y);
+                ctx.moveTo(x, y - 5 * pixelRatio);
+                ctx.lineTo(x, y + 5 * pixelRatio);
+                ctx.stroke();
+            } else {
+                ctx.strokeStyle = '#CA8A04';
+                ctx.fillStyle = 'rgba(202, 138, 4, 0.18)';
+                ctx.lineWidth = 1.5 * pixelRatio;
+                ctx.setLineDash([4 * pixelRatio, 4 * pixelRatio]);
+                ctx.stroke();
+                ctx.fill();
+            }
+            ctx.restore();
         }
 
         // Single continuous path stroke (Never accumulates opaque alpha artifacts!)
@@ -2708,11 +2880,118 @@
             ctx.restore();
         }
 
-        // Erases both highlighter and pen layers simultaneously
-        function eraseAt(x, y) {
+        // ========================================================
+        // DUAL ERASER: OBJECT ERASER (STROKE) & PARTIAL ERASER (PIXEL)
+        // ========================================================
+        function executeEraser(x, y) {
             const pixelRatio = window.devicePixelRatio || 1;
-            const radius = (sizeConfig[currentSizeLevel].eraser * pixelRatio) / 2;
+            const eraserRadius = (sizeConfig[currentSizeLevel].eraser * pixelRatio) / 2;
+            const pageStrokes = pageStrokesMap[pdfCurrentPage] || [];
 
+            if (currentEraserMode === 'object') {
+                // ----------------------------------------
+                // MODE 1: ลบทั้งวัตถุ / ลบทั้งเส้น (OBJECT ERASER)
+                // ----------------------------------------
+                let strokeHit = false;
+                const remaining = [];
+
+                for (let i = 0; i < pageStrokes.length; i++) {
+                    const s = pageStrokes[i];
+                    const strokeWidth = (s.type === 'highlighter'
+                        ? sizeConfig[s.sizeLevel].highlighter
+                        : sizeConfig[s.sizeLevel].pen) * pixelRatio;
+                    const hitThreshold = eraserRadius + (strokeWidth / 2);
+
+                    let hit = false;
+                    if (s.points.length === 1) {
+                        if (Math.hypot(s.points[0].x - x, s.points[0].y - y) <= hitThreshold) {
+                            hit = true;
+                        }
+                    } else {
+                        for (let j = 0; j < s.points.length - 1; j++) {
+                            if (distToSegment({ x, y }, s.points[j], s.points[j + 1]) <= hitThreshold) {
+                                hit = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (hit) {
+                        strokeHit = true;
+                    } else {
+                        remaining.push(s);
+                    }
+                }
+
+                if (strokeHit) {
+                    pageStrokesMap[pdfCurrentPage] = remaining;
+                    redrawAllStrokes(pdfCurrentPage);
+                } else if (pageStrokes.length === 0) {
+                    // Fallback for older raster image annotations
+                    eraseRasterFallback(x, y, eraserRadius);
+                }
+
+            } else {
+                // ----------------------------------------
+                // MODE 2: ลบบางส่วน (PARTIAL ERASER)
+                // ----------------------------------------
+                let anyModified = false;
+                const newStrokes = [];
+
+                for (let i = 0; i < pageStrokes.length; i++) {
+                    const s = pageStrokes[i];
+                    const strokeWidth = (s.type === 'highlighter'
+                        ? sizeConfig[s.sizeLevel].highlighter
+                        : sizeConfig[s.sizeLevel].pen) * pixelRatio;
+                    const cutRadius = eraserRadius + (strokeWidth * 0.25);
+
+                    const subStrokes = [];
+                    let currentRun = [];
+
+                    for (let j = 0; j < s.points.length; j++) {
+                        const pt = s.points[j];
+                        const d = Math.hypot(pt.x - x, pt.y - y);
+
+                        if (d > cutRadius) {
+                            currentRun.push(pt);
+                        } else {
+                            anyModified = true;
+                            if (currentRun.length > 0) {
+                                subStrokes.push(currentRun);
+                                currentRun = [];
+                            }
+                        }
+                    }
+                    if (currentRun.length > 0) {
+                        subStrokes.push(currentRun);
+                    }
+
+                    if (subStrokes.length === 0) {
+                        anyModified = true;
+                    } else {
+                        for (let k = 0; k < subStrokes.length; k++) {
+                            newStrokes.push({
+                                id: s.id + '_' + k,
+                                type: s.type,
+                                color: s.color,
+                                sizeLevel: s.sizeLevel,
+                                points: subStrokes[k]
+                            });
+                        }
+                    }
+                }
+
+                if (anyModified) {
+                    pageStrokesMap[pdfCurrentPage] = newStrokes;
+                    redrawAllStrokes(pdfCurrentPage);
+                }
+
+                // Also execute raster composite erase for crisp visual feedback
+                eraseRasterFallback(x, y, eraserRadius);
+            }
+        }
+
+        function eraseRasterFallback(x, y, radius) {
             ['highlighterCanvas', 'penCanvas'].forEach(id => {
                 const c = document.getElementById(id);
                 if (c) {
@@ -2727,18 +3006,69 @@
             });
         }
 
-        function saveUndoSnapshot() {
+        function redrawAllStrokes(pageNum) {
             const hlCanvas = document.getElementById('highlighterCanvas');
             const penCanvas = document.getElementById('penCanvas');
             if (!hlCanvas || !penCanvas) return;
 
-            if (!pageUndoStacks[pdfCurrentPage]) pageUndoStacks[pdfCurrentPage] = [];
-            if (pageUndoStacks[pdfCurrentPage].length > 25) pageUndoStacks[pdfCurrentPage].shift();
+            const hlCtx = hlCanvas.getContext('2d');
+            const penCtx = penCanvas.getContext('2d');
 
-            pageUndoStacks[pdfCurrentPage].push({
-                highlighter: hlCanvas.toDataURL(),
-                pen: penCanvas.toDataURL()
-            });
+            hlCtx.clearRect(0, 0, hlCanvas.width, hlCanvas.height);
+            penCtx.clearRect(0, 0, penCanvas.width, penCanvas.height);
+
+            const strokes = pageStrokesMap[pageNum] || [];
+            const pixelRatio = window.devicePixelRatio || 1;
+
+            for (let i = 0; i < strokes.length; i++) {
+                const s = strokes[i];
+                if (!s.points || s.points.length === 0) continue;
+
+                const isHl = s.type === 'highlighter';
+                const targetCtx = isHl ? hlCtx : penCtx;
+                const cfgWidth = isHl
+                    ? sizeConfig[s.sizeLevel].highlighter
+                    : sizeConfig[s.sizeLevel].pen;
+
+                targetCtx.save();
+                targetCtx.beginPath();
+                targetCtx.moveTo(s.points[0].x, s.points[0].y);
+
+                if (isHl) {
+                    targetCtx.globalAlpha = 0.70;
+                    targetCtx.strokeStyle = s.color;
+                    targetCtx.lineWidth = cfgWidth * pixelRatio;
+                    targetCtx.lineCap = 'round';
+                    targetCtx.lineJoin = 'round';
+                } else {
+                    targetCtx.globalAlpha = 1.0;
+                    targetCtx.strokeStyle = s.color;
+                    targetCtx.lineWidth = cfgWidth * pixelRatio;
+                    targetCtx.lineCap = 'round';
+                    targetCtx.lineJoin = 'round';
+                }
+
+                for (let j = 1; j < s.points.length; j++) {
+                    targetCtx.lineTo(s.points[j].x, s.points[j].y);
+                }
+
+                if (s.points.length === 1) {
+                    targetCtx.lineTo(s.points[0].x + 0.1, s.points[0].y + 0.1);
+                }
+
+                targetCtx.stroke();
+                targetCtx.restore();
+            }
+
+            saveCurrentPageAnnotation();
+        }
+
+        function saveUndoSnapshot() {
+            if (!pageUndoStacks[pdfCurrentPage]) pageUndoStacks[pdfCurrentPage] = [];
+            if (pageUndoStacks[pdfCurrentPage].length > 30) pageUndoStacks[pdfCurrentPage].shift();
+
+            const currentStrokes = pageStrokesMap[pdfCurrentPage] || [];
+            pageUndoStacks[pdfCurrentPage].push(JSON.parse(JSON.stringify(currentStrokes)));
         }
 
         function saveCurrentPageAnnotation() {
@@ -2757,22 +3087,31 @@
             const penCanvas = document.getElementById('penCanvas');
             if (!hlCanvas || !penCanvas) return;
 
-            const hlCtx = hlCanvas.getContext('2d');
-            const penCtx = penCanvas.getContext('2d');
+            if (pageStrokesMap[num] && pageStrokesMap[num].length > 0) {
+                redrawAllStrokes(num);
+            } else {
+                const hlCtx = hlCanvas.getContext('2d');
+                const penCtx = penCanvas.getContext('2d');
+                hlCtx.clearRect(0, 0, hlCanvas.width, hlCanvas.height);
+                penCtx.clearRect(0, 0, penCanvas.width, penCanvas.height);
 
-            hlCtx.clearRect(0, 0, hlCanvas.width, hlCanvas.height);
-            penCtx.clearRect(0, 0, penCanvas.width, penCanvas.height);
-
-            const saved = pageAnnotationsMap[num];
-            if (saved) {
-                if (saved.highlighter) {
-                    const imgH = new Image();
-                    imgH.onload = () => hlCtx.drawImage(imgH, 0, 0, hlCanvas.width, hlCanvas.height);
-                    imgH.src = saved.highlighter;
+                const saved = pageAnnotationsMap[num];
+                if (saved) {
+                    if (saved.highlighter) {
+                        const imgH = new Image();
+                        imgH.onload = () => hlCtx.drawImage(imgH, 0, 0, hlCanvas.width, hlCanvas.height);
+                        imgH.src = saved.highlighter;
+                    }
+                    if (saved.pen) {
+                        const imgP = new Image();
+                        imgP.onload = () => penCtx.drawImage(imgP, 0, 0, penCanvas.width, penCanvas.height);
+                        imgP.src = saved.pen;
+                    }
                 }
-                if (saved.pen) {
-                    const imgP = new Image();
-                    imgP.onload = () => penCtx.drawImage(imgP, 0, 0, penCanvas.width, penCanvas.height);
+            }
+        }
+
+        () => penCtx.drawImage(imgP, 0, 0, penCanvas.width, penCanvas.height);
                     imgP.src = saved.pen;
                 }
             }
@@ -2783,37 +3122,38 @@
             if (!stack || stack.length === 0) return;
 
             const prev = stack.pop();
-            const hlCanvas = document.getElementById('highlighterCanvas');
-            const penCanvas = document.getElementById('penCanvas');
-            if (!hlCanvas || !penCanvas) return;
+            if (Array.isArray(prev)) {
+                pageStrokesMap[pdfCurrentPage] = prev;
+                redrawAllStrokes(pdfCurrentPage);
+            } else {
+                const hlCanvas = document.getElementById('highlighterCanvas');
+                const penCanvas = document.getElementById('penCanvas');
+                if (!hlCanvas || !penCanvas) return;
 
-            const hlCtx = hlCanvas.getContext('2d');
-            const penCtx = penCanvas.getContext('2d');
+                const hlCtx = hlCanvas.getContext('2d');
+                const penCtx = penCanvas.getContext('2d');
 
-            hlCtx.clearRect(0, 0, hlCanvas.width, hlCanvas.height);
-            penCtx.clearRect(0, 0, penCanvas.width, penCanvas.height);
+                hlCtx.clearRect(0, 0, hlCanvas.width, hlCanvas.height);
+                penCtx.clearRect(0, 0, penCanvas.width, penCanvas.height);
 
-            if (prev.highlighter) {
-                const imgH = new Image();
-                imgH.onload = () => hlCtx.drawImage(imgH, 0, 0, hlCanvas.width, hlCanvas.height);
-                imgH.src = prev.highlighter;
+                if (prev.highlighter) {
+                    const imgH = new Image();
+                    imgH.onload = () => hlCtx.drawImage(imgH, 0, 0, hlCanvas.width, hlCanvas.height);
+                    imgH.src = prev.highlighter;
+                }
+                if (prev.pen) {
+                    const imgP = new Image();
+                    imgP.onload = () => penCtx.drawImage(imgP, 0, 0, penCanvas.width, penCanvas.height);
+                    imgP.src = prev.pen;
+                }
+                saveCurrentPageAnnotation();
             }
-            if (prev.pen) {
-                const imgP = new Image();
-                imgP.onload = () => penCtx.drawImage(imgP, 0, 0, penCanvas.width, penCanvas.height);
-                imgP.src = prev.pen;
-            }
-
-            saveCurrentPageAnnotation();
         }
 
         function clearCurrentPageAnnotations() {
             saveUndoSnapshot();
-            const hlCanvas = document.getElementById('highlighterCanvas');
-            const penCanvas = document.getElementById('penCanvas');
-            if (hlCanvas) hlCanvas.getContext('2d').clearRect(0, 0, hlCanvas.width, hlCanvas.height);
-            if (penCanvas) penCanvas.getContext('2d').clearRect(0, 0, penCanvas.width, penCanvas.height);
-
+            pageStrokesMap[pdfCurrentPage] = [];
+            redrawAllStrokes(pdfCurrentPage);
             delete pageAnnotationsMap[pdfCurrentPage];
         }
 
@@ -2913,6 +3253,7 @@
                 eventCanvas.addEventListener('pointermove', handlePointerMove);
                 eventCanvas.addEventListener('pointerup', handlePointerUp);
                 eventCanvas.addEventListener('pointercancel', handlePointerUp);
+                eventCanvas.addEventListener('pointerleave', handlePointerLeave);
             }
         });
     </script>
