@@ -824,7 +824,25 @@
         }
 
         
-        /* ======================================================== */
+        
+        /* Bulletproof Double-Tap-to-Zoom Prevention on all buttons and bars */
+        button,
+        .pdf-mobile-btn,
+        .pdf-tool-btn,
+        .pdf-btn-close-main,
+        .pdf-mobile-bottom-bar,
+        .pdf-reader-toolbar,
+        .pdf-mobile-page-pill,
+        .pdf-mobile-zoom-pill,
+        .annot-btn {
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -webkit-touch-callout: none !important;
+        }
+
+/* ======================================================== */
         /* BULLETPROOF MOBILE SCROLLING & PROMINENT CLOSE BUTTON     */
         /* ======================================================== */
         
@@ -2797,8 +2815,37 @@
         }
 
         function nextPdfPage() {
-            if (!pdfDoc || pdfCurrentPage >= pdfTotalPagesCount) return;
-            renderPdfPage(pdfCurrentPage + 1);
+            if (!pdfDoc) return;
+            let target = pdfCurrentPage;
+            if (pdfIsRendering && pdfRenderQueue !== null) {
+                target = pdfRenderQueue;
+            }
+            if (target < pdfTotalPagesCount) {
+                const nextNum = target + 1;
+                // Instantly update indicator UI so user sees fast responsive feedback
+                const mobilePageInd = document.getElementById('pdfMobilePageIndicator');
+                if (mobilePageInd) mobilePageInd.textContent = `หน้า ${nextNum} / ${pdfTotalPagesCount}`;
+                const pageInput = document.getElementById('pdfPageInput');
+                if (pageInput) pageInput.value = nextNum;
+                renderPdfPage(nextNum);
+            }
+        }
+
+        function prevPdfPage() {
+            if (!pdfDoc) return;
+            let target = pdfCurrentPage;
+            if (pdfIsRendering && pdfRenderQueue !== null) {
+                target = pdfRenderQueue;
+            }
+            if (target > 1) {
+                const prevNum = target - 1;
+                // Instantly update indicator UI so user sees fast responsive feedback
+                const mobilePageInd = document.getElementById('pdfMobilePageIndicator');
+                if (mobilePageInd) mobilePageInd.textContent = `หน้า ${prevNum} / ${pdfTotalPagesCount}`;
+                const pageInput = document.getElementById('pdfPageInput');
+                if (pageInput) pageInput.value = prevNum;
+                renderPdfPage(prevNum);
+            }
         }
 
         function jumpPdfPage(val) {
@@ -3854,13 +3901,7 @@
                 const dx = touch.clientX - touchStartX;
                 const dy = touch.clientY - touchStartY;
 
-                // 1. Double Tap Detection (Toggle Zoom)
-                if (now - lastTapTime < 320 && Math.hypot(dx, dy) < 25) {
-                    lastTapTime = 0;
-                    cycleMobileZoom();
-                    return;
-                }
-                lastTapTime = now;
+                // Double-tap zoom on canvas disabled to prevent accidental zooming on rapid taps
 
                 // 2. Horizontal Swipe Detection (Flip Pages)
                 if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 450) {
@@ -3905,6 +3946,31 @@
                 closePdfReader(true);
             }
         });
+
+
+        // ========================================================
+        // PREVENT MOBILE DOUBLE-TAP ZOOM ON BUTTONS & FAST FLIPPING
+        // ========================================================
+        document.addEventListener('touchend', function(e) {
+            const btn = e.target.closest('button, .pdf-mobile-btn, .pdf-tool-btn, .pdf-btn-close-main, .pdf-mobile-bottom-bar, .pdf-mobile-page-pill, .pdf-mobile-zoom-pill');
+            if (btn) {
+                const now = Date.now();
+                const last = btn._lastTouchEnd || 0;
+                btn._lastTouchEnd = now;
+                // If tapped twice rapidly within 350ms, prevent native browser double-tap zoom
+                if (now - last < 350) {
+                    e.preventDefault();
+                    btn.click();
+                }
+            }
+        }, { passive: false });
+
+        document.addEventListener('dblclick', function(e) {
+            if (e.target.closest('button, .pdf-mobile-btn, .pdf-tool-btn, .pdf-btn-close-main, .pdf-mobile-bottom-bar, .pdf-mobile-page-pill, .pdf-mobile-zoom-pill')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, { passive: false });
 
 </script>
 </body>
