@@ -1166,7 +1166,66 @@ w(this,document.body,Oq,this.Ml,this);this.RO(!0)}RO(a){this.Da.Z("active",a)}Lz
 this.Da.x();return a}vO(){return this.Oh()}iw(a){var b;if(b=!a.defaultPrevented)b=this.Da.displayObject().getBoundingClientRect(),b=!(a.clientY>=b.top&&a.clientY<=b.top+b.height);if(b){b=this.displayObject().getBoundingClientRect();var c=this.Oh(),d=0==this.us?this.wk:this.us;a=(a.clientY-(b.top-c.top))/this.Jp<=this.Da.y()?-d:d;this.nf(this.rb+a)}}Vz(a){super.Vz(a);const b=this.Da.displayObject().getBoundingClientRect();this.mV=a.clientY-Math.round(b.top);this.Ml(a)}Ml(a){const b=this.displayObject().getBoundingClientRect(),
 c=this.Oh();this.Ks((a.clientY-b.top-c.top*this.Jp-this.mV)/(c.height*this.Jp)*lI(this)+this.ni)}};function oI(a,b){Je.call(this);this.PB=a;a=Md(this.PB)?this.PB:this.PB?this.PB.body:null;this.maa=!!a&&Yg(a);this.i0=te(this.PB,Mb?"DOMMouseScroll":"mousewheel",this,b)}ya(oI,Je);
 oI.prototype.handleEvent=function(a){var b=0,c=0,d=a.$d;"mousewheel"==d.type?(a=pI(-d.wheelDelta),void 0!==d.wheelDeltaX?(b=pI(-d.wheelDeltaX),c=pI(-d.wheelDeltaY)):c=a):(a=d.detail,100<a?a=3:-100>a&&(a=-3),void 0!==d.axis&&d.axis===d.HORIZONTAL_AXIS?b=a:c=a);"number"===typeof this.l0&&(b=Wc(b,-this.l0,this.l0));"number"===typeof this.m0&&(c=Wc(c,-this.m0,this.m0));this.maa&&(b=-b);b=new qI(a,d,b,c);this.dispatchEvent(b)};function pI(a){return Nb&&(Ob||Qb)&&0!=a%40?a:a/40}
-oI.prototype.Pe=function(){oI.Zc.Pe.call(this);Ce(this.i0);this.i0=null};function qI(a,b,c,d){ge.call(this,b);this.type="mousewheel";this.detail=a;this.deltaX=c;this.deltaY=d}ya(qI,ge);var rI=new be;function sI(a){a.B3&&a.Te(a.jZ||a.ZL?.5:0)}function tI(a,b){w(a,new oI(b.displayObject(),{passive:!0}),rI,c=>{!Mh(c.$d)&&c.deltaY&&(c=0<c.deltaY?a.xe():-a.xe(),a.nf(a.rb+c))},a)}
+oI.prototype.Pe=function(){oI.Zc.Pe.call(this);Ce(this.i0);this.i0=null};function qI(a,b,c,d){ge.call(this,b);this.type="mousewheel";this.detail=a;this.deltaX=c;this.deltaY=d}ya(qI,ge);var rI=new be;function sI(a){a.B3&&a.Te(a.jZ||a.ZL?.5:0)}function tI(a,b){
+    w(a,new oI(b.displayObject(),{passive:!0}),rI,c=>{!Mh(c.$d)&&c.deltaY&&(c=0<c.deltaY?a.xe():-a.xe(),a.nf(a.rb+c))},a);
+    (function(scroller,el){
+        if(!el||el.__touchScrollAttached)return;
+        el.__touchScrollAttached=true;
+        var startY=0,lastY=0,startX=0,moved=false,vel=0,lastT=0,anim=null;
+        el.addEventListener('touchstart',function(e){
+            if(e.touches.length!==1)return;
+            if(anim){cancelAnimationFrame(anim);anim=null;}
+            startY=lastY=e.touches[0].clientY;
+            startX=e.touches[0].clientX;
+            lastT=Date.now();
+            moved=false;
+            vel=0;
+        },{passive:true});
+        el.addEventListener('touchmove',function(e){
+            if(e.touches.length!==1)return;
+            var curY=e.touches[0].clientY;
+            var curX=e.touches[0].clientX;
+            var dy=curY-lastY;
+            var totalDy=curY-startY;
+            var totalDx=curX-startX;
+            var now=Date.now();
+            var dt=Math.max(1,now-lastT);
+            vel=(dy/dt)*16;
+            lastY=curY;
+            lastT=now;
+            if(!moved&&Math.abs(totalDy)>5&&Math.abs(totalDy)>Math.abs(totalDx)){
+                moved=true;
+            }
+            if(moved){
+                if(e.cancelable)e.preventDefault();
+                e.stopPropagation();
+                scroller.nf(scroller.rb - dy * 1.5);
+            }
+        },{passive:false});
+        el.addEventListener('touchend',function(e){
+            if(moved){
+                function stopClick(ev){
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    window.removeEventListener('click',stopClick,true);
+                }
+                window.addEventListener('click',stopClick,true);
+                setTimeout(function(){window.removeEventListener('click',stopClick,true);},350);
+                if(Math.abs(vel)>1){
+                    var curVel=vel;
+                    function inertiaStep(){
+                        if(Math.abs(curVel)<0.5)return;
+                        curVel*=0.92;
+                        scroller.nf(scroller.rb - curVel * 1.5);
+                        anim=requestAnimationFrame(inertiaStep);
+                    }
+                    anim=requestAnimationFrame(inertiaStep);
+                }
+            }
+            moved=false;
+        },{passive:true});
+    })(a,b.displayObject());
+}
 class uI extends nI{constructor({G:a,xe:b,Pq:c,caa:d,Q0:e=null}){super({G:a,xe:b});this.Dv=c;this.ZL=this.jZ=!1;this.B3=d;this.AA=e;O(c,"overflow","hidden");x(this,this.wi,()=>{c.displayObject().scrollTop=this.rb});w(this,c,"scroll",()=>{this.nf(c.displayObject().scrollTop)},this);this.AA?tI(this,this.AA):(tI(this,this.Dv),tI(this,this));d?(this.Te(0),this.AA?(w(this,this.AA,"mouseenter",this.Kl,this),w(this,this.AA,"mouseleave",this.hj,this)):(w(this,this.Dv,"mouseover",this.Kl,this),w(this,this,
 "mouseover",this.Kl,this),w(this,this.Dv,"mouseout",this.hj,this),w(this,this,"mouseout",this.hj,this))):this.Te(1)}Yh(a,b,c,d=0){this.J(0<c);super.Yh(a,b,c,d)}Vw(){this.nf(this.Dv.displayObject().scrollTop)}RO(a){this.jZ=a;sI(this)}Kl(a){a&&(this.contains(a.relatedTarget)||this.Dv.contains(a.relatedTarget))||(this.ZL=!0,sI(this))}hj(a){a&&(null==a.relatedTarget||this.contains(a.relatedTarget)||this.Dv.contains(a.relatedTarget))||(this.ZL=!1,sI(this))}};class vI extends R{constructor(a){super({G:a});a=new R({$:Q(this,"thumb")});P(this,a)}}class wI{constructor(a,b){this.Sc=a;this.wi=b}scrollY(){const a=this.Sc.getComputedPosition().y;return isNaN(a)?0:-a}SH(){return this.wi}px(a){this.scrollY()!=a&&this.Sc.scrollTo(0,-a)}}class xI extends L{constructor(a){super();this.N=a;this.Uz=K(this);w(this,a,"scroll",()=>{this.Uz.C()})}scrollY(){return this.N.scrollTop}SH(){return this.Uz}px(a){this.N.scrollTop=a}}
 class yI extends L{constructor({G:a="vertical-scrollbar",Fha:b="mobile-vertical-scrollbar",Pq:c,Iha:d,qP:e,Q0:f=null,xe:g=20,preventDefault:h=!0}){super();this.ra=this.Sc=null;this.sZ=d||null;this.pS=e||null;this.fj=0;if(B){const k=K(this);a={fadeScrollbars:!0,scrollX:!1,scrollY:!0,bounce:!1,deceleration:.006,useTransition:!1,preventDefault:h,disablePointer:!0,disableTouch:!1,disableMouse:!1,onScrollHandler:()=>{k.C()}};b=new vI(b);a.indicators={el:b.displayObject(),shrink:"scale"};this.Sc=new IScroll(c.displayObject(),

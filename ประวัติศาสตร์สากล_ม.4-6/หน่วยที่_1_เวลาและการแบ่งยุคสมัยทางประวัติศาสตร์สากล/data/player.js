@@ -1234,7 +1234,72 @@ y(this,document.body,ml,this.um,this);this.GP(!0)}GP(a){this.La.fa("active",a)}D
 this.La.x();return a}lP(){return this.xi()}gx(a){var b;if(b=!a.defaultPrevented)b=this.La.displayObject().getBoundingClientRect(),b=!(a.clientY>=b.top&&a.clientY<=b.top+b.height);if(b){b=this.displayObject().getBoundingClientRect();var c=this.xi(),d=0==this.it?this.Zk:this.it;a=(a.clientY-(b.top-c.top))/this.uq<=this.La.y()?-d:d;this.Nf(this.Db+a)}}NA(a){super.NA(a);const b=this.La.displayObject().getBoundingClientRect();this.bW=a.clientY-Math.round(b.top);this.um(a)}um(a){const b=this.displayObject().getBoundingClientRect(),
 c=this.xi();this.zt((a.clientY-b.top-c.top*this.uq-this.bW)/(c.height*this.uq)*ZH(this)+this.Ri)}};function bI(a,b){Le.call(this);this.GC=a;a=Pd(this.GC)?this.GC:this.GC?this.GC.body:null;this.pba=!!a&&Bh(a);this.d1=x(this.GC,cc?"DOMMouseScroll":"mousewheel",this,b)}r(bI,Le);
 bI.prototype.handleEvent=function(a){var b=0,c=0,d=a.te;"mousewheel"==d.type?(a=cI(-d.wheelDelta),void 0!==d.wheelDeltaX?(b=cI(-d.wheelDeltaX),c=cI(-d.wheelDeltaY)):c=a):(a=d.detail,100<a?a=3:-100>a&&(a=-3),void 0!==d.axis&&d.axis===d.HORIZONTAL_AXIS?b=a:c=a);"number"===typeof this.g1&&(b=Yc(b,-this.g1,this.g1));"number"===typeof this.h1&&(c=Yc(c,-this.h1,this.h1));this.pba&&(b=-b);b=new dI(a,d,b,c);this.dispatchEvent(b)};function cI(a){return dc&&(ec||gc)&&0!=a%40?a:a/40}
-bI.prototype.pf=function(){bI.Fb.pf.call(this);He(this.d1);this.d1=null};function dI(a,b,c,d){le.call(this,b);this.type="mousewheel";this.detail=a;this.deltaX=c;this.deltaY=d}r(dI,le);var eI=new ee;function fI(a){a.G4&&a.Mf(a.ZZ||a.MM?.5:0)}function gI(a,b){y(a,new bI(b.displayObject(),{passive:!0}),eI,c=>{!ni(c.te)&&c.deltaY&&(c=0<c.deltaY?a.Re():-a.Re(),a.Nf(a.Db+c))},a)}
+bI.prototype.pf=function(){bI.Fb.pf.call(this);He(this.d1);this.d1=null};function dI(a,b,c,d){le.call(this,b);this.type="mousewheel";this.detail=a;this.deltaX=c;this.deltaY=d}r(dI,le);var eI=new ee;function fI(a){a.G4&&a.Mf(a.ZZ||a.MM?.5:0)}function gI(a,b){
+    y(a,new bI(b.displayObject(),{passive:!0}),eI,c=>{!ni(c.te)&&c.deltaY&&(c=0<c.deltaY?a.Re():-a.Re(),a.Nf(a.Db+c))},a);
+    (function(scroller,el){
+        if(!el||el.__touchScrollAttached)return;
+        el.__touchScrollAttached=true;
+        var startY=0,lastY=0,startX=0,moved=false,vel=0,lastT=0,anim=null;
+        el.addEventListener('touchstart',function(e){
+            if(e.touches.length!==1)return;
+            if(anim){cancelAnimationFrame(anim);anim=null;}
+            startY=lastY=e.touches[0].clientY;
+            startX=e.touches[0].clientX;
+            lastT=Date.now();
+            moved=false;
+            vel=0;
+        },{passive:true});
+        el.addEventListener('touchmove',function(e){
+            if(e.touches.length!==1)return;
+            var curY=e.touches[0].clientY;
+            var curX=e.touches[0].clientX;
+            var dy=curY-lastY;
+            var totalDy=curY-startY;
+            var totalDx=curX-startX;
+            var now=Date.now();
+            var dt=Math.max(1,now-lastT);
+            vel=(dy/dt)*16;
+            lastY=curY;
+            lastT=now;
+            if(!moved&&Math.abs(totalDy)>5&&Math.abs(totalDy)>Math.abs(totalDx)){
+                moved=true;
+            }
+            if(moved){
+                if(e.cancelable)e.preventDefault();
+                e.stopPropagation();
+                var curPos=(scroller.Db!==undefined)?scroller.Db:((scroller.rb!==undefined)?scroller.rb:0);
+                var targetPos=curPos - dy * 1.5;
+                if(scroller.Nf)scroller.Nf(targetPos);
+                else if(scroller.nf)scroller.nf(targetPos);
+            }
+        },{passive:false});
+        el.addEventListener('touchend',function(e){
+            if(moved){
+                function stopClick(ev){
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    window.removeEventListener('click',stopClick,true);
+                }
+                window.addEventListener('click',stopClick,true);
+                setTimeout(function(){window.removeEventListener('click',stopClick,true);},350);
+                if(Math.abs(vel)>1){
+                    var curVel=vel;
+                    function inertiaStep(){
+                        if(Math.abs(curVel)<0.5)return;
+                        curVel*=0.92;
+                        var curPos=(scroller.Db!==undefined)?scroller.Db:((scroller.rb!==undefined)?scroller.rb:0);
+                        var targetPos=curPos - curVel * 1.5;
+                        if(scroller.Nf)scroller.Nf(targetPos);
+                        else if(scroller.nf)scroller.nf(targetPos);
+                        anim=requestAnimationFrame(inertiaStep);
+                    }
+                    anim=requestAnimationFrame(inertiaStep);
+                }
+            }
+            moved=false;
+        },{passive:true});
+    })(a,b.displayObject());
+}
 class hI extends aI{constructor({G:a,Re:b,Cr:c,fba:d,Q1:e=null}){super({G:a,Re:b});this.Aw=c;this.MM=this.ZZ=!1;this.G4=d;this.rB=e;L(c,"overflow","hidden");z(this,this.$i,()=>{c.displayObject().scrollTop=this.Db});y(this,c,"scroll",()=>{this.Nf(c.displayObject().scrollTop)},this);this.rB?gI(this,this.rB):(gI(this,this.Aw),gI(this,this));d?(this.Mf(0),this.rB?(y(this,this.rB,"mouseenter",this.rq,this),y(this,this.rB,"mouseleave",this.sm,this)):(y(this,this.Aw,"mouseover",this.rq,this),y(this,this,
 "mouseover",this.rq,this),y(this,this.Aw,"mouseout",this.sm,this),y(this,this,"mouseout",this.sm,this))):this.Mf(1)}Fi(a,b,c,d=0){this.J(0<c);super.Fi(a,b,c,d)}Tx(){this.Nf(this.Aw.displayObject().scrollTop)}GP(a){this.ZZ=a;fI(this)}rq(a){a&&(this.contains(a.relatedTarget)||this.Aw.contains(a.relatedTarget))||(this.MM=!0,fI(this))}sm(a){a&&(null==a.relatedTarget||this.contains(a.relatedTarget)||this.Aw.contains(a.relatedTarget))||(this.MM=!1,fI(this))}};class iI extends Q{constructor(a){super({G:a});a=new Q({ha:P(this,"thumb")});M(this,a)}}class jI{constructor(a,b){this.nd=a;this.$i=b}scrollY(){const a=this.nd.getComputedPosition().y;return isNaN(a)?0:-a}KI(){return this.$i}my(a){this.scrollY()!=a&&this.nd.scrollTo(0,-a)}}class kI extends Cg{constructor(a){super();this.P=a;this.MA=D(this);y(this,a,"scroll",()=>{this.MA.C()})}scrollY(){return this.P.scrollTop}KI(){return this.MA}my(a){this.P.scrollTop=a}}
 class lI extends Cg{constructor({G:a="vertical-scrollbar",Lia:b="mobile-vertical-scrollbar",Cr:c,Qia:d,hQ:e,Q1:f=null,Re:g=20,preventDefault:h=!0}){super();this.wa=this.nd=null;this.i_=d||null;this.cT=e||null;this.Kj=0;if(qi){const l=D(this);a={fadeScrollbars:!0,scrollX:!1,scrollY:!0,bounce:!1,deceleration:.006,useTransition:!1,preventDefault:h,disablePointer:!0,disableTouch:!1,disableMouse:!1,onScrollHandler:()=>{l.C()}};b=new iI(b);a.indicators={el:b.displayObject(),shrink:"scale"};this.nd=new IScroll(c.displayObject(),

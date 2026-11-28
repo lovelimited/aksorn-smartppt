@@ -738,6 +738,9 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            touch-action: none;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: auto;
         }
 
         .slide-modal-overlay.active {
@@ -754,6 +757,8 @@
             flex-direction: column;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
+            touch-action: auto;
+            overscroll-behavior: contain;
         }
 
         .modal-header-bar {
@@ -3937,6 +3942,16 @@
 
             const overlay = document.getElementById('modalOverlay');
             if (overlay) overlay.classList.add('active');
+
+            // Bulletproof iOS Safari Background Scroll Lock
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            document.body.dataset.modalScrollY = scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+            document.body.style.height = '100%';
             document.body.style.overflow = 'hidden';
 
             // Push History State so Hardware/Browser Back closes modal cleanly
@@ -4141,7 +4156,17 @@
 
             const iframe = document.getElementById('modalIframe');
             if (iframe) iframe.src = 'about:blank'; // Stop audio/video playback immediately
+
+            // Restore iOS Background Scroll Position
+            const scrollY = document.body.dataset.modalScrollY || '0';
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+            document.body.style.width = '';
+            document.body.style.height = '';
             document.body.style.overflow = '';
+            window.scrollTo(0, parseInt(scrollY));
         }
 
         function closeModalOnBackdrop(e) {

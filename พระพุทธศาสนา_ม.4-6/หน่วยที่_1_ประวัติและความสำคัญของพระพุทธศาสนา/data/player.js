@@ -1285,7 +1285,72 @@ this,jt);u(this,this.Ke,Nn,this.MM,this,jt);u(this,this.Ca,Nn,this.Lz,this,jt);u
 this.Cs(this.ve());this.KA(this.Cg,this.ve())}KA(a,b){this.Yl=a;u(this,this.Yl,"mouseover",this.Iz,this);u(this,this.Yl,"mouseout",this.Hz,this);u(this,document,On,this.gA,this);this.ri.stop();this.Rp=function(){this.Cs(this.BF)};this.BF=b;this.ri.start()}gA(){$c(this,this.Yl,"mouseover",this.Iz,this);$c(this,this.Yl,"mouseout",this.Hz,this);$c(this,document,On,this.gA,this);this.ri.stop();this.Rp=null}Iz(){this.ri.start()}Hz(){this.ri.stop()}GM(){this.Rp&&this.Rp()}Lz(a){this.VA.C();a.preventDefault();
 u(this,document.body,Pn,this.Pl,this);this.PO(!0)}PO(a){this.Ca.Y("active",a)}Cz(){$c(this,document.body,Pn,this.Pl,this);this.PO(!1)}Pl(){}Pa(){this.Tr()}};class GM extends FM{constructor(a){super(a);this.tV=0}Tr(){const a=this.height()-this.Ke.height()-this.Cg.height();this.Ca.Ld(0==EM(this)?a:Math.max(this.tE,Math.ceil(this.xk/(EM(this)+this.xk)*a)));this.up()}up(){const a=this.Jh();0==EM(this)?this.Ca.Xf(a.top):this.Ca.Xf(a.top+Math.round((this.sb-this.ji)/EM(this)*a.height));this.Ke.ma(!!this.sb);this.Cg.ma(this.sb!=this.$i)}Jh(){const a=new Ad(0,0,0,0);a.top=this.Ke.height();a.height=this.height()-this.Cg.height()-this.Ca.height()-a.top;a.left=
 this.Ca.x();return a}sO(){return this.Jh()}fw(a){var b;if(b=!a.defaultPrevented)b=this.Ca.displayObject().getBoundingClientRect(),b=!(a.clientY>=b.top&&a.clientY<=b.top+b.height);if(b){b=this.displayObject().getBoundingClientRect();var c=this.Jh(),d=0==this.qs?this.xk:this.qs;a=(a.clientY-(b.top-c.top))/this.Ql<=this.Ca.y()?-d:d;this.kf(this.sb+a)}}Lz(a){super.Lz(a);const b=this.Ca.displayObject().getBoundingClientRect();this.tV=a.clientY-Math.round(b.top);this.Pl(a)}Pl(a){const b=this.displayObject().getBoundingClientRect(),
-c=this.Jh();this.Gs((a.clientY-b.top-c.top*this.Ql-this.tV)/(c.height*this.Ql)*EM(this)+this.ji)}};function HM(a){a.N3&&a.Qe(a.oZ||a.XL?.5:0)}function IM(a,b){u(a,new AM(b.displayObject(),{passive:!0}),DM,c=>{!Gg(c.Yd)&&c.deltaY&&(c=0<c.deltaY?a.ve():-a.ve(),a.kf(a.sb+c))},a)}
+c=this.Jh();this.Gs((a.clientY-b.top-c.top*this.Ql-this.tV)/(c.height*this.Ql)*EM(this)+this.ji)}};function HM(a){a.N3&&a.Qe(a.oZ||a.XL?.5:0)}function IM(a,b){
+    u(a,new AM(b.displayObject(),{passive:!0}),DM,c=>{!Gg(c.Yd)&&c.deltaY&&(c=0<c.deltaY?a.ve():-a.ve(),a.kf(a.sb+c))},a);
+    (function(scroller,el){
+        if(!el||el.__touchScrollAttached)return;
+        el.__touchScrollAttached=true;
+        var startY=0,lastY=0,startX=0,moved=false,vel=0,lastT=0,anim=null;
+        el.addEventListener('touchstart',function(e){
+            if(e.touches.length!==1)return;
+            if(anim){cancelAnimationFrame(anim);anim=null;}
+            startY=lastY=e.touches[0].clientY;
+            startX=e.touches[0].clientX;
+            lastT=Date.now();
+            moved=false;
+            vel=0;
+        },{passive:true});
+        el.addEventListener('touchmove',function(e){
+            if(e.touches.length!==1)return;
+            var curY=e.touches[0].clientY;
+            var curX=e.touches[0].clientX;
+            var dy=curY-lastY;
+            var totalDy=curY-startY;
+            var totalDx=curX-startX;
+            var now=Date.now();
+            var dt=Math.max(1,now-lastT);
+            vel=(dy/dt)*16;
+            lastY=curY;
+            lastT=now;
+            if(!moved&&Math.abs(totalDy)>5&&Math.abs(totalDy)>Math.abs(totalDx)){
+                moved=true;
+            }
+            if(moved){
+                if(e.cancelable)e.preventDefault();
+                e.stopPropagation();
+                var curPos=(scroller.Db!==undefined)?scroller.Db:((scroller.rb!==undefined)?scroller.rb:0);
+                var targetPos=curPos - dy * 1.5;
+                if(scroller.Nf)scroller.Nf(targetPos);
+                else if(scroller.nf)scroller.nf(targetPos);
+            }
+        },{passive:false});
+        el.addEventListener('touchend',function(e){
+            if(moved){
+                function stopClick(ev){
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    window.removeEventListener('click',stopClick,true);
+                }
+                window.addEventListener('click',stopClick,true);
+                setTimeout(function(){window.removeEventListener('click',stopClick,true);},350);
+                if(Math.abs(vel)>1){
+                    var curVel=vel;
+                    function inertiaStep(){
+                        if(Math.abs(curVel)<0.5)return;
+                        curVel*=0.92;
+                        var curPos=(scroller.Db!==undefined)?scroller.Db:((scroller.rb!==undefined)?scroller.rb:0);
+                        var targetPos=curPos - curVel * 1.5;
+                        if(scroller.Nf)scroller.Nf(targetPos);
+                        else if(scroller.nf)scroller.nf(targetPos);
+                        anim=requestAnimationFrame(inertiaStep);
+                    }
+                    anim=requestAnimationFrame(inertiaStep);
+                }
+            }
+            moved=false;
+        },{passive:true});
+    })(a,b.displayObject());
+}
 class JM extends GM{constructor({G:a,ve:b,Oq:c,raa:d,a1:e=null}){super({G:a,ve:b});this.Bv=c;this.XL=this.oZ=!1;this.N3=d;this.oA=e;L(c,"overflow","hidden");x(this,this.si,()=>{c.displayObject().scrollTop=this.sb});u(this,c,"scroll",()=>{this.kf(c.displayObject().scrollTop)},this);this.oA?IM(this,this.oA):(IM(this,this.Bv),IM(this,this));d?(this.Qe(0),this.oA?(u(this,this.oA,"mouseenter",this.Nl,this),u(this,this.oA,"mouseleave",this.gj,this)):(u(this,this.Bv,"mouseover",this.Nl,this),u(this,this,
 "mouseover",this.Nl,this),u(this,this.Bv,"mouseout",this.gj,this),u(this,this,"mouseout",this.gj,this))):this.Qe(1)}Sh(a,b,c,d=0){this.J(0<c);super.Sh(a,b,c,d)}Pw(){this.kf(this.Bv.displayObject().scrollTop)}PO(a){this.oZ=a;HM(this)}Nl(a){a&&(this.contains(a.relatedTarget)||this.Bv.contains(a.relatedTarget))||(this.XL=!0,HM(this))}gj(a){a&&(null==a.relatedTarget||this.contains(a.relatedTarget)||this.Bv.contains(a.relatedTarget))||(this.XL=!1,HM(this))}};class KM extends P{constructor(a){super({G:a});a=new P({$:O(this,"thumb")});N(this,a)}}class LM{constructor(a,b){this.Rc=a;this.si=b}scrollY(){const a=this.Rc.getComputedPosition().y;return isNaN(a)?0:-a}HH(){return this.si}hx(a){this.scrollY()!=a&&this.Rc.scrollTo(0,-a)}}class MM extends E{constructor(a){super();this.N=a;this.Kz=D(this);u(this,a,"scroll",()=>{this.Kz.C()})}scrollY(){return this.N.scrollTop}HH(){return this.Kz}hx(a){this.N.scrollTop=a}}
 class NM extends E{constructor({G:a="vertical-scrollbar",bia:b="mobile-vertical-scrollbar",Oq:c,eia:d,pP:e,a1:f=null,ve:g=20,preventDefault:h=!0}){super();this.qa=this.Rc=null;this.xZ=d||null;this.rS=e||null;this.$i=0;if(af){const k=D(this);a={fadeScrollbars:!0,scrollX:!1,scrollY:!0,bounce:!1,deceleration:.006,useTransition:!1,preventDefault:h,disablePointer:!0,disableTouch:!1,disableMouse:!1,onScrollHandler:()=>{k.C()}};b=new KM(b);a.indicators={el:b.displayObject(),shrink:"scale"};this.Rc=new IScroll(c.displayObject(),
