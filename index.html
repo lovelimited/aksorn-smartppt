@@ -2466,9 +2466,14 @@
                     <div class="course-card-actions">
                         ${course.textbook ? `
                         <div class="btn-group-pdf">
-                            <button type="button" class="btn-edu btn-edu-pdf" onclick="openPdfReader('${course.textbook.url}', '${encodeURIComponent(course.textbook.title)}', ${course.textbook.pages})" title="เปิดอ่านหนังสือเรียนฉบับเต็มทันที">
-                                <span>📖</span> เปิดอ่าน (PDF)
-                            </button>
+                            ${(() => {
+                                let lastPg = 0;
+                                try { lastPg = parseInt(localStorage.getItem('aksorn_last_page_' + course.textbook.url), 10) || 0; } catch(e){}
+                                const readLabel = (lastPg > 1) ? `อ่านต่อ (น.${lastPg})` : 'เปิดอ่าน (PDF)';
+                                return `<button type="button" class="btn-edu btn-edu-pdf" onclick="openPdfReader('${course.textbook.url}', '${encodeURIComponent(course.textbook.title)}', ${course.textbook.pages})" title="เปิดอ่านหนังสือเรียนฉบับเต็มทันที">
+                                    <span>📖</span> ${readLabel}
+                                </button>`;
+                            })()}
                             <button type="button" class="btn-cache-save ${cachedUrlsSet.has(course.textbook.url) ? 'cached' : ''}" id="cardCacheBtn_${courseKey}" data-url="${course.textbook.url}" onclick="handleCardCacheClick('${course.textbook.url}', '${encodeURIComponent(course.textbook.title)}', ${course.textbook.pages}, '${courseKey}')" title="${cachedUrlsSet.has(course.textbook.url) ? 'บันทึกในเครื่องแล้ว (คลิกเพื่อลบ)' : 'ดาวน์โหลดเก็บไว้ในเครื่องเพื่อเปิดอ่านออฟไลน์ทันทีใน 0.05 วินาที'}">
                                 ${cachedUrlsSet.has(course.textbook.url) ? '💾 ในเครื่องแล้ว' : '📥 เก็บออฟไลน์'}
                             </button>
@@ -2638,9 +2643,25 @@
                     pdfTotalPagesCount = pdf.numPages;
                     document.getElementById('pdfTotalPages').textContent = '/ ' + pdfTotalPagesCount;
                     document.getElementById('pdfPageInput').max = pdfTotalPagesCount;
-                    pdfCurrentPage = 1;
+
+                    // Restore annotations
+                    for (const k in pageStrokesMap) delete pageStrokesMap[k];
+                    try {
+                        const savedStrokes = localStorage.getItem('aksorn_strokes_' + url);
+                        if (savedStrokes) Object.assign(pageStrokesMap, JSON.parse(savedStrokes));
+                    } catch(e) {}
+
+                    // Resume Last Read Page
+                    const savedPage = parseInt(localStorage.getItem('aksorn_last_page_' + url), 10);
+                    const startPage = (savedPage && savedPage >= 1 && savedPage <= pdfTotalPagesCount) ? savedPage : 1;
+                    pdfCurrentPage = startPage;
+                    document.getElementById('pdfPageInput').value = startPage;
                     calculateInitialPdfZoom();
-                    renderPdfPage(1);
+                    renderPdfPage(startPage);
+
+                    if (startPage > 1) {
+                        setTimeout(() => showSwipeToast(`🔖 เปิดต่อจากหน้าที่อ่านค้างไว้ (หน้า ${startPage})`), 500);
+                    }
 
                     setAnnotTool('view');
                     updateFullscreenUI();
@@ -2675,10 +2696,25 @@
                 pdfTotalPagesCount = pdf.numPages;
                 document.getElementById('pdfTotalPages').textContent = '/ ' + pdfTotalPagesCount;
                 document.getElementById('pdfPageInput').max = pdfTotalPagesCount;
-                pdfCurrentPage = 1;
-                
+
+                // Restore annotations
+                for (const k in pageStrokesMap) delete pageStrokesMap[k];
+                try {
+                    const savedStrokes = localStorage.getItem('aksorn_strokes_' + url);
+                    if (savedStrokes) Object.assign(pageStrokesMap, JSON.parse(savedStrokes));
+                } catch(e) {}
+
+                // Resume Last Read Page
+                const savedPage = parseInt(localStorage.getItem('aksorn_last_page_' + url), 10);
+                const startPage = (savedPage && savedPage >= 1 && savedPage <= pdfTotalPagesCount) ? savedPage : 1;
+                pdfCurrentPage = startPage;
+                document.getElementById('pdfPageInput').value = startPage;
                 calculateInitialPdfZoom();
-                renderPdfPage(1);
+                renderPdfPage(startPage);
+
+                if (startPage > 1) {
+                    setTimeout(() => showSwipeToast(`🔖 เปิดต่อจากหน้าที่อ่านค้างไว้ (หน้า ${startPage})`), 500);
+                }
 
                 // Silently fetch full buffer in background and save into IndexedDB!
                 // So the NEXT TIME it opens, it loads in 0.05s offline!
@@ -2811,6 +2847,11 @@
                     if (spinner) spinner.style.display = 'none';
 
                     pdfCurrentPage = num;
+                    try {
+                        if (currentOpenPdfUrl) {
+                            localStorage.setItem('aksorn_last_page_' + currentOpenPdfUrl, num);
+                        }
+                    } catch(e) {}
                     document.getElementById('pdfPageInput').value = num;
 
                     if (isPageChange) {
