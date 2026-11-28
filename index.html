@@ -822,6 +822,193 @@
                 min-width: auto;
             }
         }
+
+        /* ======================================================== */
+        /* MOBILE-FIRST PDF READING ENGINE (iOS & Android Phones)    */
+        /* ======================================================== */
+        
+        /* Mobile Bottom Floating Thumb Bar */
+        .pdf-mobile-bottom-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            z-index: 10005;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 14px calc(6px + env(safe-area-inset-bottom, 0px)) 14px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pdf-mobile-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            transition: background 0.15s ease, transform 0.1s ease;
+        }
+
+        .pdf-mobile-btn:active {
+            background: rgba(37, 99, 235, 0.6);
+            transform: scale(0.96);
+        }
+
+        .pdf-mobile-page-pill {
+            background: rgba(30, 41, 59, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #38BDF8;
+            font-size: 13.5px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pdf-mobile-zoom-pill {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #FBBF24;
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 16px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Swipe / Page Transition Animation Toast */
+        .pdf-swipe-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            background: rgba(15, 23, 42, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 10020;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .pdf-swipe-toast.visible {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Immersive Mode (Auto-hide toolbars on tap for 100% screen reading) */
+        .pdf-reader-modal.is-immersive .pdf-reader-toolbar {
+            transform: translateY(-100%);
+        }
+        .pdf-reader-modal.is-immersive .pdf-sub-toolbar {
+            transform: translateY(-200%);
+        }
+        .pdf-reader-modal.is-immersive .pdf-mobile-bottom-bar {
+            transform: translateY(100%);
+        }
+
+        /* Mobile Responsive Adjustments (Phones: width <= 640px) */
+        @media (max-width: 640px) {
+            .pdf-reader-toolbar {
+                padding: 6px 10px;
+                gap: 8px;
+                transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .pdf-toolbar-left {
+                min-width: auto;
+                flex: 1;
+                overflow: hidden;
+            }
+            .pdf-realm-seal {
+                display: none;
+            }
+            .pdf-doc-meta h4 {
+                font-size: 13px;
+                max-width: 160px;
+            }
+            .pdf-stream-badge {
+                display: none;
+            }
+            /* Hide bulky middle navigation on mobile header (use bottom thumb bar instead) */
+            .pdf-toolbar-center {
+                display: none !important;
+            }
+            /* Hide desktop zoom and download in header */
+            .pdf-zoom-group {
+                display: none !important;
+            }
+            #pdfFullscreenBtn {
+                display: none !important;
+            }
+            #pdfDownloadLink {
+                display: none !important;
+            }
+            #pdfCacheToggleBtn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            #pdfCacheToggleBtn #pdfCacheText {
+                display: none;
+            }
+            /* Whiteboard toggle button on mobile */
+            .pdf-mobile-toggle-draw {
+                display: inline-flex !important;
+            }
+            /* Whiteboard sub-toolbar starts collapsed on mobile */
+            .pdf-sub-toolbar {
+                display: none;
+                padding: 6px 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 8px;
+                transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .pdf-sub-toolbar.mobile-active {
+                display: flex !important;
+            }
+            /* Viewport adjusts for bottom thumb bar */
+            .pdf-viewport {
+                padding: 8px 4px 70px 4px !important;
+                align-items: flex-start !important;
+                justify-content: center !important;
+                touch-action: pan-y pinch-zoom;
+            }
+            .pdf-canvas-container {
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            /* Display mobile bottom floating thumb bar */
+            .pdf-mobile-bottom-bar {
+                display: flex;
+            }
+        }
+
 /* ======================================================== */
         /* OPTION 1: QUESTUI PDF.JS STREAMING WEB READER MODAL      */
         /* ======================================================== */
@@ -1618,6 +1805,7 @@
                 <a id="pdfDownloadLink" href="#" download class="pdf-tool-btn" style="background: var(--gold-light); border-color: var(--gold-border); color: #1A0F0A;" title="ดาวน์โหลดไฟล์ PDF เก็บไว้">
                     ⬇️ ดาวน์โหลด
                 </a>
+                <button class="pdf-tool-btn pdf-mobile-toggle-draw" style="display:none;" onclick="toggleMobileWhiteboard()" title="เครื่องมือวาดเขียนกระดาน">✏️</button>
                 <button class="pdf-tool-btn-icon pdf-close-btn" onclick="closePdfReader()" title="ปิดโปรแกรมอ่าน (Esc)">✕</button>
             </div>
         </div>
@@ -1682,6 +1870,22 @@
             <!-- Shimmering Loading Progress Indicator -->
             <div class="pdf-stream-loader" id="pdfStreamLoader">
                 <div class="loader-rune-spinner">⚡</div>
+
+        <!-- Mobile Bottom Floating Thumb Bar (Designed for One-Thumb Reach) -->
+        <div class="pdf-mobile-bottom-bar" id="pdfMobileBottomBar">
+            <button class="pdf-mobile-btn" onclick="prevPdfPage()" title="หน้าก่อนหน้า">◀ ก่อนหน้า</button>
+            <div class="pdf-mobile-page-pill" onclick="promptMobileJumpPage()" title="แตะเพื่อเลือกเลขหน้า">
+                📖 <span id="pdfMobilePageIndicator">หน้า 1 / ...</span>
+            </div>
+            <div class="pdf-mobile-zoom-pill" id="pdfMobileZoomBtn" onclick="cycleMobileZoom()" title="แตะเพื่อเปลี่ยนโหมดซูม">
+                🔍 พอดีจอ
+            </div>
+            <button class="pdf-mobile-btn" onclick="nextPdfPage()" title="หน้าถัดไป">ถัดไป ▶</button>
+        </div>
+
+        <!-- Mobile Swipe Page Toast -->
+        <div class="pdf-swipe-toast" id="pdfSwipeToast">หน้า 1</div>
+
                 <span id="pdfLoadingText">กำลังสตรีมมิ่งหน้าแรกผ่าน Byte-Range Request...</span>
             </div>
 
@@ -2423,17 +2627,47 @@
 
         function calculateInitialPdfZoom() {
             const viewport = document.getElementById('pdfViewport');
-            const availableWidth = viewport.clientWidth - 80;
-            if (availableWidth > 400) {
-                pdfScale = Math.min(Math.max(availableWidth / 650, 0.8), 1.8);
+            const isMobile = window.innerWidth <= 640;
+            const baseWidth = window._currentPdfBaseWidth || 595.28;
+            
+            if (isMobile) {
+                // Perfect Fit-to-Width on Mobile Phones (0 horizontal scroll!)
+                const availableWidth = Math.max(viewport.clientWidth - 12, 280);
+                pdfScale = +(availableWidth / baseWidth).toFixed(3);
+                window._mobileZoomMode = 'fit';
             } else {
-                pdfScale = 0.9;
+                // Desktop / iPad
+                const availableWidth = viewport.clientWidth - 80;
+                if (availableWidth > 400) {
+                    pdfScale = Math.min(Math.max(+(availableWidth / 650).toFixed(2), 0.8), 1.8);
+                } else {
+                    pdfScale = +(availableWidth / baseWidth).toFixed(2);
+                }
             }
             updatePdfZoomLabel();
         }
 
         function updatePdfZoomLabel() {
-            document.getElementById('pdfZoomLabel').textContent = Math.round(pdfScale * 100) + '%';
+            const pct = Math.round(pdfScale * 100) + '%';
+            const desktopLabel = document.getElementById('pdfZoomLabel');
+            if (desktopLabel) desktopLabel.textContent = pct;
+
+            // Sync Mobile UI
+            const mobileZoomBtn = document.getElementById('pdfMobileZoomBtn');
+            if (mobileZoomBtn) {
+                if (window._mobileZoomMode === 'zoom14') {
+                    mobileZoomBtn.textContent = '🔍 1.4x อ่านชัด';
+                } else if (window._mobileZoomMode === 'zoom18') {
+                    mobileZoomBtn.textContent = '🔍 1.8x ขยายใหญ่';
+                } else {
+                    mobileZoomBtn.textContent = '🔍 พอดีจอ (' + pct + ')';
+                }
+            }
+
+            const mobilePageInd = document.getElementById('pdfMobilePageIndicator');
+            if (mobilePageInd) {
+                mobilePageInd.textContent = `หน้า ${pdfCurrentPage || 1} / ${pdfTotalPagesCount || '...'}`;
+            }
         }
 
         function renderPdfPage(num) {
@@ -2458,6 +2692,9 @@
             }
 
             pdfDoc.getPage(num).then(page => {
+                const unscaledVp = page.getViewport({ scale: 1.0 });
+                window._currentPdfBaseWidth = unscaledVp.width;
+                window._currentPdfBaseHeight = unscaledVp.height;
                 const viewport = page.getViewport({ scale: pdfScale });
                 const canvas = document.getElementById('pdfCanvas');
                 const ctx = canvas.getContext('2d');
@@ -3494,6 +3731,145 @@
                         console.warn('Service Worker registration skipped or failed:', err);
                     });
             });
+        }
+
+
+        // ========================================================
+        // MOBILE PDF READING & GESTURE SYSTEM
+        // ========================================================
+        window._mobileZoomMode = 'fit';
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        let lastTapTime = 0;
+
+        function cycleMobileZoom() {
+            const viewport = document.getElementById('pdfViewport');
+            const baseWidth = window._currentPdfBaseWidth || 595.28;
+            const fitScale = +((Math.max(viewport.clientWidth - 12, 280)) / baseWidth).toFixed(3);
+
+            if (window._mobileZoomMode === 'fit') {
+                window._mobileZoomMode = 'zoom14';
+                pdfScale = +(fitScale * 1.4).toFixed(3);
+                showSwipeToast('🔍 ซูม 1.4x อ่านชัด');
+            } else if (window._mobileZoomMode === 'zoom14') {
+                window._mobileZoomMode = 'zoom18';
+                pdfScale = +(fitScale * 1.8).toFixed(3);
+                showSwipeToast('🔍 ซูม 1.8x ขยายใหญ่');
+            } else {
+                window._mobileZoomMode = 'fit';
+                pdfScale = fitScale;
+                showSwipeToast('🔍 พอดีความกว้างหน้าจอ');
+            }
+
+            updatePdfZoomLabel();
+            renderPdfPage(pdfCurrentPage);
+        }
+
+        function toggleMobileWhiteboard() {
+            const subToolbar = document.querySelector('.pdf-sub-toolbar');
+            if (subToolbar) {
+                subToolbar.classList.toggle('mobile-active');
+                if (subToolbar.classList.contains('mobile-active')) {
+                    setAnnotTool('pen');
+                    showSwipeToast('✏️ เปิดโหมดวาดเขียน');
+                } else {
+                    setAnnotTool('view');
+                    showSwipeToast('📖 โหมดอ่านหนังสือ');
+                }
+            }
+        }
+
+        function promptMobileJumpPage() {
+            const input = prompt(`ไปที่หน้าที่ (1 - ${pdfTotalPagesCount}):`, pdfCurrentPage);
+            if (input !== null) {
+                const pageNum = parseInt(input.trim(), 10);
+                if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= pdfTotalPagesCount) {
+                    jumpPdfPage(pageNum);
+                } else {
+                    alert('กรุณากรอกหมายเลขหน้าที่ถูกต้อง');
+                }
+            }
+        }
+
+        function showSwipeToast(text) {
+            const toast = document.getElementById('pdfSwipeToast');
+            if (!toast) return;
+            toast.textContent = text;
+            toast.classList.add('visible');
+            clearTimeout(window._swipeToastTimer);
+            window._swipeToastTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 750);
+        }
+
+        // Attach Mobile Touch Gestures (Swipe to Flip, Double Tap to Zoom, Tap for Immersive)
+        function initMobileGestures() {
+            const container = document.getElementById('pdfCanvasContainer');
+            const viewport = document.getElementById('pdfViewport');
+            if (!viewport) return;
+
+            viewport.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    touchStartTime = Date.now();
+                }
+            }, { passive: true });
+
+            viewport.addEventListener('touchend', (e) => {
+                if (currentAnnotTool !== 'view') return; // In drawing mode, touches are for drawing
+                if (isPinching) return;
+
+                const now = Date.now();
+                const dt = now - touchStartTime;
+                const touch = e.changedTouches[0];
+                if (!touch) return;
+
+                const dx = touch.clientX - touchStartX;
+                const dy = touch.clientY - touchStartY;
+
+                // 1. Double Tap Detection (Toggle Zoom)
+                if (now - lastTapTime < 320 && Math.hypot(dx, dy) < 25) {
+                    lastTapTime = 0;
+                    cycleMobileZoom();
+                    return;
+                }
+                lastTapTime = now;
+
+                // 2. Horizontal Swipe Detection (Flip Pages)
+                if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 450) {
+                    if (dx < 0) {
+                        // Swiped Left -> Next Page
+                        if (pdfCurrentPage < pdfTotalPagesCount) {
+                            showSwipeToast(`ถัดไป หน้า ${pdfCurrentPage + 1} ▶`);
+                            nextPdfPage();
+                        }
+                    } else {
+                        // Swiped Right -> Previous Page
+                        if (pdfCurrentPage > 1) {
+                            showSwipeToast(`◀ ก่อนหน้า ${pdfCurrentPage - 1}`);
+                            prevPdfPage();
+                        }
+                    }
+                    return;
+                }
+
+                // 3. Single Tap on Page (Toggle Immersive Reading Mode)
+                if (Math.hypot(dx, dy) < 12 && dt < 250) {
+                    const modal = document.getElementById('pdfReaderModal');
+                    if (modal && window.innerWidth <= 640) {
+                        modal.classList.toggle('is-immersive');
+                    }
+                }
+            }, { passive: true });
+        }
+
+        // Initialize mobile gestures when document ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMobileGestures);
+        } else {
+            initMobileGestures();
         }
 
 </script>
