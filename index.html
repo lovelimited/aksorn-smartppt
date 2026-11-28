@@ -2,7 +2,19 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    
+    <!-- iOS Web App & PWA Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SmartPPT">
+    <meta name="application-name" content="SmartPPT">
+    <meta name="theme-color" content="#1e3a8a">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/icon-192.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
     <title>Aksorn Smart PPT & E-Book Library | คลังสื่อการเรียนรู้ออนไลน์ อักษรเจริญทัศน์</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1428,6 +1440,9 @@
                 <div class="stat-pill cache-badge-pill" id="cacheSummaryBadge" onclick="showCacheManagerModal()" title="คลิกเพื่อดูและจัดการหนังสือที่บันทึกไว้ในเครื่อง">
                     <span id="cacheSummaryIcon">💾</span> <strong id="cachedBooksCount">0</strong> เล่มในเครื่อง
                 </div>
+                    <div class="stat-pill ipad-install-pill" id="ipadInstallPill" onclick="showIpadModal()" title="คู่มือติดตั้งเป็นแอปบน iPad">
+                        📱 ติดตั้งลง iPad
+                    </div>
             </div>
         </header>
 
@@ -1478,6 +1493,53 @@
 
     
     <!-- Cache Manager Modal -->
+    
+    <!-- iPad Web App Installation Modal -->
+    <div id="ipadModalOverlay" class="cache-modal-overlay" style="display: none;" onclick="closeIpadModal(event)">
+        <div class="cache-modal" style="max-width: 520px; text-align: center;" onclick="event.stopPropagation()">
+            <div class="cache-modal-header" style="justify-content: flex-end; border-bottom: none; padding-bottom: 0;">
+                <button class="cache-modal-close" onclick="closeIpadModal()">&times;</button>
+            </div>
+            <div style="padding: 0 24px 24px 24px;">
+                <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+                    <img src="/apple-touch-icon.png" alt="SmartPPT App Icon" style="width: 88px; height: 88px; border-radius: 20px; box-shadow: 0 10px 25px rgba(37,99,235,0.4); border: 2px solid rgba(255,255,255,0.2);">
+                </div>
+                <h3 style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 6px;">ติดตั้ง SmartPPT ลงบน iPad</h3>
+                <p style="font-size: 0.9rem; color: #94A3B8; margin-bottom: 24px;">เปิดใช้งานแบบเต็มจอ ไร้แถบ Safari เหมือนแอปแท้ และเปิดอ่านหนังสือออฟไลน์ได้ทันที</p>
+                
+                <div style="text-align: left; background: rgba(15,23,42,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 18px; margin-bottom: 20px;">
+                    <div style="display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563EB; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">1</div>
+                        <div>
+                            <div style="font-weight: 600; color: #F8FAFC; font-size: 0.95rem;">แตะปุ่มแชร์ (Share) บน Safari</div>
+                            <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 2px;">กดที่ไอคอนสี่เหลี่ยมลูกศรชี้ขึ้น <span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-weight: bold;">⎋ Share</span> ที่แถบเครื่องมือด้านบนของ Safari</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563EB; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">2</div>
+                        <div>
+                            <div style="font-weight: 600; color: #F8FAFC; font-size: 0.95rem;">เลือก 'เพิ่มไปยังหน้าจอโฮม'</div>
+                            <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 2px;">เลื่อนลงมาในเมนูแชร์ แล้วแตะ <span style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-weight: bold;">⊞ เพิ่มไปยังหน้าจอโฮม (Add to Home Screen)</span></div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 14px; align-items: flex-start;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #16A34A; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0;">3</div>
+                        <div>
+                            <div style="font-weight: 600; color: #F8FAFC; font-size: 0.95rem;">แตะ 'เพิ่ม' (Add) ที่มุมขวาบน</div>
+                            <div style="font-size: 0.85rem; color: #94A3B8; margin-top: 2px;">ไอคอนแอป SmartPPT จะปรากฏบนหน้าจอหลักของ iPad ทันที</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="closeIpadModal()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #2563EB, #1D4ED8); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: transform 0.15s ease;">
+                    เข้าใจแล้ว เริ่มใช้งานเลย 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="slide-modal-overlay" id="cacheModalOverlay" onclick="if(event.target.id==='cacheModalOverlay') closeCacheManagerModal()">
         <div class="slide-modal-dialog" style="max-width: 600px; height: auto; max-height: 80vh;">
             <div class="modal-header-bar">
@@ -3408,6 +3470,32 @@
                 }, { passive: false });
             }
         });
-    </script>
+    
+        // --- iPad Web App & PWA Helper ---
+        function showIpadModal() {
+            const modal = document.getElementById('ipadModalOverlay');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function closeIpadModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            const modal = document.getElementById('ipadModalOverlay');
+            if (modal) modal.style.display = 'none';
+        }
+
+        // Register Service Worker for true Offline & Standalone experience
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => {
+                        console.log('SmartPPT Service Worker Registered successfully:', reg.scope);
+                    })
+                    .catch((err) => {
+                        console.warn('Service Worker registration skipped or failed:', err);
+                    });
+            });
+        }
+
+</script>
 </body>
 </html>
