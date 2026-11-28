@@ -1101,6 +1101,20 @@
             flex-direction: column;
         }
 
+        /* Fullscreen styles (Native Fullscreen & Fallback) */
+        .pdf-reader-modal:fullscreen,
+        .pdf-reader-modal:-webkit-full-screen,
+        .pdf-reader-modal.is-fullscreen {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+            border-radius: 0 !important;
+            z-index: 999999 !important;
+        }
+
         .pdf-reader-toolbar {
             background: #FFFFFF;
             border-bottom: 1px solid var(--border-subtle);
@@ -1521,6 +1535,16 @@
             margin: auto;
             height: fit-content;
             user-select: none;
+            touch-action: none;
+            will-change: transform;
+            transform-origin: center center;
+            transition: none;
+        }
+
+        #pdfFullscreenBtn {
+            font-size: 12px;
+            font-weight: 700;
+            gap: 6px;
         }
 
         #pdfCanvas {
@@ -1788,6 +1812,7 @@
                 <div class="pdf-page-jump-wrap">
                     <input type="number" id="pdfPageInput" min="1" value="1" onchange="jumpPdfPage(this.value)" onkeydown="if(event.key==='Enter') jumpPdfPage(this.value)">
                     <span class="pdf-total-pages" id="pdfTotalPages">/ ...</span>
+                    <span id="pdfPageLoadingSpinner" style="display:none; margin-left:6px; font-size:13px; color:var(--gold-primary);" title="กำลังโหลดหน้า...">⚡</span>
                 </div>
                 <button class="pdf-tool-btn" id="pdfNextBtn" onclick="nextPdfPage()" title="หน้าถัดไป (Arrow Right)">ถัดไป ▶</button>
             </div>
@@ -1799,6 +1824,9 @@
                     <button class="pdf-tool-btn-icon" onclick="zoomPdfIn()" title="ขยายขนาด (+)">+</button>
                     <button class="pdf-tool-btn" onclick="zoomPdfFit()" title="พอดีความกว้าง">พอดีจอ</button>
                 </div>
+                <button class="pdf-tool-btn" id="pdfFullscreenBtn" onclick="togglePdfFullscreen()" title="โหมดเต็มหน้าจอ (F)">
+                    <span id="pdfFullscreenIcon">⛶</span> <span id="pdfFullscreenText">เต็มจอ</span>
+                </button>
                 <a id="pdfDownloadLink" href="#" download class="pdf-tool-btn" style="background: var(--gold-light); border-color: var(--gold-border); color: #1A0F0A;" title="ดาวน์โหลดไฟล์ PDF เก็บไว้">
                     ⬇️ ดาวน์โหลด
                 </a>
@@ -2373,7 +2401,7 @@
         }
 
         // ==========================================
-        // OPTION 1: STREAMING PDF.JS WEB READER (ULTRA-FAST)
+        // OPTION 1: STREAMING PDF.JS WEB READER (ULTRA-FAST & TOUCH-OPTIMIZED)
         // ==========================================
         function openPdfReader(url, encodedTitle, totalPages) {
             const title = decodeURIComponent(encodedTitle);
@@ -2386,20 +2414,20 @@
             document.getElementById('pdfTotalPages').textContent = '/ ' + (totalPages || '...');
             document.getElementById('pdfPageInput').value = 1;
 
-            showPdfLoader(true, 'กำลังเชื่อมต่อและสตรีมมิ่งหน้าแรก (512KB HTTP Range)...');
+            showPdfLoader(true, 'กำลังเชื่อมต่อและสตรีมมิ่งหน้าแรก (256KB Range)...');
 
             if (pdfDoc) {
                 pdfDoc.destroy();
                 pdfDoc = null;
             }
 
-            // Configure PDF.js for true on-demand range streaming (No background 60MB downloading)
+            // Configure PDF.js for true on-demand progressive range streaming (Fast Web View / Linearized)
             const loadingTask = pdfjsLib.getDocument({
                 url: encodeURI(url),
                 disableAutoFetch: true,       // CRITICAL: prevents downloading remaining pages
-                disableStream: true,          // CRITICAL: prevents streaming whole 60 MB file in background!
-                disableRange: false,          // Enable HTTP Range requests
-                rangeChunkSize: 524288,       // 512KB range requests
+                disableStream: false,         // CRITICAL: enables progressive chunk parsing for Fast Web View
+                disableRange: false,          // Enables HTTP Range requests (206 Partial Content)
+                rangeChunkSize: 262144,       // 256KB range requests - fastest time to first page
                 cMapPacked: true
             });
 
@@ -2419,6 +2447,7 @@
 
             // Initialize Annotation UI in view mode
             setAnnotTool('view');
+            updateFullscreenUI();
         }
 
         function calculateInitialPdfZoom() {
@@ -2443,11 +2472,19 @@
                 return;
             }
 
+            const isInitial = !pdfCurrentPage;
+            const isPageChange = pdfCurrentPage && pdfCurrentPage !== num;
+
             // Save annotation on previous page before flipping
             saveCurrentPageAnnotation();
 
             pdfIsRendering = true;
-            showPdfLoader(true, `กำลังสตรีมมิ่งหน้า ${num} จาก ${pdfTotalPagesCount}...`);
+            if (isInitial) {
+                showPdfLoader(true, `กำลังสตรีมมิ่งหน้า ${num} จาก ${pdfTotalPagesCount}...`);
+            } else {
+                const spinner = document.getElementById('pdfPageLoadingSpinner');
+                if (spinner) spinner.style.display = 'inline-block';
+            }
 
             pdfDoc.getPage(num).then(page => {
                 const viewport = page.getViewport({ scale: pdfScale });
@@ -2489,11 +2526,16 @@
                 renderTask.promise.then(() => {
                     pdfIsRendering = false;
                     showPdfLoader(false);
+                    const spinner = document.getElementById('pdfPageLoadingSpinner');
+                    if (spinner) spinner.style.display = 'none';
+
                     pdfCurrentPage = num;
                     document.getElementById('pdfPageInput').value = num;
 
-                    const vp = document.getElementById('pdfViewport');
-                    vp.scrollTop = 0;
+                    if (isPageChange) {
+                        const vp = document.getElementById('pdfViewport');
+                        vp.scrollTop = 0;
+                    }
 
                     // Restore annotations for this page
                     restorePageAnnotation(num);
@@ -2511,11 +2553,15 @@
                 }).catch(err => {
                     pdfIsRendering = false;
                     showPdfLoader(false);
+                    const spinner = document.getElementById('pdfPageLoadingSpinner');
+                    if (spinner) spinner.style.display = 'none';
                     console.error('Page render error:', err);
                 });
             }).catch(err => {
                 pdfIsRendering = false;
                 showPdfLoader(false);
+                const spinner = document.getElementById('pdfPageLoadingSpinner');
+                if (spinner) spinner.style.display = 'none';
                 console.error('Get page error:', err);
             });
         }
@@ -2540,7 +2586,7 @@
         }
 
         function zoomPdfIn() {
-            if (pdfScale >= 3.0) return;
+            if (pdfScale >= 3.5) return;
             pdfScale = +(pdfScale + 0.2).toFixed(2);
             updatePdfZoomLabel();
             renderPdfPage(pdfCurrentPage);
@@ -2558,9 +2604,55 @@
             renderPdfPage(pdfCurrentPage);
         }
 
-        function closePdfReader() {
-            saveCurrentPageAnnotation();
+        function togglePdfFullscreen() {
             const modal = document.getElementById('pdfReaderModal');
+            const isCurrentlyFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || modal.classList.contains('is-fullscreen'));
+
+            if (!isCurrentlyFullscreen) {
+                if (modal.requestFullscreen) {
+                    modal.requestFullscreen().catch(() => modal.classList.add('is-fullscreen'));
+                } else if (modal.webkitRequestFullscreen) {
+                    modal.webkitRequestFullscreen();
+                } else if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().catch(() => modal.classList.add('is-fullscreen'));
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else {
+                    modal.classList.add('is-fullscreen');
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                modal.classList.remove('is-fullscreen');
+            }
+            updateFullscreenUI();
+        }
+
+        function updateFullscreenUI() {
+            const modal = document.getElementById('pdfReaderModal');
+            const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || (modal && modal.classList.contains('is-fullscreen')));
+            const icon = document.getElementById('pdfFullscreenIcon');
+            const text = document.getElementById('pdfFullscreenText');
+            const btn = document.getElementById('pdfFullscreenBtn');
+            if (icon) icon.textContent = isFs ? '🗗' : '⛶';
+            if (text) text.textContent = isFs ? 'ย่อจอ' : 'เต็มจอ';
+            if (btn) btn.title = isFs ? 'ออกจากโหมดเต็มจอ (F / Esc)' : 'โหมดเต็มหน้าจอ (F)';
+        }
+
+        document.addEventListener('fullscreenchange', updateFullscreenUI);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenUI);
+
+        function closePdfReader() {
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            }
+            const modal = document.getElementById('pdfReaderModal');
+            modal.classList.remove('is-fullscreen');
+            saveCurrentPageAnnotation();
             modal.style.display = 'none';
             document.body.style.overflow = '';
             if (pdfDoc) {
@@ -2711,8 +2803,65 @@
             };
         }
 
+        // ==========================================
+        // TOUCH & MULTI-POINTER PINCH-ZOOM / PAN ENGINE (IPAD & TABLET)
+        // ==========================================
+        const activePointers = new Map();
+        let isPinching = false;
+        let pinchStartDistance = 0;
+        let pinchStartScale = 1;
+        let pinchCenterClient = { x: 0, y: 0 };
+        let pinchStartScroll = { left: 0, top: 0 };
+        let pinchCurrentScaleFactor = 1;
+        let pinchStartMidpoint = { x: 0, y: 0 };
+
         function handlePointerDown(e) {
+            activePointers.set(e.pointerId, {
+                clientX: e.clientX,
+                clientY: e.clientY,
+                pointerType: e.pointerType
+            });
+
+            // If 2 or more touches detected: Enter Pinch-to-Zoom / Pan mode
+            if (activePointers.size >= 2) {
+                // Cancel single-finger drawing stroke immediately if one was started
+                if (isDrawing) {
+                    isDrawing = false;
+                    strokePoints = [];
+                    const eventCanvas = document.getElementById('eventCanvas');
+                    if (eventCanvas) {
+                        const ctx = eventCanvas.getContext('2d');
+                        ctx.clearRect(0, 0, eventCanvas.width, eventCanvas.height);
+                    }
+                }
+
+                const pts = Array.from(activePointers.values());
+                pinchStartDistance = Math.hypot(pts[1].clientX - pts[0].clientX, pts[1].clientY - pts[0].clientY) || 1;
+                pinchStartScale = pdfScale;
+                pinchCurrentScaleFactor = 1;
+
+                const viewport = document.getElementById('pdfViewport');
+                const vpRect = viewport.getBoundingClientRect();
+                pinchStartMidpoint = {
+                    x: (pts[0].clientX + pts[1].clientX) / 2,
+                    y: (pts[0].clientY + pts[1].clientY) / 2
+                };
+                pinchCenterClient = {
+                    x: pinchStartMidpoint.x - vpRect.left,
+                    y: pinchStartMidpoint.y - vpRect.top
+                };
+                pinchStartScroll = {
+                    left: viewport.scrollLeft,
+                    top: viewport.scrollTop
+                };
+
+                isPinching = true;
+                return;
+            }
+
             if (currentAnnotTool === 'view') return;
+
+            // Single pointer drawing
             isDrawing = true;
             const eventCanvas = document.getElementById('eventCanvas');
             try { eventCanvas.setPointerCapture(e.pointerId); } catch(err) {}
@@ -2731,6 +2880,41 @@
         }
 
         function handlePointerMove(e) {
+            if (activePointers.has(e.pointerId)) {
+                activePointers.set(e.pointerId, {
+                    clientX: e.clientX,
+                    clientY: e.clientY,
+                    pointerType: e.pointerType
+                });
+            }
+
+            // Two-finger Pinch-to-zoom & Pan
+            if (isPinching && activePointers.size >= 2) {
+                const pts = Array.from(activePointers.values());
+                const curDist = Math.hypot(pts[1].clientX - pts[0].clientX, pts[1].clientY - pts[0].clientY) || 1;
+                pinchCurrentScaleFactor = curDist / pinchStartDistance;
+
+                // Hardware-accelerated CSS transform on iPad
+                const canvasContainer = document.getElementById('pdfCanvasContainer');
+                if (canvasContainer) {
+                    canvasContainer.style.transformOrigin = `${pinchCenterClient.x + pinchStartScroll.left}px ${pinchCenterClient.y + pinchStartScroll.top}px`;
+                    canvasContainer.style.transform = `scale(${pinchCurrentScaleFactor})`;
+                }
+
+                // Two-finger smooth pan
+                const curMidX = (pts[0].clientX + pts[1].clientX) / 2;
+                const curMidY = (pts[0].clientY + pts[1].clientY) / 2;
+                const deltaX = curMidX - pinchStartMidpoint.x;
+                const deltaY = curMidY - pinchStartMidpoint.y;
+                const viewport = document.getElementById('pdfViewport');
+                viewport.scrollLeft = pinchStartScroll.left - deltaX;
+                viewport.scrollTop = pinchStartScroll.top - deltaY;
+
+                const liveScale = Math.min(Math.max(pinchStartScale * pinchCurrentScaleFactor, 0.4), 4.0);
+                document.getElementById('pdfZoomLabel').textContent = Math.round(liveScale * 100) + '%';
+                return;
+            }
+
             const coords = getCanvasCoords(e);
 
             if (currentAnnotTool === 'eraser') {
@@ -2767,6 +2951,26 @@
         }
 
         function handlePointerUp(e) {
+            activePointers.delete(e.pointerId);
+
+            if (isPinching) {
+                if (activePointers.size < 2) {
+                    isPinching = false;
+                    const canvasContainer = document.getElementById('pdfCanvasContainer');
+                    if (canvasContainer) {
+                        canvasContainer.style.transform = '';
+                        canvasContainer.style.transformOrigin = '';
+                    }
+
+                    // Commit new scale and re-render crisply
+                    const targetScale = Math.min(Math.max(pinchStartScale * pinchCurrentScaleFactor, 0.5), 3.5);
+                    pdfScale = +targetScale.toFixed(2);
+                    updatePdfZoomLabel();
+                    renderPdfPage(pdfCurrentPage);
+                }
+                return;
+            }
+
             if (!isDrawing && currentAnnotTool !== 'eraser') return;
             isDrawing = false;
             const eventCanvas = document.getElementById('eventCanvas');
@@ -2799,6 +3003,9 @@
         }
 
         function handlePointerLeave(e) {
+            if (activePointers.has(e.pointerId)) {
+                activePointers.delete(e.pointerId);
+            }
             if (currentAnnotTool === 'eraser' && !isDrawing) {
                 const eventCanvas = document.getElementById('eventCanvas');
                 if (eventCanvas) {
@@ -3220,7 +3427,9 @@
                 else closeModal();
             } else if (isPdfOpen) {
                 if (document.activeElement.tagName !== 'INPUT') {
-                    if (e.key === 'p' || e.key === 'P') setAnnotTool('pen');
+                    if (e.key === 'f' || e.key === 'F') {
+                        togglePdfFullscreen();
+                    } else if (e.key === 'p' || e.key === 'P') setAnnotTool('pen');
                     else if (e.key === 'h' || e.key === 'H') setAnnotTool('highlighter');
                     else if (e.key === 'e' || e.key === 'E') setAnnotTool('eraser');
                     else if (e.key === 'v' || e.key === 'V') setAnnotTool('view');
@@ -3256,6 +3465,38 @@
                 eventCanvas.addEventListener('pointerup', handlePointerUp);
                 eventCanvas.addEventListener('pointercancel', handlePointerUp);
                 eventCanvas.addEventListener('pointerleave', handlePointerLeave);
+            }
+
+            // Bind gestures on viewport for reading mode and desktop trackpads
+            const viewport = document.getElementById('pdfViewport');
+            if (viewport) {
+                viewport.addEventListener('pointerdown', (e) => {
+                    if (currentAnnotTool === 'view') handlePointerDown(e);
+                });
+                viewport.addEventListener('pointermove', (e) => {
+                    if (currentAnnotTool === 'view') handlePointerMove(e);
+                });
+                viewport.addEventListener('pointerup', (e) => {
+                    if (currentAnnotTool === 'view') handlePointerUp(e);
+                });
+                viewport.addEventListener('pointercancel', (e) => {
+                    if (currentAnnotTool === 'view') handlePointerUp(e);
+                });
+
+                // Desktop / Laptop Trackpad pinch-to-zoom (wheel with ctrlKey)
+                viewport.addEventListener('wheel', (e) => {
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        const delta = -e.deltaY * 0.005;
+                        const newScale = Math.min(Math.max(pdfScale + delta, 0.5), 3.5);
+                        pdfScale = +(newScale).toFixed(2);
+                        updatePdfZoomLabel();
+                        clearTimeout(window._wheelZoomTimer);
+                        window._wheelZoomTimer = setTimeout(() => {
+                            renderPdfPage(pdfCurrentPage);
+                        }, 150);
+                    }
+                }, { passive: false });
             }
         });
     </script>
