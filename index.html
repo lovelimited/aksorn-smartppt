@@ -566,9 +566,10 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-height: 380px;
-            overflow-y: auto;
-            padding-right: 4px;
+            max-height: none; /* Fully expanded, no nested scroll trap */
+            overflow: visible;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
         }
 
         .drawer-unit-item {
@@ -878,6 +879,162 @@
             height: 100% !important;
             min-height: 520px !important;
             border: none !important;
+        }
+
+        
+        /* ======================================================== */
+        /* SMART PPT SLIDE MODAL: FULLSCREEN & BULLETPROOF CLOSE    */
+        /* ======================================================== */
+        
+        .slide-modal-dialog {
+            background: #FFFFFF;
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        /* Fullscreen Slide Modal (For TV, Projectors & Tablets) */
+        .slide-modal-dialog.is-fullscreen,
+        .slide-modal-dialog:fullscreen,
+        .slide-modal-dialog:-webkit-full-screen {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
+            max-height: none !important;
+            border-radius: 0 !important;
+            z-index: 100010 !important;
+            box-shadow: none !important;
+        }
+
+        .modal-header-bar {
+            padding: 10px 18px;
+            background: #0F172A;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .modal-header-titles {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .modal-header-titles h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #F8FAFC;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
+        }
+
+        .modal-header-titles span {
+            font-size: 11.5px;
+            color: #94A3B8;
+        }
+
+        .modal-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .modal-header-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #F8FAFC;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            touch-action: manipulation;
+        }
+        .modal-header-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+            color: #FFFFFF;
+        }
+
+        .modal-btn-close-prominent {
+            background: #DC2626 !important;
+            color: #FFFFFF !important;
+            border: 1px solid #B91C1C !important;
+            padding: 6px 14px !important;
+            border-radius: 6px !important;
+            font-size: 13.5px !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4) !important;
+            transition: all 0.15s ease !important;
+            touch-action: manipulation !important;
+        }
+        .modal-btn-close-prominent:active {
+            transform: scale(0.95);
+            background: #B91C1C !important;
+        }
+
+        /* Floating Emergency Close Button for Slide Modal */
+        .slide-modal-floating-close {
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+            .slide-modal-overlay {
+                padding: 0 !important;
+            }
+            .slide-modal-dialog {
+                height: 100vh !important;
+                max-height: 100vh !important;
+                border-radius: 0 !important;
+            }
+            .modal-header-bar {
+                padding: 8px 10px !important;
+            }
+            .modal-header-titles h4 {
+                font-size: 13.5px !important;
+                max-width: 180px !important;
+            }
+            .slide-modal-floating-close {
+                display: flex !important;
+                position: fixed !important;
+                top: 8px !important;
+                right: 8px !important;
+                z-index: 100030 !important;
+                background: #DC2626 !important;
+                color: #FFFFFF !important;
+                border: 1px solid #B91C1C !important;
+                padding: 6px 12px !important;
+                border-radius: 20px !important;
+                font-size: 12.5px !important;
+                font-weight: 700 !important;
+                cursor: pointer !important;
+                align-items: center !important;
+                gap: 4px !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+            }
         }
 
         /* ======================================================== */
@@ -1817,18 +1974,31 @@
         </div>
     </div>
 
-    <!-- Quick Inspect Slide Modal -->
+    <!-- Quick Inspect Slide Modal (Interactive Smart PPT) -->
     <div class="slide-modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+        <!-- Emergency Floating Close Button for Mobile -->
+        <button type="button" class="slide-modal-floating-close" onclick="closeModal()" title="ปิดสไลด์">✕ ปิด</button>
+
         <div class="slide-modal-dialog">
             <div class="modal-header-bar">
                 <div class="modal-header-titles">
                     <h4 id="modalTitle">สไลด์การสอน Smart PPT</h4>
-                    <span id="modalSubtitle">ระบบพรีวิวสื่ออินเตอร์แอคทีฟ</span>
+                    <span id="modalSubtitle">สื่อประกอบการสอน Smart PPT (Interactive)</span>
                 </div>
-                <button type="button" class="modal-close-btn" onclick="closeModal()" title="ปิด (Esc)">✕</button>
+                <div class="modal-header-actions">
+                    <a id="modalExternalLink" href="#" target="_blank" class="modal-header-btn" title="เปิดสื่อนี้เต็มจอในแท็บใหม่">
+                        ↗ เปิดแท็บใหม่
+                    </a>
+                    <button type="button" class="modal-header-btn" id="modalFullscreenBtn" onclick="toggleSlideModalFullscreen()" title="ขยายเต็มหน้าจอ">
+                        <span id="modalFullscreenIcon">⛶</span> <span id="modalFullscreenText">เต็มจอ</span>
+                    </button>
+                    <button type="button" class="modal-btn-close-prominent" onclick="closeModal()" title="ปิดสไลด์ (Esc)">
+                        ✕ ปิด
+                    </button>
+                </div>
             </div>
             <div class="modal-body-iframe">
-                <iframe id="modalIframe" src="" allowfullscreen></iframe>
+                <iframe id="modalIframe" src="" allowfullscreen allow="fullscreen; autoplay; encrypted-media"></iframe>
             </div>
         </div>
     </div>
@@ -3758,21 +3928,72 @@
         function openModal(url, encodedTitle) {
             const title = decodeURIComponent(encodedTitle);
             document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalSubtitle').textContent = "QuestUI Interactive Presentation Viewer";
+            document.getElementById('modalSubtitle').textContent = "สื่อประกอบการสอน Smart PPT (Interactive)";
             document.getElementById('modalIframe').src = url;
-            document.getElementById('modalOverlay').classList.add('active');
+            
+            // Set External link
+            const extLink = document.getElementById('modalExternalLink');
+            if (extLink) extLink.href = url;
+
+            const overlay = document.getElementById('modalOverlay');
+            if (overlay) overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Push History State so Hardware/Browser Back closes modal cleanly
+            try {
+                window.history.pushState({ slideModalOpen: true }, '');
+            } catch(e) {}
         }
 
         function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-            document.getElementById('modalIframe').src = '';
+            const overlay = document.getElementById('modalOverlay');
+            if (overlay) overlay.classList.remove('active');
+
+            const dialog = document.querySelector('.slide-modal-dialog');
+            if (dialog) dialog.classList.remove('is-fullscreen');
+
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                try {
+                    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                } catch(e) {}
+            }
+
+            const iframe = document.getElementById('modalIframe');
+            if (iframe) iframe.src = 'about:blank'; // Stop audio/video playback immediately
             document.body.style.overflow = '';
         }
 
         function closeModalOnBackdrop(e) {
-            if (e.target.id === 'modalOverlay') {
+            if (e.target && e.target.id === 'modalOverlay') {
                 closeModal();
+            }
+        }
+
+        function toggleSlideModalFullscreen() {
+            const dialog = document.querySelector('.slide-modal-dialog');
+            if (!dialog) return;
+            const isFull = dialog.classList.toggle('is-fullscreen');
+            const icon = document.getElementById('modalFullscreenIcon');
+            const text = document.getElementById('modalFullscreenText');
+
+            if (isFull) {
+                if (dialog.requestFullscreen) {
+                    dialog.requestFullscreen().catch(() => {});
+                } else if (dialog.webkitRequestFullscreen) {
+                    dialog.webkitRequestFullscreen();
+                }
+                if (icon) icon.textContent = '🗗';
+                if (text) text.textContent = 'ย่อจอ';
+            } else {
+                if (document.fullscreenElement || document.webkitFullscreenElement) {
+                    try {
+                        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+                        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                    } catch(e) {}
+                }
+                if (icon) icon.textContent = '⛶';
+                if (text) text.textContent = 'เต็มจอ';
             }
         }
 
@@ -4020,8 +4241,13 @@
 
         // Hardware & Browser Back Button cleanly closes the PDF Reader
         window.addEventListener('popstate', (e) => {
-            const modal = document.getElementById('pdfReaderModal');
-            if (modal && modal.style.display === 'flex') {
+            const slideModal = document.getElementById('modalOverlay');
+            if (slideModal && slideModal.classList.contains('active')) {
+                closeModal();
+                return;
+            }
+            const pdfModal = document.getElementById('pdfReaderModal');
+            if (pdfModal && pdfModal.style.display === 'flex') {
                 closePdfReader(true);
             }
         });
