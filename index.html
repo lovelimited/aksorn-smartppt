@@ -823,11 +823,72 @@
             }
         }
 
+        
         /* ======================================================== */
-        /* MOBILE-FIRST PDF READING ENGINE (iOS & Android Phones)    */
+        /* BULLETPROOF MOBILE SCROLLING & PROMINENT CLOSE BUTTON     */
         /* ======================================================== */
         
-        /* Mobile Bottom Floating Thumb Bar */
+        /* Viewport MUST support native 1-finger vertical & horizontal pan and pinch-zoom */
+        .pdf-viewer-viewport {
+            flex: 1;
+            background: #EBE3D5;
+            background-image: radial-gradient(circle at 50% 50%, rgba(202, 138, 4, 0.05) 0%, transparent 80%);
+            overflow-y: auto !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            touch-action: pan-x pan-y pinch-zoom !important;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 16px 8px 80px 8px !important;
+        }
+
+        /* In normal reading mode (DEFAULT), allow native 1-finger touch scrolling through canvas */
+        .pdf-reader-modal:not(.is-drawing-mode) .pdf-canvas-container {
+            touch-action: pan-x pan-y pinch-zoom !important;
+            user-select: none;
+            margin: auto;
+            position: relative;
+        }
+
+        .pdf-reader-modal:not(.is-drawing-mode) #eventCanvas,
+        .pdf-reader-modal:not(.is-drawing-mode) .pdf-canvas-layer {
+            touch-action: pan-x pan-y pinch-zoom !important;
+            pointer-events: none !important;
+        }
+
+        /* ONLY in Drawing Mode (when user clicks ✏️ เขียน) do we capture touch for pen strokes */
+        .pdf-reader-modal.is-drawing-mode .pdf-canvas-container,
+        .pdf-reader-modal.is-drawing-mode #eventCanvas {
+            touch-action: none !important;
+            pointer-events: auto !important;
+        }
+
+        /* HIGH-VISIBILITY PROMINENT CLOSE BUTTON */
+        .pdf-btn-close-main {
+            background: #DC2626 !important;
+            color: #FFFFFF !important;
+            border: 1px solid #B91C1C !important;
+            padding: 7px 16px !important;
+            border-radius: 8px !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.45) !important;
+            flex-shrink: 0 !important;
+            z-index: 10010 !important;
+            transition: all 0.15s ease !important;
+        }
+        .pdf-btn-close-main:active {
+            transform: scale(0.95);
+            background: #B91C1C !important;
+        }
+
+        /* Mobile Bottom Floating Thumb Bar with Close Button */
         .pdf-mobile-bottom-bar {
             display: none;
             position: fixed;
@@ -835,61 +896,70 @@
             left: 0;
             right: 0;
             height: 60px;
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(15, 23, 42, 0.96);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
-            z-index: 10005;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 10015;
             align-items: center;
             justify-content: space-between;
-            padding: 6px 14px calc(6px + env(safe-area-inset-bottom, 0px)) 14px;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)) 12px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
         }
 
         .pdf-mobile-btn {
             background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             color: #FFFFFF;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
-            padding: 8px 16px;
-            border-radius: 24px;
+            padding: 7px 12px;
+            border-radius: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             user-select: none;
             -webkit-user-select: none;
             touch-action: manipulation;
-            transition: background 0.15s ease, transform 0.1s ease;
         }
-
         .pdf-mobile-btn:active {
             background: rgba(37, 99, 235, 0.6);
             transform: scale(0.96);
         }
 
+        .pdf-mobile-close-btn {
+            background: rgba(220, 38, 38, 0.25) !important;
+            border-color: rgba(239, 68, 68, 0.5) !important;
+            color: #FCA5A5 !important;
+            font-weight: 700 !important;
+        }
+        .pdf-mobile-close-btn:active {
+            background: #DC2626 !important;
+            color: white !important;
+        }
+
         .pdf-mobile-page-pill {
-            background: rgba(30, 41, 59, 0.85);
-            border: 1px solid rgba(56, 189, 248, 0.35);
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.4);
             color: #38BDF8;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 18px;
             cursor: pointer;
             user-select: none;
             display: flex;
             align-items: center;
             gap: 4px;
+            white-space: nowrap;
         }
 
         .pdf-mobile-zoom-pill {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid rgba(245, 158, 11, 0.4);
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.5);
             color: #FBBF24;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 600;
             padding: 6px 10px;
             border-radius: 16px;
@@ -897,68 +967,33 @@
             white-space: nowrap;
         }
 
-        /* Swipe / Page Transition Animation Toast */
-        .pdf-swipe-toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.85);
-            background: rgba(15, 23, 42, 0.88);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            padding: 12px 24px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            z-index: 10020;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-        .pdf-swipe-toast.visible {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        /* Immersive Mode (Auto-hide toolbars on tap for 100% screen reading) */
-        .pdf-reader-modal.is-immersive .pdf-reader-toolbar {
-            transform: translateY(-100%);
-        }
-        .pdf-reader-modal.is-immersive .pdf-sub-toolbar {
-            transform: translateY(-200%);
-        }
-        .pdf-reader-modal.is-immersive .pdf-mobile-bottom-bar {
-            transform: translateY(100%);
-        }
-
-        /* Mobile Responsive Adjustments (Phones: width <= 640px) */
+        /* Mobile Specific Overrides */
         @media (max-width: 640px) {
             .pdf-reader-toolbar {
-                padding: 6px 10px;
-                gap: 8px;
-                transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                padding: 8px 12px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                gap: 8px !important;
+                transform: none !important; /* NEVER hide header */
             }
             .pdf-toolbar-left {
-                min-width: auto;
-                flex: 1;
-                overflow: hidden;
-            }
-            .pdf-realm-seal {
-                display: none;
+                min-width: auto !important;
+                flex: 1 !important;
+                overflow: hidden !important;
+                display: flex !important;
+                align-items: center !important;
             }
             .pdf-doc-meta h4 {
-                font-size: 13px;
-                max-width: 160px;
+                font-size: 13.5px !important;
+                max-width: 170px !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
             }
-            .pdf-stream-badge {
-                display: none;
-            }
-            /* Hide bulky middle navigation on mobile header (use bottom thumb bar instead) */
             .pdf-toolbar-center {
                 display: none !important;
             }
-            /* Hide desktop zoom and download in header */
             .pdf-zoom-group {
                 display: none !important;
             }
@@ -969,47 +1004,23 @@
                 display: none !important;
             }
             #pdfCacheToggleBtn {
-                padding: 4px 8px;
-                font-size: 11px;
+                display: none !important;
             }
-            #pdfCacheToggleBtn #pdfCacheText {
-                display: none;
+            .pdf-tool-btn-icon.pdf-close-btn {
+                display: none !important;
             }
-            /* Whiteboard toggle button on mobile */
+            .pdf-btn-close-main {
+                display: inline-flex !important;
+            }
             .pdf-mobile-toggle-draw {
                 display: inline-flex !important;
             }
-            /* Whiteboard sub-toolbar starts collapsed on mobile */
-            .pdf-sub-toolbar {
-                display: none;
-                padding: 6px 8px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                gap: 8px;
-                transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            .pdf-sub-toolbar.mobile-active {
-                display: flex !important;
-            }
-            /* Viewport adjusts for bottom thumb bar */
-            .pdf-viewport {
-                padding: 8px 4px 70px 4px !important;
-                align-items: flex-start !important;
-                justify-content: center !important;
-                touch-action: pan-y pinch-zoom;
-            }
-            .pdf-canvas-container {
-                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-                border-radius: 4px;
-                overflow: hidden;
-            }
-            /* Display mobile bottom floating thumb bar */
             .pdf-mobile-bottom-bar {
-                display: flex;
+                display: flex !important;
             }
         }
 
-/* ======================================================== */
+        /* ======================================================== */
         /* OPTION 1: QUESTUI PDF.JS STREAMING WEB READER MODAL      */
         /* ======================================================== */
         .pdf-reader-modal {
@@ -1805,8 +1816,8 @@
                 <a id="pdfDownloadLink" href="#" download class="pdf-tool-btn" style="background: var(--gold-light); border-color: var(--gold-border); color: #1A0F0A;" title="ดาวน์โหลดไฟล์ PDF เก็บไว้">
                     ⬇️ ดาวน์โหลด
                 </a>
-                <button class="pdf-tool-btn pdf-mobile-toggle-draw" style="display:none;" onclick="toggleMobileWhiteboard()" title="เครื่องมือวาดเขียนกระดาน">✏️</button>
-                <button class="pdf-tool-btn-icon pdf-close-btn" onclick="closePdfReader()" title="ปิดโปรแกรมอ่าน (Esc)">✕</button>
+                <button class="pdf-tool-btn pdf-mobile-toggle-draw" style="display:none; font-size:14px; font-weight:600; padding:6px 10px; border-radius:8px;" onclick="toggleMobileWhiteboard()" title="เครื่องมือวาดเขียนกระดาน">✏️ เขียน</button>
+                <button class="pdf-btn-close-main" onclick="closePdfReader()" title="ปิดโปรแกรมอ่าน (Esc)">✕ ปิด</button>
             </div>
         </div>
 
@@ -1871,16 +1882,17 @@
             <div class="pdf-stream-loader" id="pdfStreamLoader">
                 <div class="loader-rune-spinner">⚡</div>
 
-        <!-- Mobile Bottom Floating Thumb Bar (Designed for One-Thumb Reach) -->
+        <!-- Mobile Bottom Floating Thumb Bar (One-Thumb Reach + Close Button) -->
         <div class="pdf-mobile-bottom-bar" id="pdfMobileBottomBar">
-            <button class="pdf-mobile-btn" onclick="prevPdfPage()" title="หน้าก่อนหน้า">◀ ก่อนหน้า</button>
+            <button class="pdf-mobile-btn pdf-mobile-close-btn" onclick="closePdfReader()" title="ปิดหน้าหนังสือ">✕ ปิด</button>
+            <button class="pdf-mobile-btn" onclick="prevPdfPage()" title="หน้าก่อนหน้า">◀ ก่อน</button>
             <div class="pdf-mobile-page-pill" onclick="promptMobileJumpPage()" title="แตะเพื่อเลือกเลขหน้า">
                 📖 <span id="pdfMobilePageIndicator">หน้า 1 / ...</span>
             </div>
+            <button class="pdf-mobile-btn" onclick="nextPdfPage()" title="หน้าถัดไป">ถัดไป ▶</button>
             <div class="pdf-mobile-zoom-pill" id="pdfMobileZoomBtn" onclick="cycleMobileZoom()" title="แตะเพื่อเปลี่ยนโหมดซูม">
                 🔍 พอดีจอ
             </div>
-            <button class="pdf-mobile-btn" onclick="nextPdfPage()" title="หน้าถัดไป">ถัดไป ▶</button>
         </div>
 
         <!-- Mobile Swipe Page Toast -->
@@ -2528,6 +2540,11 @@
 
             const modal = document.getElementById('pdfReaderModal');
             modal.style.display = 'flex';
+            modal.classList.remove('is-drawing-mode');
+            setAnnotTool('view');
+            try {
+                window.history.pushState({ pdfReaderOpen: true }, '');
+            } catch(e) {}
             document.body.style.overflow = 'hidden';
 
             document.getElementById('pdfReaderTitle').textContent = title;
@@ -2913,6 +2930,14 @@
         }
 
         function setAnnotTool(tool) {
+            const modal = document.getElementById('pdfReaderModal');
+            if (modal) {
+                if (tool === 'view') {
+                    modal.classList.remove('is-drawing-mode');
+                } else {
+                    modal.classList.add('is-drawing-mode');
+                }
+            }
             if (tool === 'eraser' && currentAnnotTool === 'eraser') {
                 // Toggle mode if clicking eraser while already active
                 setEraserMode(currentEraserMode === 'partial' ? 'object' : 'partial');
@@ -3871,6 +3896,15 @@
         } else {
             initMobileGestures();
         }
+
+
+        // Hardware & Browser Back Button cleanly closes the PDF Reader
+        window.addEventListener('popstate', (e) => {
+            const modal = document.getElementById('pdfReaderModal');
+            if (modal && modal.style.display === 'flex') {
+                closePdfReader(true);
+            }
+        });
 
 </script>
 </body>
