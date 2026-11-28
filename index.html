@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <!-- iOS Web App & PWA Capabilities -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -842,7 +842,45 @@
             -webkit-touch-callout: none !important;
         }
 
-/* ======================================================== */
+
+        /* FIX: PPT Slides Drawer & Slide Modal Smooth Touch Scrolling */
+        .drawer-units-list {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 10px !important;
+            max-height: none !important; /* Allow all PPT slide units to expand fully so user can scroll down naturally */
+            overflow: visible !important;
+            -webkit-overflow-scrolling: touch !important;
+            touch-action: pan-y !important;
+        }
+
+        .drawer-unit-item {
+            touch-action: pan-y !important;
+        }
+
+        /* Slide modal iframe scrolling on mobile / iPad */
+        .slide-modal-dialog {
+            max-height: 94vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+
+        .modal-body-iframe {
+            flex: 1 !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            touch-action: pan-y pinch-zoom !important;
+        }
+
+        .modal-body-iframe iframe {
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 520px !important;
+            border: none !important;
+        }
+
+        /* ======================================================== */
         /* BULLETPROOF MOBILE SCROLLING & PROMINENT CLOSE BUTTON     */
         /* ======================================================== */
         
@@ -3971,6 +4009,82 @@
                 e.stopPropagation();
             }
         }, { passive: false });
+
+
+        // ========================================================
+        // PREVENT ENTIRE WEBPAGE FROM ZOOMING (LOCK BROWSER ZOOM)
+        // ========================================================
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('gesturechange', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('gestureend', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
+        // PDF Reader Specific Two-Finger Pinch-to-Zoom (Scales PDF Canvas, NOT the Website!)
+        (function setupPdfCanvasPinch() {
+            let pStartDist = 0;
+            let pStartScale = 1;
+            let pCenter = { x: 0, y: 0 };
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const viewport = document.getElementById('pdfViewport');
+                const container = document.getElementById('pdfCanvasContainer');
+                if (!viewport || !container) return;
+
+                viewport.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 2) {
+                        e.preventDefault(); // Stop entire page from zooming!
+                        const t1 = e.touches[0];
+                        const t2 = e.touches[1];
+                        pStartDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY) || 1;
+                        pStartScale = pdfScale;
+                        pCenter = {
+                            x: (t1.clientX + t2.clientX) / 2,
+                            y: (t1.clientY + t2.clientY) / 2
+                        };
+                    }
+                }, { passive: false });
+
+                viewport.addEventListener('touchmove', (e) => {
+                    if (e.touches.length === 2 && pStartDist > 0) {
+                        e.preventDefault(); // Stop entire browser page from zooming!
+                        const t1 = e.touches[0];
+                        const t2 = e.touches[1];
+                        const curDist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY) || 1;
+                        const factor = curDist / pStartDist;
+                        
+                        // Hardware-accelerated smooth scale during pinch
+                        container.style.transformOrigin = 'center top';
+                        container.style.transform = `scale(${factor})`;
+                    }
+                }, { passive: false });
+
+                viewport.addEventListener('touchend', (e) => {
+                    if (pStartDist > 0 && e.touches.length < 2) {
+                        if (container.style.transform) {
+                            const match = container.style.transform.match(/scale\(([^)]+)\)/);
+                            const factor = match ? parseFloat(match[1]) : 1;
+                            container.style.transform = '';
+                            container.style.transformOrigin = '';
+                            
+                            if (factor && Math.abs(factor - 1) > 0.05) {
+                                const newScale = Math.min(Math.max(+(pStartScale * factor).toFixed(2), 0.5), 3.5);
+                                pdfScale = newScale;
+                                updatePdfZoomLabel();
+                                renderPdfPage(pdfCurrentPage);
+                            }
+                        }
+                        pStartDist = 0;
+                    }
+                }, { passive: false });
+            });
+        })();
 
 </script>
 </body>
