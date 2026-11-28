@@ -1251,6 +1251,231 @@
             flex-direction: column;
         }
 
+        /* PDF ALL PAGES THUMBNAILS OVERVIEW DRAWER */
+        .pdf-thumbnails-drawer {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            z-index: 10005;
+            display: none;
+            flex-direction: column;
+            animation: pdfFadeIn 0.2s ease-out;
+        }
+
+        .pdf-thumbnails-drawer.active {
+            display: flex;
+        }
+
+        @keyframes pdfFadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .pdf-thumbnails-header {
+            padding: 14px 24px;
+            background: #1E293B;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .pdf-thumbnails-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pdf-thumbnails-icon {
+            font-size: 26px;
+        }
+
+        .pdf-thumbnails-title-group h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .pdf-thumbnails-subtitle {
+            font-size: 12.5px;
+            color: #94A3B8;
+            margin-top: 3px;
+            display: block;
+        }
+
+        .pdf-thumbnails-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pdf-thumb-jump-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #0F172A;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #94A3B8;
+        }
+
+        .pdf-thumb-jump-box input {
+            width: 58px;
+            padding: 4px 6px;
+            background: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: #F8FAFC;
+            font-size: 13px;
+            text-align: center;
+            outline: none;
+        }
+
+        .pdf-thumb-jump-btn {
+            background: #2563EB;
+            color: #FFFFFF;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .pdf-thumb-jump-btn:hover {
+            background: #1D4ED8;
+        }
+
+        .pdf-thumbnails-close-btn {
+            background: #DC2626;
+            color: #FFFFFF;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+        }
+
+        .pdf-thumbnails-close-btn:hover {
+            background: #B91C1C;
+            transform: translateY(-1px);
+        }
+
+        .pdf-thumbnails-grid-container {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+            align-content: start;
+        }
+
+        .pdf-thumb-card {
+            background: #1E293B;
+            border: 2px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+            position: relative;
+            user-select: none;
+        }
+
+        .pdf-thumb-card:hover {
+            transform: translateY(-3px);
+            border-color: #38BDF8;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        }
+
+        .pdf-thumb-card.active-page {
+            border-color: #F59E0B !important;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5), 0 8px 24px rgba(245, 158, 11, 0.3) !important;
+        }
+
+        .pdf-thumb-preview-wrap {
+            width: 100%;
+            aspect-ratio: 1 / 1.414;
+            background: #0F172A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pdf-thumb-canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .pdf-thumb-skeleton {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            gap: 6px;
+        }
+
+        .pdf-thumb-skeleton span:first-child {
+            font-size: 24px;
+        }
+
+        .pdf-thumb-badge {
+            width: 100%;
+            padding: 6px 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #E2E8F0;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.85);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pdf-thumb-card.active-page .pdf-thumb-badge {
+            background: #F59E0B !important;
+            color: #0F172A !important;
+            font-weight: 700 !important;
+        }
+
+        @media (max-width: 640px) {
+            .pdf-thumbnails-grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 12px;
+                padding: 14px;
+            }
+            .pdf-thumbnails-header {
+                padding: 10px 14px;
+            }
+            .pdf-thumb-jump-box {
+                display: none;
+            }
+        }
+
         /* Fullscreen styles (Native Fullscreen & Fallback) */
         .pdf-reader-modal:fullscreen,
         .pdf-reader-modal:-webkit-full-screen,
@@ -2029,9 +2254,13 @@
                     <span id="pdfPageLoadingSpinner" style="display:none; margin-left:6px; font-size:13px; color:var(--gold-primary);" title="กำลังโหลดหน้า...">⚡</span>
                 </div>
                 <button class="pdf-tool-btn" id="pdfNextBtn" onclick="nextPdfPage()" title="หน้าถัดไป (Arrow Right)">ถัดไป ▶</button>
+                <button class="pdf-tool-btn" id="pdfOverviewBtn" onclick="togglePdfThumbnailsModal()" title="ดูหน้าทั้งหมดของหนังสือ (Overview)">📑 ดูหน้าทั้งหมด</button>
             </div>
 
             <div class="pdf-toolbar-right">
+                <button class="pdf-tool-btn" id="pdfMobileOverviewTopBtn" onclick="togglePdfThumbnailsModal()" title="ดูหน้าทั้งหมดของหนังสือ" style="background:#2563EB; color:#FFF; font-weight:600;">
+                    📑 หน้าทั้งหมด
+                </button>
                 <div class="pdf-zoom-group">
                     <button class="pdf-tool-btn-icon" onclick="zoomPdfOut()" title="ย่อขนาด (-)">−</button>
                     <span class="pdf-zoom-text" id="pdfZoomLabel" onclick="zoomPdfFit()" title="คลิกเพื่อพอดีหน้าจอ">100%</span>
@@ -2117,10 +2346,11 @@
         <div class="pdf-mobile-bottom-bar" id="pdfMobileBottomBar">
             <button class="pdf-mobile-btn pdf-mobile-close-btn" onclick="closePdfReader()" title="ปิดหน้าหนังสือ">✕ ปิด</button>
             <button class="pdf-mobile-btn" onclick="prevPdfPage()" title="หน้าก่อนหน้า">◀ ก่อน</button>
-            <div class="pdf-mobile-page-pill" onclick="promptMobileJumpPage()" title="แตะเพื่อเลือกเลขหน้า">
+            <div class="pdf-mobile-page-pill" onclick="togglePdfThumbnailsModal()" title="แตะเพื่อดูหน้าทั้งหมด">
                 📖 <span id="pdfMobilePageIndicator">หน้า 1 / ...</span>
             </div>
             <button class="pdf-mobile-btn" onclick="nextPdfPage()" title="หน้าถัดไป">ถัดไป ▶</button>
+            <button class="pdf-mobile-btn" onclick="togglePdfThumbnailsModal()" title="ดูหน้าทั้งหมด">📑 ทั้งหมด</button>
             <div class="pdf-mobile-zoom-pill" id="pdfMobileZoomBtn" onclick="cycleMobileZoom()" title="แตะเพื่อเปลี่ยนโหมดซูม">
                 🔍 พอดีจอ
             </div>
@@ -2143,6 +2373,30 @@
             <!-- Floating Chevrons -->
             <button class="floating-nav-btn prev" onclick="prevPdfPage()" title="หน้าก่อนหน้า">‹</button>
             <button class="floating-nav-btn next" onclick="nextPdfPage()" title="หน้าถัดไป">›</button>
+        </div>
+
+        <!-- PDF All Pages Thumbnail Overview Drawer / Modal -->
+        <div class="pdf-thumbnails-drawer" id="pdfThumbnailsDrawer">
+            <div class="pdf-thumbnails-header">
+                <div class="pdf-thumbnails-title-group">
+                    <span class="pdf-thumbnails-icon">📑</span>
+                    <div>
+                        <h3 id="pdfThumbnailsHeading">ดูหน้าทั้งหมด</h3>
+                        <span class="pdf-thumbnails-subtitle" id="pdfThumbnailsSub">รวมทั้งหมด ... หน้า • แตะหน้าที่ต้องการเพื่อเปิดอ่านทันที</span>
+                    </div>
+                </div>
+                <div class="pdf-thumbnails-actions">
+                    <div class="pdf-thumb-jump-box">
+                        <span>ไปที่หน้า:</span>
+                        <input type="number" id="pdfThumbFastInput" min="1" placeholder="เลขหน้า" onkeydown="if(event.key==='Enter') fastJumpFromThumb(this.value)">
+                        <button class="pdf-thumb-jump-btn" onclick="fastJumpFromThumb(document.getElementById('pdfThumbFastInput').value)">ไป</button>
+                    </div>
+                    <button class="pdf-thumbnails-close-btn" onclick="togglePdfThumbnailsModal(false)" title="ปิดหน้ารวม">✕ ปิด</button>
+                </div>
+            </div>
+            <div class="pdf-thumbnails-grid-container" id="pdfThumbnailsContainer">
+                <!-- Dynamically generated thumbnail cards -->
+            </div>
         </div>
     </div>
 
@@ -2730,6 +2984,8 @@
         let pdfScale = 1.25;
         let pdfIsRendering = false;
         let pdfRenderQueue = null;
+        let pdfThumbnailCache = {};
+        let pdfThumbObserver = null;
 
         // ANNOTATION TOOLS STATE & VARIABLES
         let currentAnnotTool = 'view';
@@ -2792,6 +3048,10 @@
                 pdfDoc.destroy();
                 pdfDoc = null;
             }
+            pdfThumbnailCache = {};
+            togglePdfThumbnailsModal(false);
+            const thumbContainer = document.getElementById('pdfThumbnailsContainer');
+            if (thumbContainer) thumbContainer.innerHTML = '';
 
             // 1. CHECK LOCAL INDEXEDDB CACHE FIRST!
             showPdfLoader(true, 'กำลังตรวจสอบข้อมูลในเครื่อง (Local Storage)...');
@@ -3111,6 +3371,170 @@
             }
         }
 
+        // ==========================================
+        // PDF ALL PAGES OVERVIEW / THUMBNAIL DRAWER
+        // ==========================================
+        function togglePdfThumbnailsModal(forceState) {
+            const drawer = document.getElementById('pdfThumbnailsDrawer');
+            if (!drawer) return;
+            const shouldOpen = forceState !== undefined ? forceState : !drawer.classList.contains('active');
+            if (shouldOpen) {
+                if (!pdfDoc) return;
+                drawer.classList.add('active');
+                const sub = document.getElementById('pdfThumbnailsSub');
+                if (sub) sub.textContent = `รวมทั้งหมด ${pdfTotalPagesCount} หน้า • แตะหน้าที่ต้องการเพื่อเปิดอ่านทันที`;
+                const fastInput = document.getElementById('pdfThumbFastInput');
+                if (fastInput) {
+                    fastInput.max = pdfTotalPagesCount;
+                    fastInput.value = '';
+                }
+                buildPdfThumbnailsGrid();
+            } else {
+                drawer.classList.remove('active');
+                if (pdfThumbObserver) {
+                    pdfThumbObserver.disconnect();
+                    pdfThumbObserver = null;
+                }
+            }
+        }
+
+        function buildPdfThumbnailsGrid() {
+            const container = document.getElementById('pdfThumbnailsContainer');
+            if (!container || !pdfDoc) return;
+
+            const existingCards = container.querySelectorAll('.pdf-thumb-card');
+            if (existingCards.length === pdfTotalPagesCount) {
+                existingCards.forEach((card, idx) => {
+                    const pageNum = idx + 1;
+                    const badge = card.querySelector('.pdf-thumb-badge');
+                    if (pageNum === pdfCurrentPage) {
+                        card.classList.add('active-page');
+                        if (badge) badge.textContent = `✓ หน้า ${pageNum} (กำลังอ่าน)`;
+                        setTimeout(() => card.scrollIntoView({ block: 'center', behavior: 'smooth' }), 50);
+                    } else {
+                        card.classList.remove('active-page');
+                        if (badge) badge.textContent = `หน้า ${pageNum}`;
+                    }
+                });
+                observeThumbnails();
+                return;
+            }
+
+            container.innerHTML = '';
+            const frag = document.createDocumentFragment();
+
+            for (let i = 1; i <= pdfTotalPagesCount; i++) {
+                const card = document.createElement('div');
+                card.className = `pdf-thumb-card ${i === pdfCurrentPage ? 'active-page' : ''}`;
+                card.dataset.pageNum = i;
+                card.onclick = () => selectThumbnailPage(i);
+
+                const previewWrap = document.createElement('div');
+                previewWrap.className = 'pdf-thumb-preview-wrap';
+
+                if (pdfThumbnailCache[i]) {
+                    const img = document.createElement('img');
+                    img.src = pdfThumbnailCache[i];
+                    img.className = 'pdf-thumb-canvas';
+                    previewWrap.appendChild(img);
+                } else {
+                    const skeleton = document.createElement('div');
+                    skeleton.className = 'pdf-thumb-skeleton';
+                    skeleton.innerHTML = `<span>📄</span><span>หน้า ${i}</span>`;
+                    previewWrap.appendChild(skeleton);
+                }
+
+                const badge = document.createElement('div');
+                badge.className = 'pdf-thumb-badge';
+                badge.textContent = i === pdfCurrentPage ? `✓ หน้า ${i} (กำลังอ่าน)` : `หน้า ${i}`;
+
+                card.appendChild(previewWrap);
+                card.appendChild(badge);
+                frag.appendChild(card);
+            }
+
+            container.appendChild(frag);
+
+            setTimeout(() => {
+                const activeCard = container.querySelector('.pdf-thumb-card.active-page');
+                if (activeCard) activeCard.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            }, 60);
+
+            observeThumbnails();
+        }
+
+        function observeThumbnails() {
+            if (pdfThumbObserver) pdfThumbObserver.disconnect();
+            const container = document.getElementById('pdfThumbnailsContainer');
+            if (!container) return;
+
+            pdfThumbObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const pageNum = parseInt(card.dataset.pageNum, 10);
+                        renderSingleThumbnail(pageNum, card);
+                        observer.unobserve(card);
+                    }
+                });
+            }, {
+                root: container,
+                rootMargin: '160px'
+            });
+
+            container.querySelectorAll('.pdf-thumb-card').forEach(c => {
+                const pageNum = parseInt(c.dataset.pageNum, 10);
+                if (!pdfThumbnailCache[pageNum]) {
+                    pdfThumbObserver.observe(c);
+                }
+            });
+        }
+
+        async function renderSingleThumbnail(pageNum, card) {
+            if (!pdfDoc || pdfThumbnailCache[pageNum]) return;
+            try {
+                const page = await pdfDoc.getPage(pageNum);
+                const viewport = page.getViewport({ scale: 0.28 });
+                const canvas = document.createElement('canvas');
+                canvas.className = 'pdf-thumb-canvas';
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                const ctx = canvas.getContext('2d', { alpha: false });
+
+                await page.render({
+                    canvasContext: ctx,
+                    viewport: viewport
+                }).promise;
+
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                pdfThumbnailCache[pageNum] = dataUrl;
+
+                const wrap = card.querySelector('.pdf-thumb-preview-wrap');
+                if (wrap) {
+                    const img = document.createElement('img');
+                    img.src = dataUrl;
+                    img.className = 'pdf-thumb-canvas';
+                    wrap.innerHTML = '';
+                    wrap.appendChild(img);
+                }
+            } catch(e) {}
+        }
+
+        function selectThumbnailPage(pageNum) {
+            togglePdfThumbnailsModal(false);
+            jumpPdfPage(pageNum);
+            showSwipeToast(`เปิด หน้า ${pageNum}`);
+        }
+
+        function fastJumpFromThumb(val) {
+            const p = parseInt(val, 10);
+            if (!isNaN(p) && p >= 1 && p <= pdfTotalPagesCount) {
+                selectThumbnailPage(p);
+            } else {
+                alert(`กรุณากรอกเลขหน้า 1 ถึง ${pdfTotalPagesCount}`);
+            }
+        }
+
         function zoomPdfIn() {
             if (pdfScale >= 3.5) return;
             pdfScale = +(pdfScale + 0.2).toFixed(2);
@@ -3172,6 +3596,7 @@
         document.addEventListener('webkitfullscreenchange', updateFullscreenUI);
 
         function closePdfReader() {
+            togglePdfThumbnailsModal(false);
             if (document.fullscreenElement || document.webkitFullscreenElement) {
                 if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
                 else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
@@ -3185,6 +3610,10 @@
                 pdfDoc.destroy();
                 pdfDoc = null;
             }
+            pdfThumbnailCache = {};
+            togglePdfThumbnailsModal(false);
+            const thumbContainer = document.getElementById('pdfThumbnailsContainer');
+            if (thumbContainer) thumbContainer.innerHTML = '';
         }
 
         function showPdfLoader(show, text) {
@@ -4208,6 +4637,11 @@
             const isPdfOpen = pdfModal.style.display === 'flex';
 
             if (e.key === 'Escape') {
+                const drawer = document.getElementById('pdfThumbnailsDrawer');
+                if (drawer && drawer.classList.contains('active')) {
+                    togglePdfThumbnailsModal(false);
+                    return;
+                }
                 if (isPdfOpen) closePdfReader();
                 else closeModal();
             } else if (isPdfOpen) {
