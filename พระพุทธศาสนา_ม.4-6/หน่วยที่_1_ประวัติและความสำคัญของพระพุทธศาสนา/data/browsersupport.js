@@ -6,3 +6,191 @@
 var b="function"==typeof Object.defineProperties?Object.defineProperty:function(a,c,d){if(a==Array.prototype||a==Object.prototype)return a;a[c]=d.value;return a};function f(a){a=["object"==typeof globalThis&&globalThis,a,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var c=0;c<a.length;++c){var d=a[c];if(d&&d.Math==Math)return d}throw Error("Cannot find global object");}var g=f(this);
 function h(a,c){if(c)a:{var d=g;a=a.split(".");for(var e=0;e<a.length-1;e++){var x=a[e];if(!(x in d))break a;d=d[x]}a=a[a.length-1];e=d[a];c=c(e);c!=e&&null!=c&&b(d,a,{configurable:!0,writable:!0,value:c})}}h("globalThis",function(a){return a||g});var k=this||self;function l(){var a=k.navigator;return a&&(a=a.userAgent)?a:""}function m(a){return-1!=l().indexOf(a)};function n(){return m("iPhone")&&!m("iPod")&&!m("iPad")};function p(){return m("Firefox")||m("FxiOS")}function q(){return(m("Chrome")||m("CriOS"))&&!m("Edge")||m("Silk")};var r=m("Opera"),t=m("Trident")||m("MSIE"),u=m("Edge"),v=m("Gecko")&&!(-1!=l().toLowerCase().indexOf("webkit")&&!m("Edge"))&&!(m("Trident")||m("MSIE"))&&!m("Edge"),w=-1!=l().toLowerCase().indexOf("webkit")&&!m("Edge"),y;
 a:{var z="",A=function(){var a=l();if(v)return/rv:([^\);]+)(\)|;)/.exec(a);if(u)return/Edge\/([\d\.]+)/.exec(a);if(t)return/\b(?:MSIE|rv)[: ]([^\);]+)(\)|;)/.exec(a);if(w)return/WebKit\/(\S+)/.exec(a);if(r)return/(?:Version)[ \/]?(\S+)/.exec(a)}();A&&(z=A?A[1]:"");if(t){var B,C=k.document;B=C?C.documentMode:void 0;if(null!=B&&B>parseFloat(z)){y=String(B);break a}}y=z};var D=p(),E=n()||m("iPod"),F=m("iPad"),G=m("Android")&&!(q()||p()||m("Opera")||m("Silk")),H=q(),I=m("Safari")&&!(q()||m("Coast")||m("Opera")||m("Edge")||m("Edg/")||m("OPR")||p()||m("Silk")||m("Android"))&&!(n()||m("iPad")||m("iPod"));function J(a){return(a=a.exec(l()))?a[1]:""}var K=function(){if(D)return J(/Firefox\/([0-9.]+)/);if(t||u||r)return y;if(H){if(n()||m("iPad")||m("iPod")||m("Macintosh")){var a=J(/CriOS\/([0-9.]+)/);if(a)return a}return J(/Chrome\/([0-9.]+)/)}if(I&&!(n()||m("iPad")||m("iPod")))return J(/Version\/([0-9.]+)/);if(E||F){if(a=/Version\/(\S+).*Mobile\/(\S+)/.exec(l()))return a[1]+"."+a[2]}else if(G)return(a=J(/Android\s+([0-9.]+)/))?a:J(/Version\/([0-9.]+)/);return""}();function L(a){var c;(c=!Modernizr.inlinesvg||t)||(c=parseInt(K,10),c=I&&14>c);return c?(location.replace(a+window.location.search),!0):!1}let M=globalThis;const N=["ispring","compatibility","performRedirectIfNeeded"];for(let a=0;a<N.length-1;a++){const c=N[a];if(["__proto__","constructor","prototype"].includes(c))throw Error(`Property name "${c}" is not allowed`);M[c]&&"object"===typeof M[c]||(M[c]={});M=M[c]}M[N[N.length-1]]=L;L("data/html5-unsupported.html");window.onerror=function(){return!0};k.console||(window._log="",k.console={log:function(a){window._log+="\n"+a},warn:function(a){window._log+="\nwarn: "+a},error:function(a){window._log+="\nerror: "+a}});})();
+
+
+
+/* === iSpring Sliders Touch Scroll Polyfill for iPad / Touch Devices === */
+(function() {
+    if (window.__ispringSlidersTouchScrollInitialized) return;
+    window.__ispringSlidersTouchScrollInitialized = true;
+
+    function injectTouchStyles() {
+        if (document.getElementById('ispring-sliders-touch-styles')) return;
+        var style = document.createElement('style');
+        style.id = 'ispring-sliders-touch-styles';
+        style.textContent = [
+            '.outline-info-panel, .outline-info-panel__outline-container, .universal-side-panel,',
+            '.treecontrol, .treecontrol > div, .slide-item-view, .vertical-scrollbar, .scroll-area {',
+            '    touch-action: pan-y !important;',
+            '    -webkit-overflow-scrolling: touch !important;',
+            '}',
+            '.treecontrol, .treecontrol > div:first-child, .outline-info-panel .outline, .outline-info-panel__outline-container {',
+            '    overflow-y: auto !important;',
+            '}',
+            '.treecontrol::-webkit-scrollbar, .treecontrol > div::-webkit-scrollbar,',
+            '.outline-info-panel::-webkit-scrollbar, .universal-side-panel::-webkit-scrollbar {',
+            '    display: none !important;',
+            '    width: 0 !important;',
+            '    height: 0 !important;',
+            '}',
+            '.treecontrol, .treecontrol > div, .outline-info-panel, .universal-side-panel {',
+            '    scrollbar-width: none !important;',
+            '    -ms-overflow-style: none !important;',
+            '}'
+        ].join('\n');
+        (document.head || document.documentElement).appendChild(style);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectTouchStyles);
+    } else {
+        injectTouchStyles();
+    }
+
+    var startY = 0, startX = 0, lastY = 0, lastTime = 0, velocity = 0;
+    var isDragging = false, activeScroller = null, animId = null;
+
+    function findScroller(startEl) {
+        if (!startEl) return null;
+        var el = startEl;
+        while (el && el !== document.body && el !== document.documentElement) {
+            if (el.scrollHeight > el.clientHeight + 5 && (el.classList.contains('treecontrol') || el.closest('.treecontrol') || el.closest('.outline-info-panel') || el.closest('.universal-side-panel'))) {
+                return el;
+            }
+            el = el.parentElement;
+        }
+        var tc = startEl.closest('.treecontrol') || document.querySelector('.treecontrol');
+        if (tc) {
+            var slide = tc.querySelector('.slide-item-view');
+            if (slide && slide.parentElement && slide.parentElement.parentElement) {
+                return slide.parentElement.parentElement;
+            }
+            if (slide && slide.parentElement) return slide.parentElement;
+            return tc.firstElementChild || tc;
+        }
+        return startEl.closest('.outline, .outline-info-panel, .universal-side-panel');
+    }
+
+    function isOutlineTarget(target) {
+        if (!target) return false;
+        return !!target.closest(
+            '.outline-info-panel, .universal-side-panel, .treecontrol, .slide-item-view, ' +
+            '.universal-tablet-layout_left-panel, [class*="outline"], [class*="side-panel"]'
+        );
+    }
+
+    function dispatchSyntheticWheel(target, deltaY) {
+        if (!target) return;
+        var wheelEvt = new Event('mousewheel', { bubbles: true, cancelable: true });
+        var wDelta = deltaY * 2.5;
+        Object.defineProperty(wheelEvt, 'wheelDelta', { value: wDelta, writable: true });
+        Object.defineProperty(wheelEvt, 'wheelDeltaY', { value: wDelta, writable: true });
+        Object.defineProperty(wheelEvt, 'detail', { value: -deltaY / 30, writable: true });
+        target.dispatchEvent(wheelEvt);
+    }
+
+    window.addEventListener('touchstart', function(e) {
+        if (e.touches.length !== 1) return;
+        if (!isOutlineTarget(e.target)) return;
+
+        if (animId) {
+            cancelAnimationFrame(animId);
+            animId = null;
+        }
+
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        lastY = startY;
+        lastTime = Date.now();
+        velocity = 0;
+        isDragging = false;
+        activeScroller = findScroller(e.target);
+    }, { capture: true, passive: true });
+
+    window.addEventListener('touchmove', function(e) {
+        if (e.touches.length !== 1) return;
+        if (!activeScroller && !isOutlineTarget(e.target)) return;
+        if (!activeScroller) {
+            activeScroller = findScroller(e.target);
+        }
+
+        var currentY = e.touches[0].clientY;
+        var currentX = e.touches[0].clientX;
+        var dy = currentY - lastY;
+        var totalDy = currentY - startY;
+        var totalDx = currentX - startX;
+
+        if (!isDragging) {
+            if (Math.abs(totalDy) > 6 && Math.abs(totalDy) > Math.abs(totalDx)) {
+                isDragging = true;
+            }
+        }
+
+        if (isDragging) {
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+            e.stopPropagation();
+
+            var now = Date.now();
+            var dt = Math.max(1, now - lastTime);
+            velocity = (dy / dt) * 15;
+            lastY = currentY;
+            lastTime = now;
+
+            if (activeScroller) {
+                activeScroller.scrollTop -= dy;
+                activeScroller.dispatchEvent(new Event('scroll', { bubbles: false }));
+            }
+
+            var tc = (e.target && e.target.closest) ? (e.target.closest('.treecontrol') || document.querySelector('.treecontrol')) : document.querySelector('.treecontrol');
+            if (tc && tc !== activeScroller) {
+                tc.scrollTop -= dy;
+                tc.dispatchEvent(new Event('scroll', { bubbles: false }));
+            }
+
+            dispatchSyntheticWheel(activeScroller || e.target, dy);
+        }
+    }, { capture: true, passive: false });
+
+    window.addEventListener('touchend', function(e) {
+        if (!isDragging) return;
+
+        function stopClick(ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            window.removeEventListener('click', stopClick, true);
+        }
+        window.addEventListener('click', stopClick, true);
+        setTimeout(function() {
+            window.removeEventListener('click', stopClick, true);
+        }, 350);
+
+        if (Math.abs(velocity) > 1 && activeScroller) {
+            var currentVel = velocity;
+            function inertiaStep() {
+                if (Math.abs(currentVel) < 0.5) return;
+                currentVel *= 0.92;
+                if (activeScroller) {
+                    activeScroller.scrollTop -= currentVel;
+                    activeScroller.dispatchEvent(new Event('scroll', { bubbles: false }));
+                }
+                dispatchSyntheticWheel(activeScroller, currentVel);
+                animId = requestAnimationFrame(inertiaStep);
+            }
+            animId = requestAnimationFrame(inertiaStep);
+        }
+
+        isDragging = false;
+        activeScroller = null;
+    }, { capture: true, passive: true });
+
+    window.addEventListener('touchcancel', function() {
+        isDragging = false;
+        activeScroller = null;
+        if (animId) {
+            cancelAnimationFrame(animId);
+            animId = null;
+        }
+    }, { capture: true, passive: true });
+})();
