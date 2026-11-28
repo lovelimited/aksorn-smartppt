@@ -1,5 +1,5 @@
 // Service Worker for Aksorn SmartPPT PWA
-const CACHE_NAME = 'smartppt-shell-v2';
+const CACHE_NAME = 'smartppt-shell-v3';
 
 const STATIC_ASSETS = [
     '/',
@@ -67,9 +67,14 @@ self.addEventListener('fetch', (event) => {
     }
 
     // 1. Navigation requests (HTML document): Network-First with Cache fallback
-    if (req.mode === 'navigate' || (req.headers.get('accept') && req.headers.get('accept').includes('text/html'))) {
+    const isHtml = req.mode === 'navigate' ||
+                   url.pathname === '/' ||
+                   url.pathname.endsWith('.html') ||
+                   (req.headers.get('accept') && req.headers.get('accept').includes('text/html'));
+
+    if (isHtml) {
         event.respondWith(
-            fetch(req)
+            fetch(req, { cache: 'no-cache' })
                 .then((networkRes) => {
                     if (networkRes && networkRes.ok) {
                         const copy = networkRes.clone();

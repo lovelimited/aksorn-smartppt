@@ -2400,22 +2400,6 @@
         </div>
     </div>
 
-    <!-- Quick Inspect Slide Modal -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
-        <div class="modal-manuscript">
-            <div class="modal-header">
-                <div>
-                    <h3 id="modalTitle">คัมภีร์สไลด์นำเสนอ</h3>
-                    <span id="modalSubtitle">QuestUI Interactive Presentation Viewer</span>
-                </div>
-                <button class="modal-close-seal" onclick="closeModal()" title="ปิดหน้าต่าง">✕</button>
-            </div>
-            <div class="modal-body-iframe">
-                <iframe id="modalIframe" src="" allowfullscreen></iframe>
-            </div>
-        </div>
-    </div>
-
     <!-- ======================================================== -->
     <!-- JAVASCRIPT: LOGIC & STREAMING CONTROLLER                 -->
     <!-- ======================================================== -->
@@ -2935,7 +2919,7 @@
                                         <a href="${unit.interactiveUrl}" target="_blank" class="unit-btn primary" title="เปิดสื่อสไลด์สอนเต็มหน้าจอ">
                                             🖥️ เปิดสไลด์สอน ↗
                                         </a>
-                                        <button type="button" class="unit-btn inspect" onclick="openModal('${unit.interactiveUrl}', '${encodeURIComponent(unit.title)}')" title="ดูตัวอย่างสไลด์ในหน้านี้ทันที">
+                                        <button type="button" class="unit-btn inspect" onclick="openModal('${unit.interactiveUrl}', '${encodeURIComponent(unit.title)}', '${encodeURIComponent(course.displayName || '')}')" title="ดูตัวอย่างสไลด์ในหน้านี้ทันที">
                                             👁️ ดูตัวอย่าง
                                         </button>
                                         ${unit.hasNotes ? `
@@ -4359,11 +4343,17 @@
         }
 
         // Slide Modal Quick Inspect
-        function openModal(url, encodedTitle) {
+        function openModal(url, encodedTitle, encodedSubject) {
             const title = decodeURIComponent(encodedTitle);
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalSubtitle').textContent = "สื่อประกอบการสอน Smart PPT (Interactive)";
-            document.getElementById('modalIframe').src = url;
+            const subj = encodedSubject ? decodeURIComponent(encodedSubject) : '';
+            const modalTitleEl = document.getElementById('modalTitle');
+            if (modalTitleEl) modalTitleEl.textContent = title;
+            const modalSubEl = document.getElementById('modalSubtitle');
+            if (modalSubEl) {
+                modalSubEl.textContent = subj ? `${subj} • สื่อประกอบการสอน Smart PPT` : "สื่อประกอบการสอน Smart PPT (Interactive)";
+            }
+            const modalIframe = document.getElementById('modalIframe');
+            if (modalIframe) modalIframe.src = url;
             
             // Set External link
             const extLink = document.getElementById('modalExternalLink');
@@ -4731,16 +4721,35 @@
             if (modal) modal.style.display = 'none';
         }
 
-        // Register Service Worker for true Offline & Standalone experience
+        // Register Service Worker for true Offline, Standalone & Auto-Sync experience
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
                     .then((reg) => {
                         console.log('SmartPPT Service Worker Registered successfully:', reg.scope);
+                        reg.update().catch(() => {});
+                        reg.addEventListener('updatefound', () => {
+                            const newWorker = reg.installing;
+                            if (newWorker) {
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        });
                     })
                     .catch((err) => {
                         console.warn('Service Worker registration skipped or failed:', err);
                     });
+            });
+
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    window.location.reload();
+                }
             });
         }
 
